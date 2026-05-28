@@ -57,20 +57,22 @@
     <p class="sub" data-t="seeker_sub"></p>
     <div class="form">
       <div class="grid2">
-        <div><label data-t="f_name"></label><input id="s_name"></div>
-        <div><label data-t="f_phone"></label><input id="s_phone"></div>
+        <div><label for="s_name" data-t="f_name"></label><input id="s_name" type="text" maxlength="100" required></div>
+        <div><label for="s_phone" data-t="f_phone"></label><input id="s_phone" type="tel" maxlength="20" required></div>
       </div>
       <div class="grid2">
-        <div><label data-t="f_prov"></label><select id="s_prov"></select></div>
-        <div><label data-t="f_cat"></label><select id="s_cat"></select></div>
+        <div><label for="s_email" data-t="f_email"></label><input id="s_email" type="email" maxlength="120" required></div>
+        <div><label for="s_sal" data-t="f_esal"></label><input id="s_sal" type="number" min="0" max="100000"></div>
       </div>
       <div class="grid2">
-        <div><label data-t="f_exp"></label><select id="s_exp"></select></div>
-        <div><label data-t="f_esal"></label><input id="s_sal" type="number" min="0"></div>
+        <div><label for="s_prov" data-t="f_prov"></label><select id="s_prov"></select></div>
+        <div><label for="s_cat" data-t="f_cat"></label><select id="s_cat"></select></div>
       </div>
-      <label data-t="f_skills"></label><textarea id="s_bio"></textarea>
+      <label for="s_exp" data-t="f_exp"></label><select id="s_exp"></select>
+      <label for="s_bio" data-t="f_skills"></label><textarea id="s_bio" maxlength="1000"></textarea>
       <button class="btn" data-save="seeker" data-t="f_submit"></button>
       <div class="ok" id="s_ok" data-t="saved"></div>
+      <div class="err" id="s_err"></div>
     </div>
   </section>
 
@@ -80,24 +82,29 @@
     <p class="sub" data-t="emp_sub"></p>
     <div class="form">
       <div class="grid2">
-        <div><label data-t="f_company"></label><input id="e_co"></div>
-        <div><label data-t="f_phone"></label><input id="e_phone"></div>
+        <div><label for="e_co" data-t="f_company"></label><input id="e_co" type="text" maxlength="100" required></div>
+        <div><label for="e_phone" data-t="f_phone"></label><input id="e_phone" type="tel" maxlength="20" required></div>
       </div>
       <div class="grid2">
-        <div><label data-t="f_title"></label><input id="e_title"></div>
-        <div><label data-t="f_cat"></label><select id="e_cat"></select></div>
+        <div><label for="e_email" data-t="f_email"></label><input id="e_email" type="email" maxlength="120" required></div>
+        <div><label for="e_title" data-t="f_title"></label><input id="e_title" type="text" maxlength="120" required></div>
       </div>
       <div class="grid2">
-        <div><label data-t="f_prov"></label><select id="e_prov"></select></div>
-        <div><label data-t="f_type"></label><select id="e_type"></select></div>
+        <div><label for="e_cat" data-t="f_cat"></label><select id="e_cat"></select></div>
+        <div><label for="e_prov" data-t="f_prov"></label><select id="e_prov"></select></div>
       </div>
       <div class="grid2">
-        <div><label data-t="f_smin"></label><input id="e_smin" type="number" min="0"></div>
-        <div><label data-t="f_smax"></label><input id="e_smax" type="number" min="0"></div>
+        <div><label for="e_type" data-t="f_type"></label><select id="e_type"></select></div>
+        <div></div>
       </div>
-      <label data-t="f_desc"></label><textarea id="e_desc"></textarea>
+      <div class="grid2">
+        <div><label for="e_smin" data-t="f_smin"></label><input id="e_smin" type="number" min="0" max="100000"></div>
+        <div><label for="e_smax" data-t="f_smax"></label><input id="e_smax" type="number" min="0" max="100000"></div>
+      </div>
+      <label for="e_desc" data-t="f_desc"></label><textarea id="e_desc" maxlength="2000"></textarea>
       <button class="btn amber" data-save="employer" data-t="f_post"></button>
       <div class="ok" id="e_ok" data-t="posted"></div>
+      <div class="err" id="e_err"></div>
     </div>
   </section>
 

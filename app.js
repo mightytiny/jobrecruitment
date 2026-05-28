@@ -14,11 +14,13 @@ const T={
   emp_h:"និយោជក — ប្រកាសការងារ",emp_sub:"បំពេញព័ត៌មានក្រុមហ៊ុន និងការងារ",
   jobs_h:"ស្វែងរកការងារ",jobs_sub:"ត្រងតាមប្រភេទ ខេត្ត ឬពាក្យគន្លឹះ",
   workers_h:"ស្វែងរកកម្មករ",workers_sub:"ត្រងតាមប្រភេទ ខេត្ត បទពិសោធន៍",
-  f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
+  f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_email:"អ៊ីមែល",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
   f_esal:"ប្រាក់ខែរំពឹងទុក ($)",f_skills:"ជំនាញ / ប្រវត្តិសង្ខេប",f_submit:"ដាក់ស្នើ",saved:"✓ បានរក្សាទុក",
   f_company:"ឈ្មោះក្រុមហ៊ុន",f_title:"ចំណងជើងការងារ",f_type:"ប្រភេទ",f_smin:"ប្រាក់ខែ អប្បបរមា ($)",f_smax:"ប្រាក់ខែ អតិបរមា ($)",
   f_desc:"ការពិពណ៌នាការងារ",f_post:"ប្រកាសការងារ",posted:"✓ បានប្រកាស",
-  f_keyword:"ពាក្យគន្លឹះ",all:"ទាំងអស់",empty:"រកមិនឃើញលទ្ធផល",mo:"/ខែ",footer:"KarKhmer — គំរូបង្ហាញ"},
+  f_keyword:"ពាក្យគន្លឹះ",all:"ទាំងអស់",empty:"រកមិនឃើញលទ្ធផល",mo:"/ខែ",footer:"KarKhmer — គំរូបង្ហាញ",
+  saving:"កំពុងរក្សាទុក...",err_required:"សូមបំពេញព័ត៌មានដែលត្រូវការ",err_email:"អ៊ីមែលមិនត្រឹមត្រូវ",err_phone:"លេខទូរស័ព្ទមិនត្រឹមត្រូវ",
+  ago_today:"ថ្ងៃនេះ",ago_yesterday:"ម្សិលមិញ",ago_days:"ថ្ងៃមុន",ago_months:"ខែមុន",ago_years:"ឆ្នាំមុន"},
  en:{nav_home:"Home",nav_seeker:"Find work",nav_employer:"Hire",nav_jobs:"Jobs",nav_workers:"Find workers",
   eyebrow:"Professional Recruitment Platform",
   hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
@@ -28,16 +30,39 @@ const T={
   emp_h:"Employer — post a job",emp_sub:"Fill in company and job details",
   jobs_h:"Search jobs",jobs_sub:"Filter by category, province or keyword",
   workers_h:"Search workers",workers_sub:"Filter by category, province, experience",
-  f_name:"Name",f_phone:"Phone",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
+  f_name:"Name",f_phone:"Phone",f_email:"Email",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
   f_esal:"Expected salary ($)",f_skills:"Skills / short bio",f_submit:"Submit",saved:"✓ Saved",
   f_company:"Company name",f_title:"Job title",f_type:"Type",f_smin:"Salary min ($)",f_smax:"Salary max ($)",
   f_desc:"Job description",f_post:"Post job",posted:"✓ Posted",
-  f_keyword:"Keyword",all:"All",empty:"No results found",mo:"/mo",footer:"KarKhmer — demo prototype"}
+  f_keyword:"Keyword",all:"All",empty:"No results found",mo:"/mo",footer:"KarKhmer — demo prototype",
+  saving:"Saving...",err_required:"Please fill in all required fields",err_email:"Please enter a valid email",err_phone:"Please enter a valid phone number",
+  ago_today:"today",ago_yesterday:"yesterday",ago_days:"days ago",ago_months:"months ago",ago_years:"years ago"}
 };
 
 let lang="km";
-const L=i=>(({km:1,en:2})[lang]); // index into [id,km,en]
 const lab=arr=>arr[lang==="km"?1:2];
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>s==null?"":String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE=/^[\d\s+\-()]{6,20}$/;
+function maskPhone(p){
+  if(!p)return"";
+  const s=String(p).replace(/\D/g,"");
+  if(s.length<6)return"***";
+  return s.slice(0,3)+"••• "+s.slice(-3);
+}
+function timeAgo(iso){
+  if(!iso)return"";
+  const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);
+  if(d<1)return T[lang].ago_today;
+  if(d===1)return T[lang].ago_yesterday;
+  if(d<30)return d+" "+T[lang].ago_days;
+  const mo=Math.floor(d/30);
+  if(mo<12)return mo+" "+T[lang].ago_months;
+  return Math.floor(mo/12)+" "+T[lang].ago_years;
+}
 
 /* ---------- supabase client ---------- */
 const SUPABASE_URL="https://xhgkcydmnydtnykjkoun.supabase.co";
@@ -49,19 +74,19 @@ async function load(key){
     const {data,error}=await sb.from("seekers").select("*").order("created_at",{ascending:false});
     if(error){console.error("load seekers:",error);return [];}
     return (data||[]).map(s=>({
-      name:s.name,phone:s.phone,prov:s.province,cat:s.category,
-      exp:s.experience_level,sal:s.expected_salary,bio:s.bio
+      name:s.name,phone:s.phone,email:s.email,prov:s.province,cat:s.category,
+      exp:s.experience_level,sal:s.expected_salary,bio:s.bio,created_at:s.created_at
     }));
   }
   if(key==="jobs"){
     const {data,error}=await sb.from("jobs")
-      .select("*,employers(company_name,phone)")
+      .select("*,employers(company_name,phone,email)")
       .order("created_at",{ascending:false});
     if(error){console.error("load jobs:",error);return [];}
     return (data||[]).map(j=>({
-      co:j.employers?.company_name,phone:j.employers?.phone,
+      co:j.employers?.company_name,phone:j.employers?.phone,email:j.employers?.email,
       title:j.title,cat:j.category,prov:j.province,type:j.employment_type,
-      smin:j.salary_min,smax:j.salary_max,desc:j.description
+      smin:j.salary_min,smax:j.salary_max,desc:j.description,created_at:j.created_at
     }));
   }
   return [];
@@ -104,72 +129,99 @@ document.addEventListener("click",e=>{
 
 /* ---------- save handlers ---------- */
 const num=v=>v===""||v==null?null:parseInt(v);
+const trim=v=>(v||"").trim();
+
+function showErr(errEl,msg){errEl.textContent=msg;errEl.classList.add("show");setTimeout(()=>errEl.classList.remove("show"),4000);}
+
+async function withBusy(btn,fn){
+  const orig=btn.textContent;
+  btn.disabled=true;
+  btn.textContent=T[lang].saving;
+  try{return await fn();}
+  finally{btn.disabled=false;btn.textContent=orig;}
+}
 
 document.querySelectorAll("[data-save]").forEach(btn=>{
-  btn.addEventListener("click",async()=>{
+  btn.addEventListener("click",()=>withBusy(btn,async()=>{
     if(btn.dataset.save==="seeker"){
+      const name=trim($("s_name").value),phone=trim($("s_phone").value),email=trim($("s_email").value);
+      const errEl=$("s_err");
+      if(!name||!phone||!email||!$("s_prov").value||!$("s_cat").value||!$("s_exp").value)
+        return showErr(errEl,T[lang].err_required);
+      if(!EMAIL_RE.test(email))return showErr(errEl,T[lang].err_email);
+      if(!PHONE_RE.test(phone))return showErr(errEl,T[lang].err_phone);
       const {error}=await sb.from("seekers").insert({
-        name:s_name.value,phone:s_phone.value,
-        province:s_prov.value,category:s_cat.value,
-        experience_level:s_exp.value,expected_salary:num(s_sal.value),
-        bio:s_bio.value
+        name,phone,email,
+        province:$("s_prov").value,category:$("s_cat").value,
+        experience_level:$("s_exp").value,expected_salary:num($("s_sal").value),
+        bio:trim($("s_bio").value)
       });
-      if(error){console.error("save seeker:",error);alert("Save failed: "+error.message);return;}
-      s_ok.classList.add("show");setTimeout(()=>s_ok.classList.remove("show"),2500);
-      [s_name,s_phone,s_sal,s_bio].forEach(x=>x.value="");
+      if(error){console.error("save seeker:",error);return showErr(errEl,error.message);}
+      $("s_ok").classList.add("show");setTimeout(()=>$("s_ok").classList.remove("show"),2500);
+      ["s_name","s_phone","s_email","s_sal","s_bio"].forEach(id=>$(id).value="");
+      renderWorkers();
     }else{
+      const co=trim($("e_co").value),phone=trim($("e_phone").value),email=trim($("e_email").value),title=trim($("e_title").value);
+      const errEl=$("e_err");
+      if(!co||!phone||!email||!title||!$("e_cat").value||!$("e_prov").value||!$("e_type").value)
+        return showErr(errEl,T[lang].err_required);
+      if(!EMAIL_RE.test(email))return showErr(errEl,T[lang].err_email);
+      if(!PHONE_RE.test(phone))return showErr(errEl,T[lang].err_phone);
       const {data:emp,error:eErr}=await sb.from("employers").insert({
-        company_name:e_co.value,phone:e_phone.value
+        company_name:co,phone,email
       }).select().single();
-      if(eErr){console.error("save employer:",eErr);alert("Save failed: "+eErr.message);return;}
+      if(eErr){console.error("save employer:",eErr);return showErr(errEl,eErr.message);}
       const {error:jErr}=await sb.from("jobs").insert({
-        employer_id:emp.id,title:e_title.value,category:e_cat.value,
-        province:e_prov.value,employment_type:e_type.value,
-        salary_min:num(e_smin.value),salary_max:num(e_smax.value),
-        description:e_desc.value
+        employer_id:emp.id,title,category:$("e_cat").value,
+        province:$("e_prov").value,employment_type:$("e_type").value,
+        salary_min:num($("e_smin").value),salary_max:num($("e_smax").value),
+        description:trim($("e_desc").value)
       });
-      if(jErr){console.error("save job:",jErr);alert("Save failed: "+jErr.message);return;}
-      e_ok.classList.add("show");setTimeout(()=>e_ok.classList.remove("show"),2500);
-      [e_co,e_phone,e_title,e_smin,e_smax,e_desc].forEach(x=>x.value="");
+      if(jErr){console.error("save job:",jErr);return showErr(errEl,jErr.message);}
+      $("e_ok").classList.add("show");setTimeout(()=>$("e_ok").classList.remove("show"),2500);
+      ["e_co","e_phone","e_email","e_title","e_smin","e_smax","e_desc"].forEach(id=>$(id).value="");
+      renderJobs();
     }
-  });
+  }));
 });
 
 /* ---------- search renderers ---------- */
-const name=(arr,id)=>{const f=arr.find(a=>a[0]===id);return f?lab(f):"";};
+const labelOf=(arr,id)=>{const f=arr.find(a=>a[0]===id);return f?lab(f):"";};
 function card(html){const d=document.createElement("div");d.className="rc";d.innerHTML=html;return d;}
 
 async function renderJobs(){
-  const arr=await load("jobs");const box=j_results;box.innerHTML="";
-  const kw=j_kw.value.toLowerCase(),c=j_cat.value,p=j_prov.value;
+  const arr=await load("jobs");const box=$("j_results");box.innerHTML="";
+  const kw=$("j_kw").value.toLowerCase(),c=$("j_cat").value,p=$("j_prov").value;
   const out=arr.filter(j=>(!c||j.cat===c)&&(!p||j.prov===p)&&
-    (!kw||((j.title+j.desc+j.co).toLowerCase().includes(kw))));
-  if(!out.length){box.innerHTML=`<div class="empty">${T[lang].empty}</div>`;return;}
+    (!kw||((j.title+" "+(j.desc||"")+" "+(j.co||"")).toLowerCase().includes(kw))));
+  if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(j=>{
-    const sal=(j.smin||j.smax)?`<span class="tag sal">$${j.smin||"?"}–${j.smax||"?"} ${T[lang].mo}</span>`:"";
+    const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
+    const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
     box.appendChild(card(
-      `<div class="t">${j.title||""}</div><div class="m">${j.co||""}</div>
-       <span class="tag">${name(CAT,j.cat)}</span><span class="tag">${name(PROV,j.prov)}</span>
-       <span class="tag">${name(TYPE,j.type)}</span>${sal}
-       <div class="d">${j.desc||""}</div>`));
+      `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
+       <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
+       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
+       <div class="d">${esc(j.desc)}</div>${age}`));
   });
 }
 async function renderWorkers(){
-  const arr=await load("seekers");const box=w_results;box.innerHTML="";
-  const kw=w_kw.value.toLowerCase(),c=w_cat.value,p=w_prov.value,x=w_exp.value;
+  const arr=await load("seekers");const box=$("w_results");box.innerHTML="";
+  const kw=$("w_kw").value.toLowerCase(),c=$("w_cat").value,p=$("w_prov").value,x=$("w_exp").value;
   const out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
-    (!kw||((s.name+s.bio).toLowerCase().includes(kw))));
-  if(!out.length){box.innerHTML=`<div class="empty">${T[lang].empty}</div>`;return;}
+    (!kw||((s.name+" "+(s.bio||"")).toLowerCase().includes(kw))));
+  if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(s=>{
-    const sal=s.sal?`<span class="tag sal">$${s.sal} ${T[lang].mo}</span>`:"";
+    const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
+    const age=s.created_at?`<div class="age">${esc(timeAgo(s.created_at))}</div>`:"";
     box.appendChild(card(
-      `<div class="t">${s.name||""}</div><div class="m">${s.phone||""}</div>
-       <span class="tag">${name(CAT,s.cat)}</span><span class="tag">${name(PROV,s.prov)}</span>
-       <span class="tag">${name(EXP,s.exp)}</span>${sal}
-       <div class="d">${s.bio||""}</div>`));
+      `<div class="t">${esc(s.name)}</div><div class="m">${esc(maskPhone(s.phone))}</div>
+       <span class="tag">${esc(labelOf(CAT,s.cat))}</span><span class="tag">${esc(labelOf(PROV,s.prov))}</span>
+       <span class="tag">${esc(labelOf(EXP,s.exp))}</span>${sal}
+       <div class="d">${esc(s.bio)}</div>${age}`));
   });
 }
-["j_kw","j_cat","j_prov"].forEach(id=>document.getElementById(id).addEventListener("input",renderJobs));
-["w_kw","w_cat","w_prov","w_exp"].forEach(id=>document.getElementById(id).addEventListener("input",renderWorkers));
+["j_kw","j_cat","j_prov"].forEach(id=>$(id).addEventListener("input",renderJobs));
+["w_kw","w_cat","w_prov","w_exp"].forEach(id=>$(id).addEventListener("input",renderWorkers));
 
 applyLang();
