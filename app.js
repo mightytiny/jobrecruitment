@@ -39,15 +39,32 @@ let lang="km";
 const L=i=>(({km:1,en:2})[lang]); // index into [id,km,en]
 const lab=arr=>arr[lang==="km"?1:2];
 
-/* ---------- storage (persistent, with in-memory fallback) ---------- */
-const mem={seekers:[],jobs:[]};
+/* ---------- supabase client ---------- */
+const SUPABASE_URL="https://xhgkcydmnydtnykjkoun.supabase.co";
+const SUPABASE_KEY="sb_publishable_mgN6fq_78zOh7dgdPLkDog_ZnAv_HPY";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
 async function load(key){
-  try{const r=await window.storage.get(key);return r?JSON.parse(r.value):[];}
-  catch(e){return mem[key]||[];}
-}
-async function save(key,val){
-  mem[key]=val;
-  try{await window.storage.set(key,JSON.stringify(val));}catch(e){}
+  if(key==="seekers"){
+    const {data,error}=await sb.from("seekers").select("*").order("created_at",{ascending:false});
+    if(error){console.error("load seekers:",error);return [];}
+    return (data||[]).map(s=>({
+      name:s.name,phone:s.phone,prov:s.province,cat:s.category,
+      exp:s.experience_level,sal:s.expected_salary,bio:s.bio
+    }));
+  }
+  if(key==="jobs"){
+    const {data,error}=await sb.from("jobs")
+      .select("*,employers(company_name,phone)")
+      .order("created_at",{ascending:false});
+    if(error){console.error("load jobs:",error);return [];}
+    return (data||[]).map(j=>({
+      co:j.employers?.company_name,phone:j.employers?.phone,
+      title:j.title,cat:j.category,prov:j.province,type:j.employment_type,
+      smin:j.salary_min,smax:j.salary_max,desc:j.description
+    }));
+  }
+  return [];
 }
 
 /* ---------- build selects ---------- */
@@ -86,20 +103,32 @@ document.addEventListener("click",e=>{
 });
 
 /* ---------- save handlers ---------- */
+const num=v=>v===""||v==null?null:parseInt(v);
+
 document.querySelectorAll("[data-save]").forEach(btn=>{
   btn.addEventListener("click",async()=>{
     if(btn.dataset.save==="seeker"){
-      const arr=await load("seekers");
-      arr.push({name:s_name.value,phone:s_phone.value,prov:s_prov.value,cat:s_cat.value,
-        exp:s_exp.value,sal:s_sal.value,bio:s_bio.value});
-      await save("seekers",arr);
+      const {error}=await sb.from("seekers").insert({
+        name:s_name.value,phone:s_phone.value,
+        province:s_prov.value,category:s_cat.value,
+        experience_level:s_exp.value,expected_salary:num(s_sal.value),
+        bio:s_bio.value
+      });
+      if(error){console.error("save seeker:",error);alert("Save failed: "+error.message);return;}
       s_ok.classList.add("show");setTimeout(()=>s_ok.classList.remove("show"),2500);
       [s_name,s_phone,s_sal,s_bio].forEach(x=>x.value="");
     }else{
-      const arr=await load("jobs");
-      arr.push({co:e_co.value,phone:e_phone.value,title:e_title.value,cat:e_cat.value,prov:e_prov.value,
-        type:e_type.value,smin:e_smin.value,smax:e_smax.value,desc:e_desc.value});
-      await save("jobs",arr);
+      const {data:emp,error:eErr}=await sb.from("employers").insert({
+        company_name:e_co.value,phone:e_phone.value
+      }).select().single();
+      if(eErr){console.error("save employer:",eErr);alert("Save failed: "+eErr.message);return;}
+      const {error:jErr}=await sb.from("jobs").insert({
+        employer_id:emp.id,title:e_title.value,category:e_cat.value,
+        province:e_prov.value,employment_type:e_type.value,
+        salary_min:num(e_smin.value),salary_max:num(e_smax.value),
+        description:e_desc.value
+      });
+      if(jErr){console.error("save job:",jErr);alert("Save failed: "+jErr.message);return;}
       e_ok.classList.add("show");setTimeout(()=>e_ok.classList.remove("show"),2500);
       [e_co,e_phone,e_title,e_smin,e_smax,e_desc].forEach(x=>x.value="");
     }
