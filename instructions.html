@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KhmerJobs — Build Brief</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #1e2d42;
+        background: #f0f3f8;
+        padding: 40px 20px;
+    }
+    .page {
+        max-width: 860px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        overflow: hidden;
+    }
+    .cover {
+        background: linear-gradient(140deg, #1a2942 0%, #2d4a7a 100%);
+        padding: 52px 56px;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .cover-tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #c9a84c;
+        border: 1px solid rgba(201,168,76,0.4);
+        border-radius: 30px;
+        padding: 5px 16px;
+        margin-bottom: 18px;
+    }
+    .cover h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+    .cover h1 span { color: #c9a84c; }
+    .cover p { color: rgba(255,255,255,0.7); font-size: 15px; max-width: 560px; }
+    .body { padding: 52px 56px; }
+
+    h2 {
+        font-size: 18px;
+        color: #1a2942;
+        margin: 40px 0 14px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f3f8;
+    }
+    h2:first-child { margin-top: 0; }
+    h3 { font-size: 14px; font-weight: 700; color: #1a2942; margin: 20px 0 8px; }
+    p  { color: #4a5568; margin-bottom: 10px; }
+    ul, ol { padding-left: 20px; color: #4a5568; margin-bottom: 12px; }
+    li { margin-bottom: 5px; }
+
+    .box {
+        background: #f8faff;
+        border: 1px solid #dde3ed;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin: 14px 0;
+    }
+    .box.gold  { border-left: 4px solid #c9a84c; background: #fffdf5; }
+    .box.navy  { border-left: 4px solid #1a2942; background: #f5f7fb; }
+    .box.green { border-left: 4px solid #27ae60; background: #f4fbf6; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    th {
+        background: #1a2942;
+        color: white;
+        padding: 10px 14px;
+        text-align: left;
+        font-weight: 600;
+    }
+    td {
+        padding: 9px 14px;
+        border-bottom: 1px solid #edf0f7;
+        color: #4a5568;
+        vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #fafbfd; }
+
+    code {
+        font-family: 'Consolas', monospace;
+        background: #edf2ff;
+        color: #1a2942;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    .label {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-right: 6px;
+    }
+    .label.required { background: #fdecea; color: #c0392b; }
+    .label.optional { background: #edf2ff; color: #3b5bdb; }
+
+    @media print {
+        body { background: white; padding: 0; }
+        .page { box-shadow: none; border-radius: 0; }
+        .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        h2 { page-break-after: avoid; }
+    }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+    <div class="cover-tag">AI Build Brief</div>
+    <h1>KhmerJobs<br><span>Page Specification</span></h1>
+    <p>This document is a complete specification for building a professional bilingual recruitment sign-up page. Hand this to an AI coding assistant and ask it to build the page exactly as described.</p>
+</div>
+
+<div class="body">
+
+    <h2>1. Project Overview</h2>
+    <p>Build a single-page recruitment website where <strong>job seekers</strong> and <strong>employers</strong> can register for free. The page must be bilingual — <strong>Khmer is the default language</strong>, with a toggle to switch to English. Design must be top professional.</p>
+
+    <div class="box gold">
+        <strong>What to build:</strong> One HTML page with two registration forms — one for job seekers, one for employers. When a user selects their type, the relevant form appears. On submit, data is saved to Firebase Firestore and any uploaded files go to Firebase Storage.
+    </div>
+
+
+    <h2>2. Tech Stack</h2>
+    <table>
+        <tr><th>Purpose</th><th>Tool</th><th>Notes</th></tr>
+        <tr><td>Frontend</td><td>Plain HTML, CSS, JavaScript</td><td>No frameworks. No npm. No build tools.</td></tr>
+        <tr><td>Database</td><td>Firebase Firestore</td><td>Free tier. NoSQL document storage.</td></tr>
+        <tr><td>Authentication</td><td>Firebase Authentication</td><td>Email + password only.</td></tr>
+        <tr><td>File storage</td><td>Firebase Storage</td><td>For resumes and company logos.</td></tr>
+        <tr><td>Hosting</td><td>Firebase Hosting</td><td>Free. Drag and drop deploy.</td></tr>
+        <tr><td>Fonts</td><td>Google Fonts</td><td>Noto Sans Khmer + Moul + Inter. Load via CDN link tag.</td></tr>
+        <tr><td>Firebase SDK</td><td>Version 10.12.0</td><td>Load via CDN script imports. No npm.</td></tr>
+    </table>
+
+    <div class="box navy">
+        <strong>Important:</strong> Firebase config keys must be placed in a clearly marked section at the top of <code>app.js</code> with a comment saying "PASTE YOUR FIREBASE CONFIG HERE". The owner will fill these in manually after creating their Firebase project.
+    </div>
+
+
+    <h2>3. Files to Create</h2>
+    <ul>
+        <li><code>index.html</code> — the full page</li>
+        <li><code>style.css</code> — all styling</li>
+        <li><code>lang.js</code> — language switching logic</li>
+        <li><code>app.js</code> — Firebase registration logic</li>
+    </ul>
+
+
+    <h2>4. Design Requirements</h2>
+
+    <h3>Colour Palette</h3>
+    <table>
+        <tr><th>Name</th><th>Hex</th><th>Use</th></tr>
+        <tr><td>Navy</td><td><code>#1a2942</code></td><td>Header, headings, buttons</td></tr>
+        <tr><td>Gold</td><td><code>#c9a84c</code></td><td>Accents, hover states, borders</td></tr>
+        <tr><td>Background</td><td><code>#f0f3f8</code></td><td>Page background</td></tr>
+        <tr><td>White</td><td><code>#ffffff</code></td><td>Cards, form backgrounds</td></tr>
+        <tr><td>Text</td><td><code>#1e2d42</code></td><td>Body text</td></tr>
+        <tr><td>Text light</td><td><code>#718096</code></td><td>Labels, secondary text</td></tr>
+    </table>
+
+    <h3>Typography</h3>
+    <ul>
+        <li>Body text: <code>Noto Sans Khmer</code>, fallback <code>Inter</code></li>
+        <li>Headings and hero title: <code>Moul</code> (Khmer display font), fallback <code>Inter</code></li>
+        <li>Buttons and labels: <code>Inter</code></li>
+    </ul>
+
+    <h3>Layout</h3>
+    <ul>
+        <li>Sticky header with logo on left, language toggle button on right</li>
+        <li>Full-width dark navy hero section with large title and subtitle</li>
+        <li>Two role-selector cards side by side: "I'm looking for work" and "I'm an employer"</li>
+        <li>Clicking a card reveals that registration form below and scrolls to it smoothly</li>
+        <li>Form in a white card with gold top border, max-width 860px, centered</li>
+        <li>Form fields in two-column grid on desktop, single column on mobile</li>
+        <li>Footer with copyright</li>
+        <li>Fully responsive — works on mobile</li>
+    </ul>
+
+    <h3>Interactions</h3>
+    <ul>
+        <li>Role cards highlight (navy background, white text) when selected</li>
+        <li>Submit button changes to gold on hover with slight lift shadow</li>
+        <li>Success overlay appears after successful registration</li>
+        <li>Error overlay appears with friendly message if registration fails</li>
+        <li>File upload area has dashed border, highlights gold on hover, shows filename after selection</li>
+    </ul>
+
+
+    <h2>5. Language System</h2>
+    <p>Every visible text string must exist in both Khmer and English using <code>data-km</code> and <code>data-en</code> HTML attributes. The <code>lang.js</code> file reads these attributes and swaps text when the user toggles language. The chosen language is saved in <code>localStorage</code> so it persists on refresh.</p>
+
+    <div class="box gold">
+        <strong>Default language is Khmer.</strong> The page loads in Khmer. The toggle button shows "EN" when in Khmer mode and "ខ្មែរ" when in English mode.
+    </div>
+
+    <h3>Key translations needed</h3>
+    <table>
+        <tr><th>English</th><th>Khmer</th></tr>
+        <tr><td>I'm Looking for Work</td><td>ខ្ញុំកំពុងរកការងារ</td></tr>
+        <tr><td>I'm an Employer</td><td>ខ្ញុំជានិយោជក</td></tr>
+        <tr><td>Job Seeker Registration</td><td>ចុះឈ្មោះអ្នករកការងារ</td></tr>
+        <tr><td>Employer Registration</td><td>ចុះឈ្មោះក្រុមហ៊ុន</td></tr>
+        <tr><td>Full Name</td><td>ឈ្មោះពេញ</td></tr>
+        <tr><td>Email Address</td><td>អ៊ីមែល</td></tr>
+        <tr><td>Password</td><td>ពាក្យសម្ងាត់</td></tr>
+        <tr><td>Phone Number</td><td>លេខទូរស័ព្ទ</td></tr>
+        <tr><td>Location / Province</td><td>ទីតាំង / ខេត្ត</td></tr>
+        <tr><td>Industry</td><td>ឧស្សាហកម្ម</td></tr>
+        <tr><td>Experience Level</td><td>កម្រិតបទពិសោធន៍</td></tr>
+        <tr><td>Skills (comma separated)</td><td>ជំនាញ (បំបែកដោយក្បៀស)</td></tr>
+        <tr><td>Upload Resume (PDF or Word)</td><td>បង្ហោះប្រវត្តិរូប (PDF ឬ Word)</td></tr>
+        <tr><td>Company Name</td><td>ឈ្មោះក្រុមហ៊ុន</td></tr>
+        <tr><td>Contact Person</td><td>ឈ្មោះអ្នកទំនាក់ទំនង</td></tr>
+        <tr><td>Number of Employees</td><td>ចំនួនបុគ្គលិក</td></tr>
+        <tr><td>We Are Looking For</td><td>យើងកំពុងស្វែងរក</td></tr>
+        <tr><td>Position(s) Required</td><td>មុខតំណែងដែលត្រូវការ</td></tr>
+        <tr><td>Employment Type</td><td>ប្រភេទការងារ</td></tr>
+        <tr><td>Required Experience Level</td><td>កម្រិតបទពិសោធន៍ដែលត្រូវការ</td></tr>
+        <tr><td>Salary Range (USD/month)</td><td>ជួរប្រាក់បំណាច់ (USD/ខែ)</td></tr>
+        <tr><td>Register for Free</td><td>ចុះឈ្មោះឥតគិតថ្លៃ</td></tr>
+        <tr><td>Registration Successful!</td><td>ចុះឈ្មោះបានជោគជ័យ!</td></tr>
+        <tr><td>Already have an account? Login here</td><td>មានគណនីរួចហើយ? ចូលទីនេះ</td></tr>
+    </table>
+
+
+    <h2>6. Job Seeker Form Fields</h2>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Required</th></tr>
+        <tr><td>Full Name</td><td>Text input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Phone Number</td><td>Tel input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Email Address</td><td>Email input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Password (min 6 characters)</td><td>Password input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Location / Province</td><td>Text input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Current or Desired Job Title</td><td>Text input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Industry</td><td>Dropdown</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Experience Level</td><td>Dropdown</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Skills</td><td>Text input (comma separated)</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>About Me</td><td>Textarea</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Resume Upload</td><td>File input (.pdf, .doc, .docx)</td><td><span class="label optional">Optional</span></td></tr>
+    </table>
+
+    <h3>Industry dropdown options (both forms)</h3>
+    <p>Technology, Finance / Accounting, Healthcare, Education, Construction / Engineering, Hospitality / Tourism, Agriculture, NGO / Non-Profit, Retail / Trade, Other</p>
+
+    <h3>Experience level options (both forms)</h3>
+    <p>Entry Level (no experience), Junior (1–3 years), Mid-Level (3–5 years), Senior (5+ years), Executive / Manager</p>
+
+
+    <h2>7. Employer Form Fields</h2>
+
+    <h3>Company Information section</h3>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Required</th></tr>
+        <tr><td>Company Name</td><td>Text input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Contact Person</td><td>Text input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Email Address</td><td>Email input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Password (min 6 characters)</td><td>Password input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Phone Number</td><td>Tel input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Company Website</td><td>URL input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Industry</td><td>Dropdown</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Number of Employees</td><td>Dropdown</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Company Location</td><td>Text input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>About the Company</td><td>Textarea</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Company Logo</td><td>File input (images)</td><td><span class="label optional">Optional</span></td></tr>
+    </table>
+
+    <h3>"We Are Looking For" section (visually separated with a distinct heading)</h3>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Required</th></tr>
+        <tr><td>Position(s) Required</td><td>Text input</td><td><span class="label required">Required</span></td></tr>
+        <tr><td>Employment Type</td><td>Dropdown: Full-Time, Part-Time, Contract, Internship, Remote</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Required Experience Level</td><td>Dropdown (same as seeker + "Any Level")</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Salary Range (USD/month)</td><td>Dropdown: $0–200, $200–400, $400–700, $700–1200, $1200–2000, $2000+, Negotiable</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Required Skills</td><td>Text input (comma separated)</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Number of Vacancies</td><td>Number input</td><td><span class="label optional">Optional</span></td></tr>
+        <tr><td>Additional Requirements / Notes</td><td>Textarea</td><td><span class="label optional">Optional</span></td></tr>
+    </table>
+
+
+    <h2>8. Firebase Logic (app.js)</h2>
+    <p>Load Firebase SDK version 10.12.0 via CDN using ES module imports. Do not use npm.</p>
+
+    <h3>Job Seeker registration flow</h3>
+    <ol>
+        <li>Call <code>createUserWithEmailAndPassword(auth, email, password)</code></li>
+        <li>If a resume file was selected, upload it to Firebase Storage at path <code>resumes/{userId}/{filename}</code> and get the download URL</li>
+        <li>Save all form data to Firestore collection <code>seekers</code>, document ID = user's UID</li>
+        <li>Show success overlay. Reset form.</li>
+        <li>On error, show error overlay with a friendly message (not the raw Firebase error code)</li>
+    </ol>
+
+    <h3>Employer registration flow</h3>
+    <ol>
+        <li>Call <code>createUserWithEmailAndPassword(auth, email, password)</code></li>
+        <li>If a logo file was selected, upload it to Firebase Storage at path <code>logos/{userId}/{filename}</code> and get the download URL</li>
+        <li>Save all form data to Firestore collection <code>employers</code>, document ID = user's UID. The "We Are Looking For" fields must be saved as a nested object called <code>lookingFor</code></li>
+        <li>Show success overlay. Reset form.</li>
+        <li>On error, show error overlay with a friendly message</li>
+    </ol>
+
+    <h3>Common friendly error messages to handle</h3>
+    <table>
+        <tr><th>Firebase error code</th><th>Message to show user</th></tr>
+        <tr><td>auth/email-already-in-use</td><td>This email is already registered. Please log in instead.</td></tr>
+        <tr><td>auth/invalid-email</td><td>Please enter a valid email address.</td></tr>
+        <tr><td>auth/weak-password</td><td>Password must be at least 6 characters.</td></tr>
+        <tr><td>auth/network-request-failed</td><td>Network error. Please check your internet connection.</td></tr>
+    </table>
+
+
+    <h2>9. Firebase Security Rules</h2>
+    <p>Include these as comments at the bottom of <code>app.js</code> so the owner can copy and paste them into the Firebase console.</p>
+
+    <h3>Firestore rules</h3>
+    <div class="box navy">
+<pre style="font-family:Consolas,monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /seekers/{userId} {
+      allow read:           if request.auth != null;
+      allow create:         if request.auth != null &amp;&amp; request.auth.uid == userId;
+      allow update, delete: if request.auth.uid == userId;
+    }
+    match /employers/{userId} {
+      allow read:           if request.auth != null;
+      allow create:         if request.auth != null &amp;&amp; request.auth.uid == userId;
+      allow update, delete: if request.auth.uid == userId;
+    }
+  }
+}</pre>
+    </div>
+
+    <h3>Storage rules</h3>
+    <div class="box navy">
+<pre style="font-family:Consolas,monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;">rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /resumes/{userId}/{fileName} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null &amp;&amp; request.auth.uid == userId;
+    }
+    match /logos/{userId}/{fileName} {
+      allow read:  if true;
+      allow write: if request.auth != null &amp;&amp; request.auth.uid == userId;
+    }
+  }
+}</pre>
+    </div>
+
+
+    <h2>10. What the Owner Will Do After You Build It</h2>
+    <div class="box green">
+        <ol style="color:#1a5c36;">
+            <li>Create a free Firebase project at firebase.google.com</li>
+            <li>Enable Authentication (Email/Password), Firestore, Storage, and Hosting</li>
+            <li>Copy their Firebase config and paste it into the marked section of <code>app.js</code></li>
+            <li>Paste the security rules into Firebase console</li>
+            <li>Drag the 4 files into Firebase Hosting to go live</li>
+        </ol>
+    </div>
+
+    <div style="margin-top:48px;padding-top:24px;border-top:1px solid #edf0f7;text-align:center;color:#a0aec0;font-size:12px;">
+        KhmerJobs Build Brief &nbsp;·&nbsp; Print this page: Ctrl + P &nbsp;·&nbsp; Hand to AI coding assistant to build
+    </div>
+
+</div>
+</div>
+</body>
+</html>

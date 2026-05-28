@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KarKhmer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Noto+Sans+Khmer:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-lang="km">
+
+<header><div class="wrap bar">
+  <div class="logo" data-go="home">Kar<span>Khmer</span></div>
+  <nav>
+    <button data-go="home" class="active" data-t="nav_home"></button>
+    <button data-go="seeker" data-t="nav_seeker"></button>
+    <button data-go="employer" data-t="nav_employer"></button>
+    <button data-go="jobs" data-t="nav_jobs"></button>
+    <button data-go="workers" data-t="nav_workers"></button>
+  </nav>
+  <div class="lang">
+    <button data-lang="km" class="active">ខ្មែរ</button>
+    <button data-lang="en">EN</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="page show">
+    <div class="hero">
+      <div class="hero-content">
+        <span class="eyebrow" data-t="eyebrow"></span>
+        <h1 data-t="hero_h"></h1>
+        <p data-t="hero_p"></p>
+        <div class="paths">
+          <div class="path" data-go="seeker">
+            <h3 data-t="path_seeker_h"></h3>
+            <p data-t="path_seeker_p"></p>
+            <span class="path-cta" data-t="cta_register"></span>
+          </div>
+          <div class="path" data-go="employer">
+            <h3 data-t="path_emp_h"></h3>
+            <p data-t="path_emp_p"></p>
+            <span class="path-cta" data-t="cta_post"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEEKER SIGNUP -->
+  <section id="seeker" class="page">
+    <h2 data-t="seeker_h"></h2>
+    <p class="sub" data-t="seeker_sub"></p>
+    <div class="form">
+      <div class="grid2">
+        <div><label data-t="f_name"></label><input id="s_name"></div>
+        <div><label data-t="f_phone"></label><input id="s_phone"></div>
+      </div>
+      <div class="grid2">
+        <div><label data-t="f_prov"></label><select id="s_prov"></select></div>
+        <div><label data-t="f_cat"></label><select id="s_cat"></select></div>
+      </div>
+      <div class="grid2">
+        <div><label data-t="f_exp"></label><select id="s_exp"></select></div>
+        <div><label data-t="f_esal"></label><input id="s_sal" type="number" min="0"></div>
+      </div>
+      <label data-t="f_skills"></label><textarea id="s_bio"></textarea>
+      <button class="btn" data-save="seeker" data-t="f_submit"></button>
+      <div class="ok" id="s_ok" data-t="saved"></div>
+    </div>
+  </section>
+
+  <!-- EMPLOYER + JOB POST -->
+  <section id="employer" class="page">
+    <h2 data-t="emp_h"></h2>
+    <p class="sub" data-t="emp_sub"></p>
+    <div class="form">
+      <div class="grid2">
+        <div><label data-t="f_company"></label><input id="e_co"></div>
+        <div><label data-t="f_phone"></label><input id="e_phone"></div>
+      </div>
+      <div class="grid2">
+        <div><label data-t="f_title"></label><input id="e_title"></div>
+        <div><label data-t="f_cat"></label><select id="e_cat"></select></div>
+      </div>
+      <div class="grid2">
+        <div><label data-t="f_prov"></label><select id="e_prov"></select></div>
+        <div><label data-t="f_type"></label><select id="e_type"></select></div>
+      </div>
+      <div class="grid2">
+        <div><label data-t="f_smin"></label><input id="e_smin" type="number" min="0"></div>
+        <div><label data-t="f_smax"></label><input id="e_smax" type="number" min="0"></div>
+      </div>
+      <label data-t="f_desc"></label><textarea id="e_desc"></textarea>
+      <button class="btn amber" data-save="employer" data-t="f_post"></button>
+      <div class="ok" id="e_ok" data-t="posted"></div>
+    </div>
+  </section>
+
+  <!-- SEARCH JOBS -->
+  <section id="jobs" class="page">
+    <h2 data-t="jobs_h"></h2>
+    <p class="sub" data-t="jobs_sub"></p>
+    <div class="filters">
+      <div><div class="label" data-t="f_keyword"></div><input id="j_kw"></div>
+      <div><div class="label" data-t="f_cat"></div><select id="j_cat"></select></div>
+      <div><div class="label" data-t="f_prov"></div><select id="j_prov"></select></div>
+    </div>
+    <div class="cards" id="j_results"></div>
+  </section>
+
+  <!-- SEARCH WORKERS -->
+  <section id="workers" class="page">
+    <h2 data-t="workers_h"></h2>
+    <p class="sub" data-t="workers_sub"></p>
+    <div class="filters">
+      <div><div class="label" data-t="f_keyword"></div><input id="w_kw"></div>
+      <div><div class="label" data-t="f_cat"></div><select id="w_cat"></select></div>
+      <div><div class="label" data-t="f_prov"></div><select id="w_prov"></select></div>
+      <div><div class="label" data-t="f_exp"></div><select id="w_exp"></select></div>
+    </div>
+    <div class="cards" id="w_results"></div>
+  </section>
+
+</main>
+<footer><div class="wrap" data-t="footer"></div></footer>
+
+<script src="app.js"></script>
+</body>
+</html>

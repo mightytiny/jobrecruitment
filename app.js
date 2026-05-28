@@ -1,0 +1,146 @@
+/* ---------- data dictionaries ---------- */
+const PROV=[["pp","ភ្នំពេញ","Phnom Penh"],["bmc","បន្ទាយមានជ័យ","Banteay Meanchey"],["btb","បាត់ដំបង","Battambang"],["kpc","កំពង់ចាម","Kampong Cham"],["kpch","កំពង់ឆ្នាំង","Kampong Chhnang"],["kps","កំពង់ស្ពឺ","Kampong Speu"],["kpt","កំពង់ធំ","Kampong Thom"],["kam","កំពត","Kampot"],["kdl","កណ្ដាល","Kandal"],["kep","កែប","Kep"],["kkg","កោះកុង","Koh Kong"],["krt","ក្រចេះ","Kratie"],["mdk","មណ្ឌលគិរី","Mondulkiri"],["odm","ឧត្តរមានជ័យ","Oddar Meanchey"],["pln","ប៉ៃលិន","Pailin"],["psh","ព្រះសីហនុ","Preah Sihanouk"],["pvh","ព្រះវិហារ","Preah Vihear"],["pvg","ព្រៃវែង","Prey Veng"],["pst","ពោធិ៍សាត់","Pursat"],["rtk","រតនគិរី","Ratanakiri"],["sr","សៀមរាប","Siem Reap"],["stg","ស្ទឹងត្រែង","Stung Treng"],["svr","ស្វាយរៀង","Svay Rieng"],["tko","តាកែវ","Takeo"],["tkm","ត្បូងឃ្មុំ","Tboung Khmum"]];
+const CAT=[["con","សំណង់","Construction"],["hos","បដិសណ្ឋារកិច្ច","Hospitality"],["ret","លក់រាយ","Retail"],["gar","កាត់ដេរ","Garment"],["drv","បើកបរ","Driving"],["dom","ការងារផ្ទះ","Domestic"],["it","ព័ត៌មានវិទ្យា","IT"],["adm","រដ្ឋបាល","Admin"],["agr","កសិកម្ម","Agriculture"]];
+const EXP=[["0","គ្មានបទពិសោធន៍","No experience"],["1","១–៣ ឆ្នាំ","1–3 years"],["3","៣ ឆ្នាំឡើងទៅ","3+ years"]];
+const TYPE=[["ft","ពេញម៉ោង","Full-time"],["pt","ក្រៅម៉ោង","Part-time"]];
+
+const T={
+ km:{nav_home:"ទំព័រដើម",nav_seeker:"ស្វែងរកការងារ",nav_employer:"ជ្រើសរើសបុគ្គលិក",nav_jobs:"ការងារទំនេរ",nav_workers:"រកកម្មករ",
+  eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
+  hero_h:"ភ្ជាប់ទេពកោសល្យកម្ពុជា ជាមួយឱកាសការងារ",hero_p:"វេទិកាដ៏ទុកចិត្តសម្រាប់អ្នកស្វែងរកការងារ និងនិយោជកនៅទូទាំងព្រះរាជាណាចក្រកម្ពុជា។",
+  path_seeker_h:"ខ្ញុំស្វែងរកការងារ",path_seeker_p:"បង្កើតប្រវត្តិរូប និងស្វែងរកឱកាសការងារ",cta_register:"ចុះឈ្មោះ →",
+  path_emp_h:"ខ្ញុំជ្រើសរើសបុគ្គលិក",path_emp_p:"ប្រកាសការងារ និងស្វែងរកបុគ្គលិក",cta_post:"ប្រកាសការងារ →",
+  seeker_h:"ចុះឈ្មោះអ្នកស្វែងរកការងារ",seeker_sub:"បំពេញព័ត៌មានរបស់អ្នក",
+  emp_h:"និយោជក — ប្រកាសការងារ",emp_sub:"បំពេញព័ត៌មានក្រុមហ៊ុន និងការងារ",
+  jobs_h:"ស្វែងរកការងារ",jobs_sub:"ត្រងតាមប្រភេទ ខេត្ត ឬពាក្យគន្លឹះ",
+  workers_h:"ស្វែងរកកម្មករ",workers_sub:"ត្រងតាមប្រភេទ ខេត្ត បទពិសោធន៍",
+  f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
+  f_esal:"ប្រាក់ខែរំពឹងទុក ($)",f_skills:"ជំនាញ / ប្រវត្តិសង្ខេប",f_submit:"ដាក់ស្នើ",saved:"✓ បានរក្សាទុក",
+  f_company:"ឈ្មោះក្រុមហ៊ុន",f_title:"ចំណងជើងការងារ",f_type:"ប្រភេទ",f_smin:"ប្រាក់ខែ អប្បបរមា ($)",f_smax:"ប្រាក់ខែ អតិបរមា ($)",
+  f_desc:"ការពិពណ៌នាការងារ",f_post:"ប្រកាសការងារ",posted:"✓ បានប្រកាស",
+  f_keyword:"ពាក្យគន្លឹះ",all:"ទាំងអស់",empty:"រកមិនឃើញលទ្ធផល",mo:"/ខែ",footer:"KarKhmer — គំរូបង្ហាញ"},
+ en:{nav_home:"Home",nav_seeker:"Find work",nav_employer:"Hire",nav_jobs:"Jobs",nav_workers:"Find workers",
+  eyebrow:"Professional Recruitment Platform",
+  hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
+  path_seeker_h:"I'm looking for work",path_seeker_p:"Build a profile and discover opportunities",cta_register:"Register →",
+  path_emp_h:"I'm hiring",path_emp_p:"Post jobs and find qualified candidates",cta_post:"Post a job →",
+  seeker_h:"Job seeker sign-up",seeker_sub:"Fill in your details",
+  emp_h:"Employer — post a job",emp_sub:"Fill in company and job details",
+  jobs_h:"Search jobs",jobs_sub:"Filter by category, province or keyword",
+  workers_h:"Search workers",workers_sub:"Filter by category, province, experience",
+  f_name:"Name",f_phone:"Phone",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
+  f_esal:"Expected salary ($)",f_skills:"Skills / short bio",f_submit:"Submit",saved:"✓ Saved",
+  f_company:"Company name",f_title:"Job title",f_type:"Type",f_smin:"Salary min ($)",f_smax:"Salary max ($)",
+  f_desc:"Job description",f_post:"Post job",posted:"✓ Posted",
+  f_keyword:"Keyword",all:"All",empty:"No results found",mo:"/mo",footer:"KarKhmer — demo prototype"}
+};
+
+let lang="km";
+const L=i=>(({km:1,en:2})[lang]); // index into [id,km,en]
+const lab=arr=>arr[lang==="km"?1:2];
+
+/* ---------- storage (persistent, with in-memory fallback) ---------- */
+const mem={seekers:[],jobs:[]};
+async function load(key){
+  try{const r=await window.storage.get(key);return r?JSON.parse(r.value):[];}
+  catch(e){return mem[key]||[];}
+}
+async function save(key,val){
+  mem[key]=val;
+  try{await window.storage.set(key,JSON.stringify(val));}catch(e){}
+}
+
+/* ---------- build selects ---------- */
+function fillSelect(el,arr,withAll){
+  el.innerHTML="";
+  if(withAll){const o=document.createElement("option");o.value="";o.textContent=T[lang].all;el.appendChild(o);}
+  arr.forEach(a=>{const o=document.createElement("option");o.value=a[0];o.textContent=lab(a);el.appendChild(o);});
+}
+function buildSelects(){
+  fillSelect(s_prov,PROV);fillSelect(s_cat,CAT);fillSelect(s_exp,EXP);
+  fillSelect(e_prov,PROV);fillSelect(e_cat,CAT);fillSelect(e_type,TYPE);
+  fillSelect(j_cat,CAT,1);fillSelect(j_prov,PROV,1);
+  fillSelect(w_cat,CAT,1);fillSelect(w_prov,PROV,1);fillSelect(w_exp,EXP,1);
+}
+
+/* ---------- translation render ---------- */
+function applyLang(){
+  document.body.dataset.lang=lang;
+  document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=T[lang][el.dataset.t]||"";});
+  buildSelects();
+  renderJobs();renderWorkers();
+}
+
+/* ---------- navigation ---------- */
+function go(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("show",p.id===id));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.go===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id==="jobs")renderJobs();
+  if(id==="workers")renderWorkers();
+}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");if(g)go(g.dataset.go);
+  const lb=e.target.closest(".lang button");if(lb){lang=lb.dataset.lang;
+    document.querySelectorAll(".lang button").forEach(x=>x.classList.toggle("active",x===lb));applyLang();}
+});
+
+/* ---------- save handlers ---------- */
+document.querySelectorAll("[data-save]").forEach(btn=>{
+  btn.addEventListener("click",async()=>{
+    if(btn.dataset.save==="seeker"){
+      const arr=await load("seekers");
+      arr.push({name:s_name.value,phone:s_phone.value,prov:s_prov.value,cat:s_cat.value,
+        exp:s_exp.value,sal:s_sal.value,bio:s_bio.value});
+      await save("seekers",arr);
+      s_ok.classList.add("show");setTimeout(()=>s_ok.classList.remove("show"),2500);
+      [s_name,s_phone,s_sal,s_bio].forEach(x=>x.value="");
+    }else{
+      const arr=await load("jobs");
+      arr.push({co:e_co.value,phone:e_phone.value,title:e_title.value,cat:e_cat.value,prov:e_prov.value,
+        type:e_type.value,smin:e_smin.value,smax:e_smax.value,desc:e_desc.value});
+      await save("jobs",arr);
+      e_ok.classList.add("show");setTimeout(()=>e_ok.classList.remove("show"),2500);
+      [e_co,e_phone,e_title,e_smin,e_smax,e_desc].forEach(x=>x.value="");
+    }
+  });
+});
+
+/* ---------- search renderers ---------- */
+const name=(arr,id)=>{const f=arr.find(a=>a[0]===id);return f?lab(f):"";};
+function card(html){const d=document.createElement("div");d.className="rc";d.innerHTML=html;return d;}
+
+async function renderJobs(){
+  const arr=await load("jobs");const box=j_results;box.innerHTML="";
+  const kw=j_kw.value.toLowerCase(),c=j_cat.value,p=j_prov.value;
+  const out=arr.filter(j=>(!c||j.cat===c)&&(!p||j.prov===p)&&
+    (!kw||((j.title+j.desc+j.co).toLowerCase().includes(kw))));
+  if(!out.length){box.innerHTML=`<div class="empty">${T[lang].empty}</div>`;return;}
+  out.forEach(j=>{
+    const sal=(j.smin||j.smax)?`<span class="tag sal">$${j.smin||"?"}–${j.smax||"?"} ${T[lang].mo}</span>`:"";
+    box.appendChild(card(
+      `<div class="t">${j.title||""}</div><div class="m">${j.co||""}</div>
+       <span class="tag">${name(CAT,j.cat)}</span><span class="tag">${name(PROV,j.prov)}</span>
+       <span class="tag">${name(TYPE,j.type)}</span>${sal}
+       <div class="d">${j.desc||""}</div>`));
+  });
+}
+async function renderWorkers(){
+  const arr=await load("seekers");const box=w_results;box.innerHTML="";
+  const kw=w_kw.value.toLowerCase(),c=w_cat.value,p=w_prov.value,x=w_exp.value;
+  const out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
+    (!kw||((s.name+s.bio).toLowerCase().includes(kw))));
+  if(!out.length){box.innerHTML=`<div class="empty">${T[lang].empty}</div>`;return;}
+  out.forEach(s=>{
+    const sal=s.sal?`<span class="tag sal">$${s.sal} ${T[lang].mo}</span>`:"";
+    box.appendChild(card(
+      `<div class="t">${s.name||""}</div><div class="m">${s.phone||""}</div>
+       <span class="tag">${name(CAT,s.cat)}</span><span class="tag">${name(PROV,s.prov)}</span>
+       <span class="tag">${name(EXP,s.exp)}</span>${sal}
+       <div class="d">${s.bio||""}</div>`));
+  });
+}
+["j_kw","j_cat","j_prov"].forEach(id=>document.getElementById(id).addEventListener("input",renderJobs));
+["w_kw","w_cat","w_prov","w_exp"].forEach(id=>document.getElementById(id).addEventListener("input",renderWorkers));
+
+applyLang();
