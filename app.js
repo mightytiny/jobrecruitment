@@ -43,10 +43,14 @@ let lang="km";
 const lab=arr=>arr[lang==="km"?1:2];
 
 /* ---------- helpers ---------- */
+// DEV: set to false before launching publicly. When true, accepts literal "email"/"phone" for fast testing.
+const DEV=true;
 const $=id=>document.getElementById(id);
 const esc=s=>s==null?"":String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE=/^[\d\s+\-()]{6,20}$/;
+const validEmail=v=>(DEV&&v==="email")||EMAIL_RE.test(v);
+const validPhone=v=>(DEV&&v==="phone")||PHONE_RE.test(v);
 function maskPhone(p){
   if(!p)return"";
   const s=String(p).replace(/\D/g,"");
@@ -148,8 +152,8 @@ document.querySelectorAll("[data-save]").forEach(btn=>{
       const errEl=$("s_err");
       if(!name||!phone||!email||!$("s_prov").value||!$("s_cat").value||!$("s_exp").value)
         return showErr(errEl,T[lang].err_required);
-      if(!EMAIL_RE.test(email))return showErr(errEl,T[lang].err_email);
-      if(!PHONE_RE.test(phone))return showErr(errEl,T[lang].err_phone);
+      if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+      if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
       const {error}=await sb.from("seekers").insert({
         name,phone,email,
         province:$("s_prov").value,category:$("s_cat").value,
@@ -165,8 +169,8 @@ document.querySelectorAll("[data-save]").forEach(btn=>{
       const errEl=$("e_err");
       if(!co||!phone||!email||!title||!$("e_cat").value||!$("e_prov").value||!$("e_type").value)
         return showErr(errEl,T[lang].err_required);
-      if(!EMAIL_RE.test(email))return showErr(errEl,T[lang].err_email);
-      if(!PHONE_RE.test(phone))return showErr(errEl,T[lang].err_phone);
+      if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+      if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
       const {data:emp,error:eErr}=await sb.from("employers").insert({
         company_name:co,phone,email
       }).select().single();
