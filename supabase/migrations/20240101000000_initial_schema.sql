@@ -48,3 +48,18 @@ CREATE INDEX idx_jobs_category ON jobs(category);
 CREATE INDEX idx_jobs_province ON jobs(province);
 CREATE INDEX idx_seekers_category ON seekers(category);
 CREATE INDEX idx_seekers_province ON seekers(province);
+
+-- Enable Row Level Security
+ALTER TABLE employers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE seekers ENABLE ROW LEVEL SECURITY;
+
+-- Public read policies (for search functionality)
+CREATE POLICY "Public read employers" ON employers FOR SELECT USING (true);
+CREATE POLICY "Public read jobs" ON jobs FOR SELECT USING (true);
+CREATE POLICY "Public read seekers" ON seekers FOR SELECT USING (true);
+
+-- Public insert policies (for registration/job posting)
+CREATE POLICY "Public insert employers" ON employers FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public insert jobs" ON jobs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public insert seekers" ON seekers FOR INSERT WITH CHECK (true);
