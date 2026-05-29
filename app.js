@@ -656,12 +656,20 @@ async function doSignup(){
 /* ---------- search renderers ---------- */
 const labelOf=(arr,id)=>{const f=arr.find(a=>a[0]===id);return f?lab(f):"";};
 function card(html){const d=document.createElement("div");d.className="rc";d.innerHTML=html;return d;}
+const KHMER_DIGITS="០១២៣៤៥៦៧៨៩";
+const toKhmerNum=n=>String(n).replace(/\d/g,d=>KHMER_DIGITS[+d]);
+function countLine(n,kind){
+  if(lang==="km") return "មាន "+toKhmerNum(n)+" "+(kind==="jobs"?"ការងារ":"កម្មករ");
+  const noun=kind==="jobs"?(n===1?"job":"jobs"):(n===1?"worker":"workers");
+  return n+" "+noun+" found";
+}
 
 async function renderJobs(){
   const arr=await load("jobs");const box=$("j_results");box.innerHTML="";
   const kw=$("j_kw").value.toLowerCase(),c=$("j_cat").value,p=$("j_prov").value;
   const out=arr.filter(j=>(!c||j.cat===c)&&(!p||j.prov===p)&&
     (!kw||((j.title+" "+(j.desc||"")+" "+(j.co||"")).toLowerCase().includes(kw))));
+  $("j_count").textContent=countLine(out.length,"jobs");
   if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(j=>{
     const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
@@ -681,6 +689,7 @@ async function renderWorkers(){
   const kw=$("w_kw").value.toLowerCase(),c=$("w_cat").value,p=$("w_prov").value,x=$("w_exp").value;
   const out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
     (!kw||((s.name+" "+(s.bio||"")).toLowerCase().includes(kw))));
+  $("w_count").textContent=countLine(out.length,"workers");
   if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(s=>{
     const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
