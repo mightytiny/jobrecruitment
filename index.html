@@ -20,9 +20,12 @@
     <button data-go="jobs" data-t="nav_jobs"></button>
     <button data-go="workers" data-t="nav_workers"></button>
   </nav>
-  <div class="lang">
-    <button data-lang="km" class="active">ខ្មែរ</button>
-    <button data-lang="en">EN</button>
+  <div class="rt">
+    <div class="auth" id="auth_area"></div>
+    <div class="lang">
+      <button data-lang="km" class="active">ខ្មែរ</button>
+      <button data-lang="en">EN</button>
+    </div>
   </div>
 </div></header>
 
@@ -51,10 +54,98 @@
     </div>
   </section>
 
+  <!-- LOGIN -->
+  <section id="login" class="page">
+    <h2 data-t="login_h"></h2>
+    <p class="sub" data-t="login_sub"></p>
+    <div class="form auth-form">
+      <label for="li_email" data-t="f_email"></label>
+      <input id="li_email" type="email" maxlength="120" autocomplete="email" required>
+      <label for="li_pw" data-t="f_password"></label>
+      <input id="li_pw" type="password" maxlength="120" autocomplete="current-password" required>
+      <button class="btn" data-auth="login" data-t="f_login_btn"></button>
+      <button class="alt-link" data-go="signup" data-t="login_alt"></button>
+      <div class="err" id="li_err"></div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section id="signup" class="page">
+    <h2 data-t="signup_h"></h2>
+    <p class="sub" data-t="signup_sub"></p>
+    <div class="form auth-form">
+      <div class="role-pick">
+        <span class="role-label" data-t="role_q"></span>
+        <div class="role-opts">
+          <label class="role-opt"><input type="radio" name="su_role" value="seeker" checked><span data-t="role_seeker"></span></label>
+          <label class="role-opt"><input type="radio" name="su_role" value="employer"><span data-t="role_employer"></span></label>
+        </div>
+      </div>
+      <label for="su_email" data-t="f_email"></label>
+      <input id="su_email" type="email" maxlength="120" autocomplete="email" required>
+      <label for="su_pw" data-t="f_password"></label>
+      <input id="su_pw" type="password" maxlength="120" minlength="6" autocomplete="new-password" required>
+      <label for="su_pw2" data-t="f_password_confirm"></label>
+      <input id="su_pw2" type="password" maxlength="120" minlength="6" autocomplete="new-password" required>
+      <button class="btn amber" data-auth="signup" data-t="f_signup_btn"></button>
+      <button class="alt-link" data-go="login" data-t="signup_alt"></button>
+      <div class="err" id="su_err"></div>
+    </div>
+  </section>
+
+  <!-- VERIFY EMAIL NOTICE -->
+  <section id="verify" class="page">
+    <h2 data-t="verify_h"></h2>
+    <p class="sub" id="verify_msg"></p>
+    <div class="form notice">
+      <p data-t="verify_help"></p>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="myposts" class="page">
+    <h2 data-t="myposts_h"></h2>
+    <p class="sub" data-t="myposts_sub"></p>
+
+    <div class="info-banner" id="need_company_banner"><span data-t="need_company"></span></div>
+
+    <div id="account_emp_section">
+      <h3 class="section-h" data-t="section_account_emp"></h3>
+      <div class="form account-form">
+        <p class="form-hint" id="ap_hint" data-t="create_company_inline"></p>
+        <div class="grid2">
+          <div><label for="ap_co" data-t="f_company"></label><input id="ap_co" type="text" maxlength="100" required></div>
+          <div><label for="ap_contact" data-t="f_contact_name"></label><input id="ap_contact" type="text" maxlength="100"></div>
+        </div>
+        <div class="grid2">
+          <div><label for="ap_phone" data-t="f_phone"></label><input id="ap_phone" type="tel" maxlength="20" required></div>
+          <div><label for="ap_email" data-t="f_email"></label><input id="ap_email" type="email" maxlength="120" required></div>
+        </div>
+        <div class="grid2">
+          <div><label for="ap_industry" data-t="f_industry"></label><input id="ap_industry" type="text" maxlength="80"></div>
+          <div><label for="ap_location" data-t="f_location"></label><input id="ap_location" type="text" maxlength="120"></div>
+        </div>
+        <label for="ap_website" data-t="f_website"></label>
+        <input id="ap_website" type="url" maxlength="200" placeholder="https://">
+        <button class="btn" data-save="account-emp" data-t="btn_save"></button>
+        <div class="ok" id="ap_ok" data-t="saved"></div>
+        <div class="err" id="ap_err"></div>
+      </div>
+    </div>
+
+    <div id="mp_content"></div>
+
+    <div class="danger-zone" id="danger_zone" hidden>
+      <p class="danger-warn" id="danger_warn"></p>
+      <button class="btn-sm danger solid" id="del_profile_btn"></button>
+    </div>
+  </section>
+
   <!-- SEEKER SIGNUP -->
   <section id="seeker" class="page">
     <h2 data-t="seeker_h"></h2>
     <p class="sub" data-t="seeker_sub"></p>
+    <div class="edit-banner" id="s_edit_banner"><span data-t="edit_profile_h"></span><button class="link-btn" data-cancel="seeker" data-t="btn_cancel"></button></div>
     <div class="form">
       <div class="grid2">
         <div><label for="s_name" data-t="f_name"></label><input id="s_name" type="text" maxlength="100" required></div>
@@ -80,15 +171,10 @@
   <section id="employer" class="page">
     <h2 data-t="emp_h"></h2>
     <p class="sub" data-t="emp_sub"></p>
+    <div class="edit-banner" id="e_edit_banner"><span data-t="edit_job_h"></span><button class="link-btn" data-cancel="employer" data-t="btn_cancel"></button></div>
     <div class="form">
-      <div class="grid2">
-        <div><label for="e_co" data-t="f_company"></label><input id="e_co" type="text" maxlength="100" required></div>
-        <div><label for="e_phone" data-t="f_phone"></label><input id="e_phone" type="tel" maxlength="20" required></div>
-      </div>
-      <div class="grid2">
-        <div><label for="e_email" data-t="f_email"></label><input id="e_email" type="email" maxlength="120" required></div>
-        <div><label for="e_title" data-t="f_title"></label><input id="e_title" type="text" maxlength="120" required></div>
-      </div>
+      <label for="e_title" data-t="f_title"></label>
+      <input id="e_title" type="text" maxlength="120" required>
       <div class="grid2">
         <div><label for="e_cat" data-t="f_cat"></label><select id="e_cat"></select></div>
         <div><label for="e_prov" data-t="f_prov"></label><select id="e_prov"></select></div>
@@ -108,6 +194,21 @@
     </div>
   </section>
 
+  <!-- JOB DETAIL -->
+  <section id="jobdetail" class="page">
+    <button class="back-btn" data-go="jobs" data-t="back_to_jobs"></button>
+    <div class="detail-wrap">
+      <h2 id="jd_title"></h2>
+      <div class="detail-meta" id="jd_meta"></div>
+      <div class="detail-tags" id="jd_tags"></div>
+      <div class="detail-age" id="jd_age"></div>
+      <h3 class="detail-section-h" data-t="job_description"></h3>
+      <div class="detail-desc" id="jd_desc"></div>
+      <h3 class="detail-section-h" data-t="contact"></h3>
+      <div class="detail-contact" id="jd_contact"></div>
+    </div>
+  </section>
+
   <!-- SEARCH JOBS -->
   <section id="jobs" class="page">
     <h2 data-t="jobs_h"></h2>
@@ -118,6 +219,20 @@
       <div><div class="label" data-t="f_prov"></div><select id="j_prov"></select></div>
     </div>
     <div class="cards" id="j_results"></div>
+  </section>
+
+  <!-- WORKER DETAIL -->
+  <section id="seekerdetail" class="page">
+    <button class="back-btn" data-go="workers" data-t="back_to_workers"></button>
+    <div class="detail-wrap">
+      <h2 id="sd_title"></h2>
+      <div class="detail-tags" id="sd_tags"></div>
+      <div class="detail-age" id="sd_age"></div>
+      <h3 class="detail-section-h" data-t="f_skills"></h3>
+      <div class="detail-desc" id="sd_bio"></div>
+      <h3 class="detail-section-h" data-t="contact"></h3>
+      <div class="detail-contact" id="sd_contact"></div>
+    </div>
   </section>
 
   <!-- SEARCH WORKERS -->
@@ -135,6 +250,17 @@
 
 </main>
 <footer><div class="wrap" data-t="footer"></div></footer>
+
+<div class="modal-backdrop" id="modal_root" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal_title">
+    <h3 id="modal_title" class="modal-h"></h3>
+    <p class="modal-body" id="modal_msg"></p>
+    <div class="modal-actions">
+      <button class="btn-sm" id="modal_cancel"></button>
+      <button class="btn-sm danger solid" id="modal_ok"></button>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
