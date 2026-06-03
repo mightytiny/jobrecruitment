@@ -1,6 +1,6 @@
 // KarKhmer service worker — app-shell caching.
 // Bump CACHE when you change any precached file so clients pick up the new version.
-const CACHE = "karkhmer-v1";
+const CACHE = "karkhmer-v2";
 const ASSETS = [
   "./",
   "./index.html",

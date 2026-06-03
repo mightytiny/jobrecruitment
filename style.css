@@ -29,9 +29,11 @@ nav button:hover{background:#ece4d4}
 nav button.active{background:var(--teal);color:#fff}
 .lang{display:flex;justify-self:end;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--card)}
 @media(max-width:780px){
-  .bar{grid-template-columns:auto 1fr;height:auto;padding:12px 0;gap:10px}
-  .lang{grid-column:2;justify-self:end}
-  nav{grid-column:1 / -1;justify-content:center}
+  header .wrap{padding:0 12px}
+  .bar{grid-template-columns:auto 1fr;height:auto;padding:12px 0;gap:10px 8px}
+  .logo{grid-row:1;grid-column:1;font-size:18px}
+  .rt{grid-row:1;grid-column:2;min-width:0}
+  nav{grid-row:2;grid-column:1 / -1;justify-content:center}
 }
 .lang button{border-radius:0;padding:7px 11px;font-size:13px}
 .lang button.active{background:var(--amber);color:var(--teal2);font-weight:600}
@@ -269,9 +271,11 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 .auth-btn.amber:hover{background:var(--amber2);border-color:var(--amber2)}
 .auth-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 @media(max-width:780px){
-  .rt{flex-wrap:wrap;justify-content:flex-end}
-  .auth{order:1;width:100%;justify-content:flex-end}
-  .auth .who{max-width:120px}
+  .rt{flex-wrap:nowrap;gap:5px;justify-content:flex-end}
+  .auth{width:auto;gap:4px;justify-content:flex-end}
+  .auth .who{max-width:80px}
+  .auth-btn{padding:5px 8px;font-size:11px}
+  .lang button{padding:5px 7px;font-size:11px}
 }
 
 /* ---------- auth forms ---------- */
