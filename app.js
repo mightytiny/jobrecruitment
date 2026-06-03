@@ -5,7 +5,7 @@ const EXP=[["0","គ្មានបទពិសោធន៍","No experience"],["
 const TYPE=[["ft","ពេញម៉ោង","Full-time"],["pt","ក្រៅម៉ោង","Part-time"]];
 
 const T={
- km:{nav_home:"ទំព័រដើម",nav_seeker:"ស្វែងរកការងារ",nav_employer:"ជ្រើសរើសបុគ្គលិក",nav_jobs:"ការងារទំនេរ",nav_workers:"រកកម្មករ",
+ km:{nav_home:"ទំព័រដើម",nav_seeker:"ស្វែងរកការងារ",nav_employer:"ជ្រើសរើសបុគ្គលិក",nav_jobs:"ស្វែងរកការងារ",nav_workers:"រកកម្មករ",
   nav_login:"ចូល",nav_signup:"ចុះឈ្មោះ",nav_logout:"ចេញ",nav_myposts:"ប្រវត្តិរូប",tab_posts:"ប្រកាសរបស់ខ្ញុំ",
   eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
   hero_h:"ភ្ជាប់ទេពកោសល្យកម្ពុជា ជាមួយឱកាសការងារ",hero_p:"វេទិកាដ៏ទុកចិត្តសម្រាប់អ្នកស្វែងរកការងារ និងនិយោជកនៅទូទាំងព្រះរាជាណាចក្រកម្ពុជា។",
@@ -45,7 +45,7 @@ const T={
   err_password:"ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៦ តួ",err_password_match:"ពាក្យសម្ងាត់មិនដូចគ្នា",
   err_login:"អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ",err_signup:"មិនអាចបង្កើតគណនីបាន",err_need_login:"សូមចូលប្រើដើម្បីប្រកាស",
   ago_today:"ថ្ងៃនេះ",ago_yesterday:"ម្សិលមិញ",ago_days:"ថ្ងៃមុន",ago_months:"ខែមុន",ago_years:"ឆ្នាំមុន"},
- en:{nav_home:"Home",nav_seeker:"Find work",nav_employer:"Hire",nav_jobs:"Jobs",nav_workers:"Find workers",
+ en:{nav_home:"Home",nav_seeker:"Find work",nav_employer:"Hire",nav_jobs:"Find jobs",nav_workers:"Find workers",
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
   hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
