@@ -16,6 +16,10 @@ const T={
   jobs_h:"ស្វែងរកការងារ",jobs_sub:"ត្រងតាមប្រភេទ ខេត្ត ឬពាក្យគន្លឹះ",
   workers_h:"ស្វែងរកកម្មករ",workers_sub:"ត្រងតាមប្រភេទ ខេត្ត បទពិសោធន៍",
   login_h:"ចូលប្រើគណនី",login_sub:"ប្រើគណនីរបស់អ្នកដើម្បីប្រកាស",login_alt:"មិនទាន់មានគណនី? ចុះឈ្មោះថ្មី",
+  login_forgot:"ភ្លេចពាក្យសម្ងាត់?",forgot_h:"កំណត់ពាក្យសម្ងាត់ឡើងវិញ",forgot_sub:"បញ្ចូលអ៊ីមែលរបស់អ្នក យើងនឹងផ្ញើតំណកំណត់ឡើងវិញ",
+  forgot_btn:"ផ្ញើតំណកំណត់ឡើងវិញ",forgot_back:"← ត្រឡប់ទៅចូលប្រើ",
+  forgot_sent:"✓ ប្រសិនបើមានគណនីសម្រាប់អ៊ីមែលនេះ យើងបានផ្ញើតំណកំណត់ឡើងវិញ។ សូមពិនិត្យប្រអប់សំបុត្រ (និងបន្ទប់ Spam)។",
+  reset_h:"កំណត់ពាក្យសម្ងាត់ថ្មី",reset_sub:"បញ្ចូលពាក្យសម្ងាត់ថ្មីសម្រាប់គណនីរបស់អ្នក",reset_btn:"រក្សាទុកពាក្យសម្ងាត់ថ្មី",reset_done:"✓ បានធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់",
   signup_h:"បង្កើតគណនី",signup_sub:"ដើម្បីប្រកាសការងារ ឬប្រវត្តិរូប",signup_alt:"មានគណនីរួចហើយ? ចូលប្រើ",
   verify_h:"សូមពិនិត្យអ៊ីមែលរបស់អ្នក",verify_help:"ចុចលើតំណបញ្ជាក់ក្នុងអ៊ីមែល បន្ទាប់មកត្រឡប់មកវិញដើម្បីចូលប្រើ។ បើមិនឃើញ សូមពិនិត្យបន្ទប់ Spam។",
   verify_msg:"យើងបានផ្ញើតំណបញ្ជាក់ទៅ",
@@ -29,6 +33,7 @@ const T={
   modal_confirm_h:"បញ្ជាក់ការលុប",modal_yes_del:"លុប",
   role_q:"ខ្ញុំជា...",role_seeker:"អ្នកស្វែងរកការងារ",role_employer:"និយោជក",
   back_to_jobs:"← ត្រឡប់ទៅការងារ",back_to_workers:"← ត្រឡប់ទៅកម្មករ",job_description:"ការពិពណ៌នាការងារ",contact:"ទំនាក់ទំនង",
+  contact_locked:"សូមចូលគណនីដើម្បីមើលព័ត៌មានទំនាក់ទំនង",
   delete_profile_btn:"លុបប្រវត្តិរូបរបស់ខ្ញុំ",
   delete_profile_warn_emp:"សកម្មភាពនេះនឹងលុបព័ត៌មានក្រុមហ៊ុន និងការងារទាំងអស់របស់អ្នកជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
   delete_profile_warn_seeker:"សកម្មភាពនេះនឹងលុបប្រវត្តិរូបការងាររបស់អ្នកជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
@@ -56,6 +61,10 @@ const T={
   jobs_h:"Search jobs",jobs_sub:"Filter by category, province or keyword",
   workers_h:"Search workers",workers_sub:"Filter by category, province, experience",
   login_h:"Log in",login_sub:"Use your account to post",login_alt:"No account yet? Sign up",
+  login_forgot:"Forgot password?",forgot_h:"Reset your password",forgot_sub:"Enter your email and we'll send you a reset link",
+  forgot_btn:"Send reset link",forgot_back:"← Back to log in",
+  forgot_sent:"✓ If an account exists for that email, we've sent a reset link. Check your inbox (and spam).",
+  reset_h:"Set a new password",reset_sub:"Enter a new password for your account",reset_btn:"Save new password",reset_done:"✓ Password updated",
   signup_h:"Create account",signup_sub:"To post jobs or your profile",signup_alt:"Already have an account? Log in",
   verify_h:"Check your email",verify_help:"Click the confirmation link in your email, then come back here to log in. If you don't see it, check your spam folder.",
   verify_msg:"We sent a confirmation link to",
@@ -69,6 +78,7 @@ const T={
   modal_confirm_h:"Confirm delete",modal_yes_del:"Delete",
   role_q:"I am a...",role_seeker:"Job seeker",role_employer:"Employer",
   back_to_jobs:"← Back to jobs",back_to_workers:"← Back to workers",job_description:"Description",contact:"Contact",
+  contact_locked:"Log in to view contact details",
   delete_profile_btn:"Delete my profile",
   delete_profile_warn_emp:"This will permanently remove your company info and all your jobs. This cannot be undone.",
   delete_profile_warn_seeker:"This will permanently remove your job-seeker profile. This cannot be undone.",
@@ -99,12 +109,6 @@ const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE=/^[\d\s+\-()]{6,20}$/;
 const validEmail=v=>(DEV&&v==="email")||EMAIL_RE.test(v);
 const validPhone=v=>(DEV&&v==="phone")||PHONE_RE.test(v);
-function maskPhone(p){
-  if(!p)return"";
-  const s=String(p).replace(/\D/g,"");
-  if(s.length<6)return"***";
-  return s.slice(0,3)+"••• "+s.slice(-3);
-}
 function timeAgo(iso){
   if(!iso)return"";
   const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);
@@ -130,10 +134,15 @@ const userRole=()=>(session&&session.user&&session.user.user_metadata&&session.u
 
 async function load(key){
   if(key==="seekers"){
-    const {data,error}=await sb.from("seekers").select("*").order("created_at",{ascending:false});
+    // Public list: phone/email are withheld from anon by RLS column grants, so
+    // request only the non-contact columns. Contact info is shown on the detail
+    // page to logged-in users only.
+    const {data,error}=await sb.from("seekers")
+      .select("id,name,province,category,experience_level,expected_salary,bio,created_at")
+      .order("created_at",{ascending:false});
     if(error){console.error("load seekers:",error);return [];}
     return (data||[]).map(s=>({
-      id:s.id,name:s.name,phone:s.phone,email:s.email,prov:s.province,cat:s.category,
+      id:s.id,name:s.name,prov:s.province,cat:s.category,
       exp:s.experience_level,sal:s.expected_salary,bio:s.bio,created_at:s.created_at
     }));
   }
@@ -564,13 +573,17 @@ function showModal(msg){
 
 /* ---------- auth ---------- */
 async function initAuth(){
+  // Recovery links land back here with a one-time session — read the hash before
+  // supabase-js processes (and clears) it, so we can show the reset form.
+  const recovering=/type=recovery/.test(window.location.hash);
   const {data}=await sb.auth.getSession();
   session=data.session;
   updateAuthUI();
-  sb.auth.onAuthStateChange((_e,s)=>{
+  sb.auth.onAuthStateChange((event,s)=>{
     const wasLoggedIn=!!session;
     session=s;
     updateAuthUI();
+    if(event==="PASSWORD_RECOVERY"){go("reset");return;}
     if(s&&!wasLoggedIn){
       const t=pendingNav;pendingNav=null;
       go(t||"home");
@@ -581,6 +594,7 @@ async function initAuth(){
       go("home");
     }
   });
+  if(recovering&&session)go("reset");
 }
 function updateAuthUI(){
   const auth=$("auth_area");
@@ -617,7 +631,10 @@ function updateRoleVisibility(){
 
 document.querySelectorAll("[data-auth]").forEach(btn=>{
   btn.addEventListener("click",()=>withBusy(btn,async()=>{
-    if(btn.dataset.auth==="login")await doLogin();
+    const a=btn.dataset.auth;
+    if(a==="login")await doLogin();
+    else if(a==="forgot")await doForgot();
+    else if(a==="reset")await doReset();
     else await doSignup();
   }));
 });
@@ -651,6 +668,33 @@ async function doSignup(){
   $("verify_msg").textContent=`${T[lang].verify_msg} ${email}`;
   ["su_email","su_pw","su_pw2"].forEach(id=>$(id).value="");
   go("verify");
+}
+async function doForgot(){
+  const errEl=$("fp_err");
+  const email=trim($("fp_email").value);
+  if(!email)return showErr(errEl,T[lang].err_required);
+  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+  const {error}=await sb.auth.resetPasswordForEmail(email,{
+    redirectTo:window.location.origin+window.location.pathname
+  });
+  // A non-existent email returns no error (Supabase avoids account enumeration);
+  // only real failures (e.g. rate limit) surface here.
+  if(error){console.error("forgot:",error);return showErr(errEl,error.message);}
+  $("fp_email").value="";
+  $("fp_ok").classList.add("show");
+}
+async function doReset(){
+  const errEl=$("rp_err");
+  const pw=$("rp_pw").value,pw2=$("rp_pw2").value;
+  if(!pw||!pw2)return showErr(errEl,T[lang].err_required);
+  if(pw.length<6)return showErr(errEl,T[lang].err_password);
+  if(pw!==pw2)return showErr(errEl,T[lang].err_password_match);
+  // The recovery link established a session; updateUser sets the new password on it.
+  const {error}=await sb.auth.updateUser({password:pw});
+  if(error){console.error("reset:",error);return showErr(errEl,error.message);}
+  ["rp_pw","rp_pw2"].forEach(id=>$(id).value="");
+  $("rp_ok").classList.add("show");
+  setTimeout(()=>{$("rp_ok").classList.remove("show");go("home");},1500);
 }
 
 /* ---------- search renderers ---------- */
@@ -695,7 +739,7 @@ async function renderWorkers(){
     const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
     const age=s.created_at?`<div class="age">${esc(timeAgo(s.created_at))}</div>`:"";
     const div=card(
-      `<div class="t">${esc(s.name)}</div><div class="m">${esc(maskPhone(s.phone))}</div>
+      `<div class="t">${esc(s.name)}</div>
        <span class="tag">${esc(labelOf(CAT,s.cat))}</span><span class="tag">${esc(labelOf(PROV,s.prov))}</span>
        <span class="tag">${esc(labelOf(EXP,s.exp))}</span>${sal}
        <div class="d">${esc(s.bio)}</div>${age}`);
@@ -744,7 +788,12 @@ function fillJobDetail(j){
 }
 
 async function viewSeeker(id){
-  const {data,error}=await sb.from("seekers").select("*").eq("id",id).maybeSingle();
+  // Contact columns are only readable by authenticated users (RLS column grants).
+  // Request them only when logged in; anon visitors get a "log in to view" prompt.
+  const cols=session
+    ?"id,name,phone,email,province,category,experience_level,expected_salary,bio,created_at"
+    :"id,name,province,category,experience_level,expected_salary,bio,created_at";
+  const {data,error}=await sb.from("seekers").select(cols).eq("id",id).maybeSingle();
   if(error){console.error("view seeker:",error);return;}
   if(!data){go("workers");return;}
   fillSeekerDetail(data);
@@ -761,6 +810,12 @@ function fillSeekerDetail(s){
     (sal?`<span class="tag sal">${esc(sal)}</span>`:"");
   $("sd_age").textContent=s.created_at?timeAgo(s.created_at):"";
   $("sd_bio").textContent=s.bio||"";
+  if(!session){
+    $("sd_contact").innerHTML=
+      `<div class="contact-locked"><span>${esc(T[lang].contact_locked)}</span>`+
+      `<button class="btn-sm" data-go="login">${esc(T[lang].nav_login)}</button></div>`;
+    return;
+  }
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
   if(s.phone)rows.push(row("f_phone",`<a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>`));

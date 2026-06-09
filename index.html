@@ -69,7 +69,10 @@
       <label for="li_pw" data-t="f_password"></label>
       <input id="li_pw" type="password" maxlength="120" autocomplete="current-password" required>
       <button class="btn" data-auth="login" data-t="f_login_btn"></button>
-      <button class="alt-link" data-go="signup" data-t="login_alt"></button>
+      <div class="auth-alt">
+        <button class="alt-link" data-go="signup" data-t="login_alt"></button>
+        <button class="alt-link" data-go="forgot" data-t="login_forgot"></button>
+      </div>
       <div class="err" id="li_err"></div>
     </div>
   </section>
@@ -104,6 +107,35 @@
     <p class="sub" id="verify_msg"></p>
     <div class="form notice">
       <p data-t="verify_help"></p>
+    </div>
+  </section>
+
+  <!-- FORGOT PASSWORD -->
+  <section id="forgot" class="page">
+    <h2 data-t="forgot_h"></h2>
+    <p class="sub" data-t="forgot_sub"></p>
+    <div class="form auth-form">
+      <label for="fp_email" data-t="f_email"></label>
+      <input id="fp_email" type="email" maxlength="120" autocomplete="email" required>
+      <button class="btn" data-auth="forgot" data-t="forgot_btn"></button>
+      <button class="alt-link" data-go="login" data-t="forgot_back"></button>
+      <div class="ok" id="fp_ok" data-t="forgot_sent"></div>
+      <div class="err" id="fp_err"></div>
+    </div>
+  </section>
+
+  <!-- RESET PASSWORD -->
+  <section id="reset" class="page">
+    <h2 data-t="reset_h"></h2>
+    <p class="sub" data-t="reset_sub"></p>
+    <div class="form auth-form">
+      <label for="rp_pw" data-t="f_password"></label>
+      <input id="rp_pw" type="password" maxlength="120" minlength="6" autocomplete="new-password" required>
+      <label for="rp_pw2" data-t="f_password_confirm"></label>
+      <input id="rp_pw2" type="password" maxlength="120" minlength="6" autocomplete="new-password" required>
+      <button class="btn amber" data-auth="reset" data-t="reset_btn"></button>
+      <div class="ok" id="rp_ok" data-t="reset_done"></div>
+      <div class="err" id="rp_err"></div>
     </div>
   </section>
 
