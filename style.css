@@ -348,6 +348,11 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
   margin:24px 0 12px;color:var(--teal2)
 }
 .mp-h:first-child{margin-top:0}
+.mp-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 12px}
+.mp-head:first-child{margin-top:0}
+.mp-head .mp-h{margin:0}
+.btn-sm.add{color:var(--teal2);border-color:var(--teal2);font-weight:600}
+.btn-sm.add:hover{background:var(--teal2);color:#fff}
 .mp-card{margin-bottom:14px}
 .mp-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .btn-sm{

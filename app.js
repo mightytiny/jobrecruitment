@@ -24,8 +24,9 @@ const T={
   verify_h:"សូមពិនិត្យអ៊ីមែលរបស់អ្នក",verify_help:"ចុចលើតំណបញ្ជាក់ក្នុងអ៊ីមែល បន្ទាប់មកត្រឡប់មកវិញដើម្បីចូលប្រើ។ បើមិនឃើញ សូមពិនិត្យបន្ទប់ Spam។",
   verify_msg:"យើងបានផ្ញើតំណបញ្ជាក់ទៅ",
   myposts_h:"ប្រវត្តិរូបរបស់ខ្ញុំ",myposts_sub:"គ្រប់គ្រងព័ត៌មាន និងការងាររបស់អ្នក",
-  myposts_profile:"ប្រវត្តិរូបការងាររបស់ខ្ញុំ",myposts_jobs:"ការងាររបស់ខ្ញុំ",myposts_empty:"អ្នកមិនទាន់មានព័ត៌មានឬប្រកាសទេ។",
-  section_account_emp:"ព័ត៌មានក្រុមហ៊ុនរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
+  myposts_profile:"ប្រកាសរបស់ខ្ញុំ",myposts_jobs:"ប្រកាសការងាររបស់ខ្ញុំ",myposts_empty:"អ្នកមិនទាន់មានព័ត៌មានឬប្រកាសទេ។",
+  section_account_emp:"ប្រវត្តិរូបក្រុមហ៊ុនរបស់ខ្ញុំ",section_account_self:"ព័ត៌មានប្រវត្តិរូបរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
+  add_listing:"+ បន្ថែមប្រកាស",add_job_listing:"+ បន្ថែមប្រកាសការងារ",
   f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"ឧស្សាហកម្ម",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
   need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",
   no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
@@ -69,8 +70,9 @@ const T={
   verify_h:"Check your email",verify_help:"Click the confirmation link in your email, then come back here to log in. If you don't see it, check your spam folder.",
   verify_msg:"We sent a confirmation link to",
   myposts_h:"My profile",myposts_sub:"Manage your account and jobs",
-  myposts_profile:"My job-seeker profile",myposts_jobs:"My jobs",myposts_empty:"Nothing here yet.",
-  section_account_emp:"My company info",section_posts:"My jobs",
+  myposts_profile:"My listings",myposts_jobs:"My job listings",myposts_empty:"Nothing here yet.",
+  section_account_emp:"My company profile",section_account_self:"My profile info",section_posts:"My jobs",
+  add_listing:"+ Add listing",add_job_listing:"+ Add job listing",
   f_contact_name:"Contact name",f_industry:"Industry",f_location:"Location",f_website:"Website",
   need_company:"Please complete your company info before posting a job",
   no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
@@ -177,11 +179,18 @@ function buildSelects(){
 function applyLang(){
   document.body.dataset.lang=lang;
   document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=T[lang][el.dataset.t]||"";});
+  setAccountSectionH();
   buildSelects();
   updateAuthUI();
   setSubmitText();
   renderJobs();renderWorkers();
   if(document.getElementById("myposts").classList.contains("show"))renderMyPosts();
+}
+
+// Top card on the profile page: "My company profile" for employers, "My profile info" for everyone else.
+function setAccountSectionH(){
+  const el=$("account_section_h");
+  if(el)el.textContent=userRole()==="employer"?T[lang].section_account_emp:T[lang].section_account_self;
 }
 
 /* ---------- navigation ---------- */
@@ -384,6 +393,7 @@ async function prepAccountForm(){
   $("need_company_banner").classList.toggle("show",!!pendingPostJob);
   if(!session)return;
   const r=userRole();
+  setAccountSectionH();
   const showEmp=!r||r==="employer";
   $("account_emp_section").style.display=showEmp?"":"none";
   if(!showEmp)return;
@@ -413,15 +423,14 @@ async function renderMyPosts(){
   ]);
   const seeker=seekerRes.data;
   const jobs=jobsRes.data||[];
-  if(!seeker&&!jobs.length){
-    box.innerHTML=`<div class="empty">${esc(T[lang].myposts_empty)}</div>`;
-    return;
-  }
   let html="";
-  if(seeker){
-    const sal=seeker.expected_salary?`<span class="tag sal">$${esc(seeker.expected_salary)} ${esc(T[lang].mo)}</span>`:"";
-    html+=`<h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>
-      <div class="rc mp-card">
+  if(showSeeker){
+    html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>`;
+    if(!seeker)html+=`<button class="btn-sm add" data-add-listing>${esc(T[lang].add_listing)}</button>`;
+    html+=`</div>`;
+    if(seeker){
+      const sal=seeker.expected_salary?`<span class="tag sal">$${esc(seeker.expected_salary)} ${esc(T[lang].mo)}</span>`:"";
+      html+=`<div class="rc mp-card">
         <div class="t">${esc(seeker.name)}</div>
         <div class="m">${esc(seeker.phone||"")} · ${esc(seeker.email||"")}</div>
         <span class="tag">${esc(labelOf(CAT,seeker.category))}</span>
@@ -433,28 +442,39 @@ async function renderMyPosts(){
           <button class="btn-sm danger" data-del-seeker="${esc(seeker.id)}">${esc(T[lang].btn_delete)}</button>
         </div>
       </div>`;
+    }else{
+      html+=`<div class="empty">${esc(T[lang].myposts_empty)}</div>`;
+    }
   }
-  if(jobs.length){
-    html+=`<h3 class="mp-h">${esc(T[lang].myposts_jobs)}</h3><div class="cards">`;
-    jobs.forEach(j=>{
-      const sal=(j.salary_min||j.salary_max)?`<span class="tag sal">$${esc(j.salary_min||"?")}–${esc(j.salary_max||"?")} ${esc(T[lang].mo)}</span>`:"";
-      const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
-      html+=`<div class="rc mp-card">
-        <div class="t">${esc(j.title)}</div>
-        <div class="m">${esc(j.employers?.company_name||"")}</div>
-        <span class="tag">${esc(labelOf(CAT,j.category))}</span>
-        <span class="tag">${esc(labelOf(PROV,j.province))}</span>
-        <span class="tag">${esc(labelOf(TYPE,j.employment_type))}</span>${sal}
-        <div class="d">${esc(j.description||"")}</div>${age}
-        <div class="mp-actions">
-          <button class="btn-sm" data-edit-job="${esc(j.id)}">${esc(T[lang].btn_edit)}</button>
-          <button class="btn-sm danger" data-del-job="${esc(j.id)}">${esc(T[lang].btn_delete)}</button>
-        </div>
-      </div>`;
-    });
-    html+=`</div>`;
+  if(showJobs){
+    html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_jobs)}</h3>
+      <button class="btn-sm add" data-add-job>${esc(T[lang].add_job_listing)}</button></div>`;
+    if(jobs.length){
+      html+=`<div class="cards">`;
+      jobs.forEach(j=>{
+        const sal=(j.salary_min||j.salary_max)?`<span class="tag sal">$${esc(j.salary_min||"?")}–${esc(j.salary_max||"?")} ${esc(T[lang].mo)}</span>`:"";
+        const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
+        html+=`<div class="rc mp-card">
+          <div class="t">${esc(j.title)}</div>
+          <div class="m">${esc(j.employers?.company_name||"")}</div>
+          <span class="tag">${esc(labelOf(CAT,j.category))}</span>
+          <span class="tag">${esc(labelOf(PROV,j.province))}</span>
+          <span class="tag">${esc(labelOf(TYPE,j.employment_type))}</span>${sal}
+          <div class="d">${esc(j.description||"")}</div>${age}
+          <div class="mp-actions">
+            <button class="btn-sm" data-edit-job="${esc(j.id)}">${esc(T[lang].btn_edit)}</button>
+            <button class="btn-sm danger" data-del-job="${esc(j.id)}">${esc(T[lang].btn_delete)}</button>
+          </div>
+        </div>`;
+      });
+      html+=`</div>`;
+    }else{
+      html+=`<div class="empty">${esc(T[lang].myposts_empty)}</div>`;
+    }
   }
   box.innerHTML=html;
+  box.querySelectorAll("[data-add-listing]").forEach(b=>b.onclick=()=>{clearEditState();go("seeker");});
+  box.querySelectorAll("[data-add-job]").forEach(b=>b.onclick=()=>{clearEditState();go("employer");});
   box.querySelectorAll("[data-edit-seeker]").forEach(b=>b.onclick=()=>editSeeker(b.dataset.editSeeker));
   box.querySelectorAll("[data-del-seeker]").forEach(b=>b.onclick=()=>delSeeker(b.dataset.delSeeker));
   box.querySelectorAll("[data-edit-job]").forEach(b=>b.onclick=()=>editJob(b.dataset.editJob));
