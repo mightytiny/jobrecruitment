@@ -400,8 +400,10 @@ async function prepAccountForm(){
   setAccountSectionH();
   const isEmp=!r||r==="employer";
   $("account_emp_section").style.display=isEmp?"":"none";
-  $("ap_co_label").textContent=r==="seeker"?T[lang].f_full_name:T[lang].f_company;
-  $("ap_contact_label").textContent=r==="seeker"?T[lang].f_family_name:T[lang].f_contact_name;
+  $("ap_co_label").textContent=r==="employer"?T[lang].f_company:T[lang].f_full_name;
+  $("ap_contact_label").textContent=r==="employer"?T[lang].f_contact_name:T[lang].f_family_name;
+  $("ap_industry_wrap").hidden=r!=="employer";
+  $("ap_telegram_wrap").hidden=r==="employer";
   if(!isEmp)return;
   const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
   const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
