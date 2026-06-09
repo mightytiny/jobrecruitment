@@ -420,7 +420,7 @@ async function renderMyPosts(){
   const uid=session.user.id;
   const r=userRole();
   const isSeeker=!r||r==="seeker";
-  const isEmployer=!r||r==="employer";
+  const isEmployer=r==="employer";
   const [seekerRes,jobsRes]=await Promise.all([
     isSeeker?sb.from("seekers").select("*").eq("user_id",uid).maybeSingle():Promise.resolve({data:null}),
     isEmployer?sb.from("jobs").select("*,employers(company_name,phone,email)").eq("user_id",uid).order("created_at",{ascending:false}):Promise.resolve({data:[]})
