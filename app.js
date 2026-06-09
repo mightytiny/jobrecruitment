@@ -28,7 +28,7 @@ const T={
   section_account_emp:"ប្រវត្តិរូបក្រុមហ៊ុនរបស់ខ្ញុំ",section_account_self:"ព័ត៌មានប្រវត្តិរូបរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
   add_listing:"+ បន្ថែមប្រកាស",add_job_listing:"+ បន្ថែមប្រកាសការងារ",
   f_full_name:"ឈ្មោះ",f_family_name:"នាមត្រកូល",f_telegram:"លេខ Telegram",
-  f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"ឧស្សាហកម្ម",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
+  f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"លេខ Telegram",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
   need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",
   no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
   create_seeker_link:"បង្កើតប្រវត្តិរូបការងារ →",create_company_inline:"បំពេញព័ត៌មាននេះដើម្បីចាប់ផ្ដើមប្រកាសការងារ",
@@ -75,7 +75,7 @@ const T={
   section_account_emp:"My company profile",section_account_self:"My profile info",section_posts:"My jobs",
   add_listing:"+ Add listing",add_job_listing:"+ Add job listing",
   f_full_name:"Name",f_family_name:"Family name",f_telegram:"Telegram number",
-  f_contact_name:"Contact name",f_industry:"Industry",f_location:"Location",f_website:"Website",
+  f_contact_name:"Contact name",f_industry:"Telegram number",f_location:"Location",f_website:"Website",
   need_company:"Please complete your company info before posting a job",
   no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
   create_seeker_link:"Create job-seeker profile →",create_company_inline:"Fill this in to start posting jobs",
@@ -400,10 +400,6 @@ async function prepAccountForm(){
   setAccountSectionH();
   const isEmp=!r||r==="employer";
   $("account_emp_section").style.display=isEmp?"":"none";
-  $("ap_co_label").textContent=r==="employer"?T[lang].f_company:T[lang].f_full_name;
-  $("ap_contact_label").textContent=r==="employer"?T[lang].f_contact_name:T[lang].f_family_name;
-  $("ap_industry_wrap").hidden=r!=="employer";
-  $("ap_telegram_wrap").hidden=r==="employer";
   if(!isEmp)return;
   const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
   const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
