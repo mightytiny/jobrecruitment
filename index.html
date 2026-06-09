@@ -151,8 +151,8 @@
       <div class="form account-form">
         <p class="form-hint" id="ap_hint" data-t="create_company_inline"></p>
         <div class="grid2">
-          <div><label for="ap_co" data-t="f_company"></label><input id="ap_co" type="text" maxlength="100" required></div>
-          <div><label for="ap_contact" data-t="f_contact_name"></label><input id="ap_contact" type="text" maxlength="100"></div>
+          <div><label for="ap_co" id="ap_co_label"></label><input id="ap_co" type="text" maxlength="100" required></div>
+          <div><label for="ap_contact" id="ap_contact_label"></label><input id="ap_contact" type="text" maxlength="100"></div>
         </div>
         <div class="grid2">
           <div><label for="ap_phone" data-t="f_phone"></label><input id="ap_phone" type="tel" maxlength="20" required></div>
@@ -191,6 +191,10 @@
       <div class="grid2">
         <div><label for="s_email" data-t="f_email"></label><input id="s_email" type="email" maxlength="120" required></div>
         <div><label for="s_sal" data-t="f_esal"></label><input id="s_sal" type="number" min="0" max="100000"></div>
+      </div>
+      <div class="grid2">
+        <div><label for="s_telegram" data-t="f_telegram"></label><input id="s_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
+        <div></div>
       </div>
       <div class="grid2">
         <div><label for="s_prov" data-t="f_prov"></label><select id="s_prov"></select></div>

@@ -27,6 +27,7 @@ const T={
   myposts_profile:"ប្រកាសរបស់ខ្ញុំ",myposts_jobs:"ប្រកាសការងាររបស់ខ្ញុំ",myposts_empty:"អ្នកមិនទាន់មានព័ត៌មានឬប្រកាសទេ។",
   section_account_emp:"ប្រវត្តិរូបក្រុមហ៊ុនរបស់ខ្ញុំ",section_account_self:"ព័ត៌មានប្រវត្តិរូបរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
   add_listing:"+ បន្ថែមប្រកាស",add_job_listing:"+ បន្ថែមប្រកាសការងារ",
+  f_full_name:"ឈ្មោះ",f_family_name:"នាមត្រកូល",f_telegram:"លេខ Telegram",
   f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"ឧស្សាហកម្ម",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
   need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",
   no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
@@ -73,6 +74,7 @@ const T={
   myposts_profile:"My listings",myposts_jobs:"My job listings",myposts_empty:"Nothing here yet.",
   section_account_emp:"My company profile",section_account_self:"My profile info",section_posts:"My jobs",
   add_listing:"+ Add listing",add_job_listing:"+ Add job listing",
+  f_full_name:"Name",f_family_name:"Family name",f_telegram:"Telegram number",
   f_contact_name:"Contact name",f_industry:"Industry",f_location:"Location",f_website:"Website",
   need_company:"Please complete your company info before posting a job",
   no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
@@ -267,12 +269,13 @@ $("del_profile_btn").addEventListener("click",deleteMyProfile);
 async function saveSeeker(){
   const errEl=$("s_err");
   const name=trim($("s_name").value),phone=trim($("s_phone").value),email=trim($("s_email").value);
+  const telegram=trim($("s_telegram").value);
   if(!name||!phone||!email||!$("s_prov").value||!$("s_cat").value||!$("s_exp").value)
     return showErr(errEl,T[lang].err_required);
   if(!validEmail(email))return showErr(errEl,T[lang].err_email);
   if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
   const payload={
-    name,phone,email,
+    name,phone,email,telegram_phone:telegram||null,
     province:$("s_prov").value,category:$("s_cat").value,
     experience_level:$("s_exp").value,expected_salary:num($("s_sal").value),
     bio:trim($("s_bio").value)
@@ -353,7 +356,7 @@ function clearEditState(){
   editMode=null;
   $("s_edit_banner").classList.remove("show");
   $("e_edit_banner").classList.remove("show");
-  ["s_name","s_phone","s_email","s_sal","s_bio"].forEach(id=>$(id).value="");
+  ["s_name","s_phone","s_email","s_sal","s_bio","s_telegram"].forEach(id=>$(id).value="");
   ["e_title","e_smin","e_smax","e_desc"].forEach(id=>$(id).value="");
   setSubmitText();
 }
@@ -374,6 +377,7 @@ async function prepSeekerForm(){
     if(data){
       editMode={kind:"seeker",id:data.id};
       $("s_name").value=data.name||"";$("s_phone").value=data.phone||"";$("s_email").value=data.email||"";
+      $("s_telegram").value=data.telegram_phone||"";
       $("s_prov").value=data.province||"";$("s_cat").value=data.category||"";$("s_exp").value=data.experience_level||"";
       $("s_sal").value=data.expected_salary||"";$("s_bio").value=data.bio||"";
     }
@@ -394,9 +398,11 @@ async function prepAccountForm(){
   if(!session)return;
   const r=userRole();
   setAccountSectionH();
-  const showEmp=!r||r==="employer";
-  $("account_emp_section").style.display=showEmp?"":"none";
-  if(!showEmp)return;
+  const isEmp=!r||r==="employer";
+  $("account_emp_section").style.display=isEmp?"":"none";
+  $("ap_co_label").textContent=r==="seeker"?T[lang].f_full_name:T[lang].f_company;
+  $("ap_contact_label").textContent=r==="seeker"?T[lang].f_family_name:T[lang].f_contact_name;
+  if(!isEmp)return;
   const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
   const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
     ["ap_email","email"],["ap_industry","industry"],["ap_location","location"],["ap_website","website"]];
@@ -415,24 +421,23 @@ async function renderMyPosts(){
   if(!session){box.innerHTML="";return;}
   const uid=session.user.id;
   const r=userRole();
-  const showSeeker=!r||r==="seeker";
-  const showJobs=!r||r==="employer";
+  const isSeeker=!r||r==="seeker";
+  const isEmployer=!r||r==="employer";
   const [seekerRes,jobsRes]=await Promise.all([
-    showSeeker?sb.from("seekers").select("*").eq("user_id",uid).maybeSingle():Promise.resolve({data:null}),
-    showJobs?sb.from("jobs").select("*,employers(company_name,phone,email)").eq("user_id",uid).order("created_at",{ascending:false}):Promise.resolve({data:[]})
+    isSeeker?sb.from("seekers").select("*").eq("user_id",uid).maybeSingle():Promise.resolve({data:null}),
+    isEmployer?sb.from("jobs").select("*,employers(company_name,phone,email)").eq("user_id",uid).order("created_at",{ascending:false}):Promise.resolve({data:[]})
   ]);
   const seeker=seekerRes.data;
   const jobs=jobsRes.data||[];
   let html="";
-  if(showSeeker){
-    html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>`;
-    if(!seeker)html+=`<button class="btn-sm add" data-add-listing>${esc(T[lang].add_listing)}</button>`;
-    html+=`</div>`;
+  if(isSeeker){
+    html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>
+      <button class="btn-sm add" data-add-listing>${esc(T[lang].add_listing)}</button></div>`;
     if(seeker){
       const sal=seeker.expected_salary?`<span class="tag sal">$${esc(seeker.expected_salary)} ${esc(T[lang].mo)}</span>`:"";
       html+=`<div class="rc mp-card">
         <div class="t">${esc(seeker.name)}</div>
-        <div class="m">${esc(seeker.phone||"")} · ${esc(seeker.email||"")}</div>
+        <div class="m">${esc(seeker.phone||"")} · ${esc(seeker.email||"")}${seeker.telegram_phone?` · Telegram: ${esc(seeker.telegram_phone)}`:""}</div>
         <span class="tag">${esc(labelOf(CAT,seeker.category))}</span>
         <span class="tag">${esc(labelOf(PROV,seeker.province))}</span>
         <span class="tag">${esc(labelOf(EXP,seeker.experience_level))}</span>${sal}
@@ -446,7 +451,7 @@ async function renderMyPosts(){
       html+=`<div class="empty">${esc(T[lang].myposts_empty)}</div>`;
     }
   }
-  if(showJobs){
+  if(isEmployer){
     html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_jobs)}</h3>
       <button class="btn-sm add" data-add-job>${esc(T[lang].add_job_listing)}</button></div>`;
     if(jobs.length){
