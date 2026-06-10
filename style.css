@@ -222,6 +222,36 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 .rc .age{font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
 .empty{color:var(--muted);padding:34px;text-align:center;border:1px dashed var(--line);border-radius:14px}
 
+/* ---------- view controls (jobs page) ---------- */
+.view-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.view-toggle-btns{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--card)}
+.view-toggle-btn{
+  font:inherit;padding:7px 10px;border:0;background:transparent;
+  color:var(--muted);cursor:pointer;transition:.15s;display:flex;align-items:center
+}
+.view-toggle-btn:hover{background:#ece4d4;color:var(--ink)}
+.view-toggle-btn.active{background:var(--teal);color:#fff}
+.view-controls>select{
+  font:inherit;font-size:13px;padding:7px 10px;width:auto;
+  border-radius:9px;border:1px solid var(--line);background:var(--card);
+  color:var(--ink);cursor:pointer
+}
+
+/* ---------- list view ---------- */
+#j_results.list-view{grid-template-columns:1fr}
+.list-item{padding:13px 18px}
+.list-r1{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:5px}
+.list-r1 .t{font-size:16px}
+.sal-tag{
+  flex-shrink:0;background:#fbf0db;color:var(--amber2);
+  font-size:12px;padding:2px 9px;border-radius:20px;font-weight:500
+}
+.list-r2{display:flex;align-items:center;flex-wrap:wrap;gap:3px 6px;font-size:13px;color:var(--muted)}
+.list-r2 .m{color:var(--teal2);font-weight:500}
+.ls{color:var(--line);font-size:11px;line-height:1}
+.list-age{font-style:italic}
+@media(max-width:480px){.list-r1{flex-direction:column;gap:4px}}
+
 /* ---------- job detail ---------- */
 .back-btn{
   font:inherit;font-size:14px;font-weight:500;
