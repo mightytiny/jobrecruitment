@@ -162,7 +162,7 @@
         </div>
         <div class="grid2">
           <div><label for="ap_phone" data-t="f_phone"></label><input id="ap_phone" type="tel" maxlength="20" required></div>
-          <div><label for="ap_email" data-t="f_email"></label><input id="ap_email" type="email" maxlength="120" required></div>
+          <div><label for="ap_email" data-t="f_email"></label><input id="ap_email" type="email" maxlength="120" readonly required><small class="field-note" data-t="f_email_note"></small></div>
         </div>
         <div class="grid2">
           <div><label for="ap_telegram" data-t="f_telegram"></label><input id="ap_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
@@ -187,7 +187,7 @@
           <div><label for="aps_phone" data-t="f_phone"></label><input id="aps_phone" type="tel" maxlength="20" required></div>
         </div>
         <div class="grid2">
-          <div><label for="aps_email" data-t="f_email"></label><input id="aps_email" type="email" maxlength="120" required></div>
+          <div><label for="aps_email" data-t="f_email"></label><input id="aps_email" type="email" maxlength="120" readonly required><small class="field-note" data-t="f_email_note"></small></div>
           <div><label for="aps_telegram" data-t="f_telegram"></label><input id="aps_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
         </div>
         <button class="btn" data-save="account-seeker" data-t="btn_save"></button>
@@ -197,6 +197,21 @@
     </div>
 
     <div id="mp_content"></div>
+
+    <div class="account-email-zone" id="account_email_zone" hidden>
+      <p class="account-email-info"><span data-t="change_email_info"></span> <strong id="account_email_current"></strong></p>
+      <button class="btn-sm" id="change_email_btn" data-t="change_email_btn"></button>
+      <div class="change-email-form" id="change_email_form" hidden>
+        <label for="ce_email" data-t="change_email_label"></label>
+        <input id="ce_email" type="email" maxlength="120" autocomplete="email" placeholder="name@example.com">
+        <div class="ce-actions">
+          <button class="btn-sm" id="ce_submit" data-t="change_email_send"></button>
+          <button class="btn-sm" id="ce_cancel" data-t="btn_cancel"></button>
+        </div>
+        <div class="ok" id="ce_ok" data-t="change_email_sent"></div>
+        <div class="err" id="ce_err"></div>
+      </div>
+    </div>
 
     <div class="switch-role-zone" id="switch_role_zone" hidden>
       <p class="switch-role-info" id="switch_role_info"></p>

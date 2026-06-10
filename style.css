@@ -195,6 +195,9 @@ textarea{min-height:88px;resize:vertical}
 .btn[disabled]:hover{background:var(--teal)}
 .btn.amber[disabled]:hover{background:var(--amber)}
 input:invalid:not(:placeholder-shown),textarea:invalid:not(:placeholder-shown){border-color:#d9534f}
+input[readonly]{background:#f0ece2;color:var(--muted);border-style:dashed;cursor:not-allowed}
+input[readonly]:focus{box-shadow:none;border-color:var(--line)}
+.field-note{display:block;font-size:11.5px;color:var(--muted);margin-top:5px;font-style:italic}
 
 .filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
 .filters>div{flex:1;min-width:150px}
@@ -447,6 +450,15 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 }
 .danger-zone[hidden]{display:none}
 .danger-warn{font-size:13.5px;color:var(--muted);margin:0 0 12px;line-height:1.55;max-width:520px}
+
+/* ---------- change account email ---------- */
+.account-email-zone{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);max-width:640px}
+.account-email-zone[hidden]{display:none}
+.account-email-info{font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.account-email-info strong{color:var(--ink);font-weight:600}
+.change-email-form{margin-top:14px;max-width:420px}
+.change-email-form[hidden]{display:none}
+.ce-actions{display:flex;gap:10px;margin-top:12px}
 
 /* ---------- modal ---------- */
 .modal-backdrop{

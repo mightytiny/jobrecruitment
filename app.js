@@ -38,7 +38,7 @@ const T={
   delete_profile_btn:"លុបប្រវត្តិរូបរបស់ខ្ញុំ",
   delete_profile_warn_emp:"សកម្មភាពនេះនឹងលុបព័ត៌មាន និងការបង្ហោះទាំងអស់របស់អ្នកចេញពីមូលដ្ឋានទិន្នន័យរបស់យើងជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
   delete_profile_warn_seeker:"សកម្មភាពនេះនឹងលុបព័ត៌មាន និងការបង្ហោះទាំងអស់របស់អ្នកចេញពីមូលដ្ឋានទិន្នន័យរបស់យើងជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
-  f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_email:"អ៊ីមែល",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
+  f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_email:"អ៊ីមែល",f_email_note:"អ៊ីមែលគណនីដែលបានផ្ទៀងផ្ទាត់",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
   f_esal:"ប្រាក់ខែរំពឹងទុក ($)",f_skills:"ជំនាញ / ប្រវត្តិសង្ខេប",f_submit:"ដាក់ស្នើ",saved:"✓ បានរក្សាទុក",
   f_company:"ឈ្មោះក្រុមហ៊ុន",f_title:"ចំណងជើងការងារ",f_type:"ប្រភេទ",f_smin:"ប្រាក់ខែ អប្បបរមា ($)",f_smax:"ប្រាក់ខែ អតិបរមា ($)",
   f_desc:"ការពិពណ៌នាការងារ",f_post:"ប្រកាសការងារ",posted:"✓ បានប្រកាស",
@@ -60,7 +60,9 @@ const T={
   switch_role_warn_to_seeker:"អ្នកនឹងប្តូរទៅជាអ្នករកការងារ។ ព័ត៌មានក្រុមហ៊ុននឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
   switch_role_warn_to_emp:"អ្នកនឹងប្តូរទៅជានិយោជក។ ប្រវត្តិរូបការងាររបស់អ្នកនឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
   report_btn:"រាយការណ៍ប្រកាស",report_confirm:"រាយការណ៍ប្រកាសនេះថាជាក់លែង ឬមិនសមស្រប?",report_confirm_btn:"រាយការណ៍",
-  report_done:"✓ បានរាយការណ៍។ អរគុណ",report_need_login:"សូមចូលគណនីដើម្បីរាយការណ៍"},
+  report_done:"✓ បានរាយការណ៍។ អរគុណ",report_need_login:"សូមចូលគណនីដើម្បីរាយការណ៍",
+  change_email_info:"អ៊ីមែលចូល និងទំនាក់ទំនង៖",change_email_btn:"ប្តូរអ៊ីមែល",change_email_label:"អ៊ីមែលថ្មី",change_email_send:"ផ្ញើតំណបញ្ជាក់",
+  change_email_sent:"✓ យើងបានផ្ញើតំណបញ្ជាក់ទៅអ៊ីមែលថ្មីរបស់អ្នក។ ចុចតំណនោះដើម្បីបញ្ចប់ការប្តូរ។ អ៊ីមែលចាស់នៅដំណើរការរហូតដល់ពេលនោះ។"},
  en:{nav_home:"Home",nav_jobs:"Find jobs",nav_workers:"Find workers",
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
@@ -94,7 +96,7 @@ const T={
   delete_profile_btn:"Delete my profile",
   delete_profile_warn_emp:"This will permanently remove all your information and postings from our database. This cannot be undone.",
   delete_profile_warn_seeker:"This will permanently remove all your information and postings from our database. This cannot be undone.",
-  f_name:"Name",f_phone:"Phone",f_email:"Email",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
+  f_name:"Name",f_phone:"Phone",f_email:"Email",f_email_note:"Your verified account email",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
   f_esal:"Expected salary ($)",f_skills:"Skills / short bio",f_submit:"Submit",saved:"✓ Saved",
   f_company:"Company name",f_title:"Job title",f_type:"Type",f_smin:"Salary min ($)",f_smax:"Salary max ($)",
   f_desc:"Job description",f_post:"Post job",posted:"✓ Posted",
@@ -116,7 +118,9 @@ const T={
   switch_role_warn_to_seeker:"You will be switched to a Job Seeker account. Your company info will be hidden but not deleted — switch back any time.",
   switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time.",
   report_btn:"Report listing",report_confirm:"Report this listing as fake or inappropriate?",report_confirm_btn:"Report",
-  report_done:"✓ Reported. Thank you.",report_need_login:"Log in to report this listing"}
+  report_done:"✓ Reported. Thank you.",report_need_login:"Log in to report this listing",
+  change_email_info:"Login & contact email:",change_email_btn:"Change email",change_email_label:"New email",change_email_send:"Send confirmation link",
+  change_email_sent:"✓ We've sent a confirmation link to your new email. Click it to finish the change. Your old email stays active until then."}
 };
 
 let lang=localStorage.getItem('lang')||'km';
@@ -205,7 +209,7 @@ function applyLang(){
   updateAuthUI();
   setSubmitText();
   renderJobs();renderWorkers();renderHomeJobs();
-  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();updateSwitchRole();}
+  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();updateSwitchRole();updateAccountEmail();}
 }
 
 // Top card on the profile page is the employer-only company form. Seekers never see it;
@@ -270,7 +274,7 @@ async function go(id){
   showPage(id);
   if(id==="jobs")renderJobs();
   else if(id==="workers")renderWorkers();
-  else if(id==="myposts"){await prepAccountForm(true);await renderMyPosts();updateDangerZone();updateSwitchRole();}
+  else if(id==="myposts"){await prepAccountForm(true);await renderMyPosts();updateDangerZone();updateSwitchRole();updateAccountEmail();}
   else if(id==="seeker")await prepSeekerForm();
   else if(id==="employer")await prepEmployerForm();
   else if(id==="home")renderHomeJobs();
@@ -366,9 +370,10 @@ async function saveEmployer(){
 
 async function saveAccountEmployer(){
   const errEl=$("ap_err");
-  const co=trim($("ap_co").value),phone=trim($("ap_phone").value),email=trim($("ap_email").value);
-  if(!co||!phone||!email)return showErr(errEl,T[lang].err_required);
-  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+  const co=trim($("ap_co").value),phone=trim($("ap_phone").value);
+  // Primary email is always the verified account email — never the read-only field.
+  const email=session.user.email;
+  if(!co||!phone)return showErr(errEl,T[lang].err_required);
   if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
   const payload={
     company_name:co,phone,email,
@@ -439,7 +444,9 @@ async function prepAccountForm(prefill=false){
   $("account_seeker_section").style.display=isEmp?"none":"";
   if(isEmp){
     const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
-      ["ap_email","email"],["ap_telegram","telegram"],["ap_industry","industry"],["ap_location","location"],["ap_website","website"]];
+      ["ap_telegram","telegram"],["ap_industry","industry"],["ap_location","location"],["ap_website","website"]];
+    // Primary email is locked to the verified account email (enforced in RLS).
+    $("ap_email").value=session.user.email||"";
     if(prefill){
       const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
       if(emp){fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});$("ap_hint").style.display="none";}
@@ -449,18 +456,20 @@ async function prepAccountForm(prefill=false){
       $("ap_hint").style.display="";
     }
   }else{
+    // Contact email is locked to the verified account email (enforced in RLS).
+    $("aps_email").value=session.user.email||"";
     if(prefill){
-      const {data:skr}=await sb.from("seekers").select("id,name,phone,email,telegram_phone").eq("user_id",session.user.id).maybeSingle();
+      const {data:skr}=await sb.from("seekers").select("id,name,phone,telegram_phone").eq("user_id",session.user.id).maybeSingle();
       if(skr){
         $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";
-        $("aps_email").value=skr.email||"";$("aps_telegram").value=skr.telegram_phone||"";
+        $("aps_telegram").value=skr.telegram_phone||"";
         $("aps_hint").style.display="none";
       }else{
-        ["aps_name","aps_phone","aps_email","aps_telegram"].forEach(id=>$(id).value="");
+        ["aps_name","aps_phone","aps_telegram"].forEach(id=>$(id).value="");
         $("aps_hint").style.display="";
       }
     }else{
-      ["aps_name","aps_phone","aps_email","aps_telegram"].forEach(id=>$(id).value="");
+      ["aps_name","aps_phone","aps_telegram"].forEach(id=>$(id).value="");
       $("aps_hint").style.display="";
     }
   }
@@ -468,9 +477,10 @@ async function prepAccountForm(prefill=false){
 
 async function saveAccountSeeker(){
   const errEl=$("aps_err");
-  const name=trim($("aps_name").value),phone=trim($("aps_phone").value),email=trim($("aps_email").value);
-  if(!name||!phone||!email)return showErr(errEl,T[lang].err_required);
-  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+  const name=trim($("aps_name").value),phone=trim($("aps_phone").value);
+  // Contact email is always the verified account email — never the read-only field.
+  const email=session.user.email;
+  if(!name||!phone)return showErr(errEl,T[lang].err_required);
   if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
   const payload={name,phone,email,telegram_phone:trim($("aps_telegram").value)||null};
   const {data:skr}=await sb.from("seekers").select("id").eq("user_id",session.user.id).maybeSingle();
@@ -624,9 +634,42 @@ async function switchRole(){
     await prepAccountForm(true);
     await renderMyPosts();
     updateDangerZone();
+    updateAccountEmail();
   });
 }
 $("switch_role_btn").addEventListener("click",switchRole);
+
+/* ---------- change account email ---------- */
+function updateAccountEmail(){
+  const zone=$("account_email_zone");
+  if(!zone)return;
+  if(!session){zone.hidden=true;return;}
+  zone.hidden=false;
+  $("account_email_current").textContent=session.user.email||"";
+  $("change_email_form").hidden=true;
+  $("ce_email").value="";
+  $("ce_ok").classList.remove("show");
+}
+async function doChangeEmail(){
+  const errEl=$("ce_err");
+  const email=trim($("ce_email").value);
+  if(!email)return showErr(errEl,T[lang].err_required);
+  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+  if(email===session.user.email){$("change_email_form").hidden=true;return;}
+  // Supabase emails a confirmation link; the change only takes effect once the
+  // user clicks it, so the old address stays valid until then.
+  const {error}=await sb.auth.updateUser({email},{emailRedirectTo:window.location.origin+window.location.pathname});
+  if(error){console.error("change email:",error);return showErr(errEl,error.message);}
+  $("ce_email").value="";
+  $("ce_ok").classList.add("show");
+}
+$("change_email_btn").addEventListener("click",()=>{
+  const f=$("change_email_form");
+  f.hidden=!f.hidden;
+  if(!f.hidden){$("ce_ok").classList.remove("show");$("ce_email").focus();}
+});
+$("ce_cancel").addEventListener("click",()=>{$("change_email_form").hidden=true;$("ce_email").value="";});
+$("ce_submit").addEventListener("click",()=>withBusy($("ce_submit"),doChangeEmail));
 
 /* ---------- danger zone (delete profile) ---------- */
 async function updateDangerZone(){
@@ -704,6 +747,8 @@ async function initAuth(){
   // Recovery links land back here with a one-time session — read the hash before
   // supabase-js processes (and clears) it, so we can show the reset form.
   const recovering=/type=recovery/.test(window.location.hash);
+  // Confirmed email-change links also land back here; surface the updated profile.
+  const emailChanged=/type=email_change/.test(window.location.hash);
   const {data}=await sb.auth.getSession();
   session=data.session;
   updateAuthUI();
@@ -711,11 +756,21 @@ async function initAuth(){
     const _saved=localStorage.getItem('page')||'home';
     if(_saved!=='myposts'||session)go(_saved);
   }
-  sb.auth.onAuthStateChange((event,s)=>{
+  sb.auth.onAuthStateChange(async (event,s)=>{
     const wasLoggedIn=!!session;
+    const prevEmail=session&&session.user?session.user.email:null;
     session=s;
     updateAuthUI();
     if(event==="PASSWORD_RECOVERY"){go("reset");return;}
+    if(event==="USER_UPDATED"){
+      // Verified email changed; the DB rows follow via the sync_contact_email
+      // trigger, so just refresh what the user sees.
+      if(s&&s.user&&s.user.email!==prevEmail){
+        if($("myposts").classList.contains("show")){await prepAccountForm(true);updateAccountEmail();}
+        renderJobs();
+      }
+      return;
+    }
     if(s&&!wasLoggedIn){
       const t=pendingNav;pendingNav=null;
       go(t||"home");
@@ -728,6 +783,7 @@ async function initAuth(){
     }
   });
   if(recovering&&session)go("reset");
+  if(emailChanged&&session)go("myposts");
 }
 function updateAuthUI(){
   const auth=$("auth_area");
