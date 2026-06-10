@@ -9,7 +9,7 @@ const T={
   nav_login:"ចូល",nav_signup:"ចុះឈ្មោះ",nav_logout:"ចេញ",nav_myposts:"ប្រវត្តិរូប",tab_posts:"ប្រកាសរបស់ខ្ញុំ",
   eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
   hero_h:"ភ្ជាប់ទេពកោសល្យកម្ពុជា ជាមួយឱកាសការងារ",hero_p:"វេទិកាដ៏ទុកចិត្តសម្រាប់អ្នកស្វែងរកការងារ និងនិយោជកនៅទូទាំងព្រះរាជាណាចក្រកម្ពុជា។",
-  seeker_h:"ចុះឈ្មោះអ្នកស្វែងរកការងារ",seeker_sub:"បំពេញព័ត៌មានរបស់អ្នក",
+  seeker_h:"ប្រកាសការស្វែងរកការងារ",seeker_sub:"ពិពណ៌នាការងារដែលអ្នកស្វែងរក",
   emp_h:"ប្រកាសការងារ",emp_sub:"បំពេញព័ត៌មានការងារ",
   jobs_h:"ស្វែងរកការងារ",jobs_sub:"ត្រងតាមប្រភេទ ខេត្ត ឬពាក្យគន្លឹះ",
   workers_h:"ស្វែងរកកម្មករ",workers_sub:"ត្រងតាមប្រភេទ ខេត្ត បទពិសោធន៍",
@@ -26,8 +26,9 @@ const T={
   section_account_emp:"ប្រវត្តិរូបក្រុមហ៊ុនរបស់ខ្ញុំ",section_account_self:"ព័ត៌មានប្រវត្តិរូបរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
   add_listing:"+ បន្ថែមប្រកាស",add_job_listing:"+ បន្ថែមប្រកាសការងារ",
   f_full_name:"ឈ្មោះ",f_family_name:"នាមត្រកូល",f_telegram:"លេខ Telegram",
-  f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"លេខ Telegram",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
-  need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",
+  f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"ឧស្សាហកម្ម",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
+  need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",need_seeker_profile:"សូមបំពេញប្រវត្តិរូបរបស់អ្នកមុនពេលប្រកាស",
+  f_seek_title:"ចំណងជើងប្រកាស (ជាជម្រើស)",
   no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
   create_seeker_link:"បង្កើតប្រវត្តិរូបការងារ →",create_company_inline:"បំពេញព័ត៌មាននេះដើម្បីចាប់ផ្ដើមប្រកាសការងារ",
   modal_confirm_h:"បញ្ជាក់ការលុប",modal_yes_del:"លុប",modal_confirm_switch_h:"បញ្ជាក់ការប្តូរ",modal_yes_switch:"ប្តូរ",
@@ -64,7 +65,7 @@ const T={
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
   hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
-  seeker_h:"Job seeker sign-up",seeker_sub:"Fill in your details",
+  seeker_h:"Post a listing",seeker_sub:"Describe the work you're looking for",
   emp_h:"Post a job",emp_sub:"Fill in the job details",
   jobs_h:"Search jobs",jobs_sub:"Filter by category, province or keyword",
   workers_h:"Search workers",workers_sub:"Filter by category, province, experience",
@@ -81,8 +82,9 @@ const T={
   section_account_emp:"My company profile",section_account_self:"My profile info",section_posts:"My jobs",
   add_listing:"+ Add listing",add_job_listing:"+ Add job listing",
   f_full_name:"Name",f_family_name:"Family name",f_telegram:"Telegram number",
-  f_contact_name:"Contact name",f_industry:"Telegram number",f_location:"Location",f_website:"Website",
-  need_company:"Please complete your company info before posting a job",
+  f_contact_name:"Contact name",f_industry:"Industry",f_location:"Location",f_website:"Website",
+  need_company:"Please complete your company info before posting a job",need_seeker_profile:"Please complete your profile before posting a listing",
+  f_seek_title:"Listing title (optional)",
   no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
   create_seeker_link:"Create job-seeker profile →",create_company_inline:"Fill this in to start posting jobs",
   modal_confirm_h:"Confirm delete",modal_yes_del:"Delete",modal_confirm_switch_h:"Confirm switch",modal_yes_switch:"Switch",
@@ -149,20 +151,19 @@ let session=null;
 let editMode=null; // null | {kind:"seeker"|"job", id, employer_id?}
 let pendingNav=null; // page to return to after login
 let pendingPostJob=false; // set when user tried Hire without an employer record
+let pendingPostSeeker=false; // set when seeker tried to post without a profile
 const userRole=()=>(session&&session.user&&session.user.user_metadata&&session.user.user_metadata.role)||null;
 
 async function load(key){
   if(key==="seekers"){
-    // Public list: phone/email are withheld from anon by RLS column grants, so
-    // request only the non-contact columns. Contact info is shown on the detail
-    // page to logged-in users only.
-    const {data,error}=await sb.from("seekers")
-      .select("id,name,province,category,experience_level,expected_salary,bio,created_at")
+    const {data,error}=await sb.from("seeker_ads")
+      .select("id,title,category,province,experience_level,expected_salary,description,created_at,seekers(name)")
       .order("created_at",{ascending:false});
     if(error){console.error("load seekers:",error);return [];}
     return (data||[]).map(s=>({
-      id:s.id,name:s.name,prov:s.province,cat:s.category,
-      exp:s.experience_level,sal:s.expected_salary,bio:s.bio,created_at:s.created_at
+      id:s.id,name:s.seekers?.name,title:s.title,
+      cat:s.category,prov:s.province,exp:s.experience_level,
+      sal:s.expected_salary,bio:s.description,created_at:s.created_at
     }));
   }
   if(key==="jobs"){
@@ -187,7 +188,6 @@ function fillSelect(el,arr,withAll){
 }
 function buildSelects(){
   fillSelect(s_prov,PROV);fillSelect(s_cat,CAT);fillSelect(s_exp,EXP);
-  fillSelect(aps_prov,PROV);fillSelect(aps_cat,CAT);fillSelect(aps_exp,EXP);
   fillSelect(e_prov,PROV);fillSelect(e_cat,CAT);fillSelect(e_type,TYPE);
   fillSelect(home_cat,CAT,1);
   fillSelect(j_cat,CAT,1);fillSelect(j_prov,PROV,1);
@@ -262,10 +262,15 @@ async function go(id){
     const {data:emp}=await sb.from("employers").select("id").eq("user_id",session.user.id).maybeSingle();
     if(!emp){pendingPostJob=true;return go("myposts");}
   }
+  // Posting a seeker ad needs a seeker profile first — divert to Profile
+  if(id==="seeker"&&session&&!(editMode&&editMode.kind==="seeker-ad")){
+    const {data:skr}=await sb.from("seekers").select("id").eq("user_id",session.user.id).maybeSingle();
+    if(!skr){pendingPostSeeker=true;return go("myposts");}
+  }
   showPage(id);
   if(id==="jobs")renderJobs();
   else if(id==="workers")renderWorkers();
-  else if(id==="myposts"){await prepAccountForm();await renderMyPosts();updateDangerZone();updateSwitchRole();}
+  else if(id==="myposts"){await prepAccountForm(true);await renderMyPosts();updateDangerZone();updateSwitchRole();}
   else if(id==="seeker")await prepSeekerForm();
   else if(id==="employer")await prepEmployerForm();
   else if(id==="home")renderHomeJobs();
@@ -311,25 +316,22 @@ $("del_profile_btn").addEventListener("click",deleteMyProfile);
 
 async function saveSeeker(){
   const errEl=$("s_err");
-  const name=trim($("s_name").value),phone=trim($("s_phone").value),email=trim($("s_email").value);
-  const telegram=trim($("s_telegram").value);
-  if(!name||!phone||!email||!$("s_prov").value||!$("s_cat").value||!$("s_exp").value)
+  if(!$("s_cat").value||!$("s_prov").value||!$("s_exp").value)
     return showErr(errEl,T[lang].err_required);
-  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
-  if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
+  const {data:skr}=await sb.from("seekers").select("id").eq("user_id",session.user.id).maybeSingle();
+  if(!skr){pendingPostSeeker=true;return go("myposts");}
   const payload={
-    name,phone,email,telegram_phone:telegram||null,
-    province:$("s_prov").value,category:$("s_cat").value,
+    category:$("s_cat").value,province:$("s_prov").value,
     experience_level:$("s_exp").value,expected_salary:num($("s_sal").value),
-    bio:trim($("s_bio").value)
+    description:trim($("s_bio").value),title:trim($("s_title").value)||null
   };
   let error;
-  if(editMode&&editMode.kind==="seeker"){
-    ({error}=await sb.from("seekers").update(payload).eq("id",editMode.id));
+  if(editMode&&editMode.kind==="seeker-ad"){
+    ({error}=await sb.from("seeker_ads").update(payload).eq("id",editMode.id));
   }else{
-    ({error}=await sb.from("seekers").insert({...payload,user_id:session.user.id}));
+    ({error}=await sb.from("seeker_ads").insert({...payload,user_id:session.user.id,seeker_id:skr.id}));
   }
-  if(error){console.error("save seeker:",error);return showErr(errEl,error.message);}
+  if(error){console.error("save seeker-ad:",error);return showErr(errEl,error.message);}
   $("s_ok").classList.add("show");setTimeout(()=>$("s_ok").classList.remove("show"),2500);
   clearEditState();
   await renderWorkers();
@@ -371,7 +373,8 @@ async function saveAccountEmployer(){
   const payload={
     company_name:co,phone,email,
     contact_name:trim($("ap_contact").value)||null,
-    telegram:trim($("ap_industry").value)||null,
+    telegram:trim($("ap_telegram").value)||null,
+    industry:trim($("ap_industry").value)||null,
     location:trim($("ap_location").value)||null,
     website:trim($("ap_website").value)||null
   };
@@ -399,7 +402,8 @@ function clearEditState(){
   editMode=null;
   $("s_edit_banner").classList.remove("show");
   $("e_edit_banner").classList.remove("show");
-  ["s_name","s_phone","s_email","s_sal","s_bio","s_telegram"].forEach(id=>$(id).value="");
+  ["s_title","s_sal","s_bio"].forEach(id=>$(id).value="");
+  $("s_cat").value="";$("s_prov").value="";$("s_exp").value="";
   ["e_title","e_smin","e_smax","e_desc"].forEach(id=>$(id).value="");
   setSubmitText();
 }
@@ -410,22 +414,11 @@ function cancelEdit(){
 function setSubmitText(){
   const sBtn=document.querySelector('[data-save="seeker"]');
   const eBtn=document.querySelector('[data-save="employer"]');
-  if(sBtn)sBtn.textContent=editMode&&editMode.kind==="seeker"?T[lang].btn_save:T[lang].f_submit;
+  if(sBtn)sBtn.textContent=editMode&&editMode.kind==="seeker-ad"?T[lang].btn_save:T[lang].f_submit;
   if(eBtn)eBtn.textContent=editMode&&editMode.kind==="job"?T[lang].btn_save:T[lang].f_post;
 }
 async function prepSeekerForm(){
-  // If user already has a profile and not explicitly editing, prefill and switch to edit mode
-  if(!editMode){
-    const {data}=await sb.from("seekers").select("*").eq("user_id",session.user.id).maybeSingle();
-    if(data){
-      editMode={kind:"seeker",id:data.id};
-      $("s_name").value=data.name||"";$("s_phone").value=data.phone||"";$("s_email").value=data.email||"";
-      $("s_telegram").value=data.telegram_phone||"";
-      $("s_prov").value=data.province||"";$("s_cat").value=data.category||"";$("s_exp").value=data.experience_level||"";
-      $("s_sal").value=data.expected_salary||"";$("s_bio").value=data.bio||"";
-    }
-  }
-  $("s_edit_banner").classList.toggle("show",!!(editMode&&editMode.kind==="seeker"));
+  $("s_edit_banner").classList.toggle("show",!!(editMode&&editMode.kind==="seeker-ad"));
   $("e_edit_banner").classList.remove("show");
   setSubmitText();
 }
@@ -438,6 +431,7 @@ async function prepEmployerForm(){
 
 async function prepAccountForm(prefill=false){
   $("need_company_banner").classList.toggle("show",!!pendingPostJob);
+  $("need_seeker_banner").classList.toggle("show",!!pendingPostSeeker);
   if(!session)return;
   const isEmp=userRole()==="employer";
   setAccountSectionH();
@@ -445,7 +439,7 @@ async function prepAccountForm(prefill=false){
   $("account_seeker_section").style.display=isEmp?"none":"";
   if(isEmp){
     const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
-      ["ap_email","email"],["ap_industry","telegram"],["ap_location","location"],["ap_website","website"]];
+      ["ap_email","email"],["ap_telegram","telegram"],["ap_industry","industry"],["ap_location","location"],["ap_website","website"]];
     if(prefill){
       const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
       if(emp){fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});$("ap_hint").style.display="none";}
@@ -456,19 +450,18 @@ async function prepAccountForm(prefill=false){
     }
   }else{
     if(prefill){
-      const {data:skr}=await sb.from("seekers").select("*").eq("user_id",session.user.id).maybeSingle();
+      const {data:skr}=await sb.from("seekers").select("id,name,phone,email,telegram_phone").eq("user_id",session.user.id).maybeSingle();
       if(skr){
-        $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";$("aps_email").value=skr.email||"";
-        $("aps_telegram").value=skr.telegram_phone||"";$("aps_sal").value=skr.expected_salary||"";
-        $("aps_prov").value=skr.province||"";$("aps_cat").value=skr.category||"";$("aps_exp").value=skr.experience_level||"";
-        $("aps_bio").value=skr.bio||"";$("aps_hint").style.display="none";
+        $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";
+        $("aps_email").value=skr.email||"";$("aps_telegram").value=skr.telegram_phone||"";
+        $("aps_hint").style.display="none";
       }else{
-        ["aps_name","aps_phone","aps_email","aps_telegram","aps_sal","aps_bio"].forEach(id=>$(id).value="");
-        $("aps_prov").value="";$("aps_cat").value="";$("aps_exp").value="";$("aps_hint").style.display="";
+        ["aps_name","aps_phone","aps_email","aps_telegram"].forEach(id=>$(id).value="");
+        $("aps_hint").style.display="";
       }
     }else{
-      ["aps_name","aps_phone","aps_email","aps_telegram","aps_sal","aps_bio"].forEach(id=>$(id).value="");
-      $("aps_prov").value="";$("aps_cat").value="";$("aps_exp").value="";$("aps_hint").style.display="";
+      ["aps_name","aps_phone","aps_email","aps_telegram"].forEach(id=>$(id).value="");
+      $("aps_hint").style.display="";
     }
   }
 }
@@ -476,16 +469,10 @@ async function prepAccountForm(prefill=false){
 async function saveAccountSeeker(){
   const errEl=$("aps_err");
   const name=trim($("aps_name").value),phone=trim($("aps_phone").value),email=trim($("aps_email").value);
-  if(!name||!phone||!email||!$("aps_prov").value||!$("aps_cat").value||!$("aps_exp").value)
-    return showErr(errEl,T[lang].err_required);
+  if(!name||!phone||!email)return showErr(errEl,T[lang].err_required);
   if(!validEmail(email))return showErr(errEl,T[lang].err_email);
   if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
-  const payload={
-    name,phone,email,telegram_phone:trim($("aps_telegram").value)||null,
-    province:$("aps_prov").value,category:$("aps_cat").value,
-    experience_level:$("aps_exp").value,expected_salary:num($("aps_sal").value),
-    bio:trim($("aps_bio").value)
-  };
+  const payload={name,phone,email,telegram_phone:trim($("aps_telegram").value)||null};
   const {data:skr}=await sb.from("seekers").select("id").eq("user_id",session.user.id).maybeSingle();
   let error;
   if(skr){({error}=await sb.from("seekers").update(payload).eq("id",skr.id));}
@@ -493,8 +480,12 @@ async function saveAccountSeeker(){
   if(error){console.error("save account-seeker:",error);return showErr(errEl,error.message);}
   $("aps_ok").classList.add("show");setTimeout(()=>$("aps_ok").classList.remove("show"),2500);
   $("aps_hint").style.display="none";
-  await renderWorkers();
   updateDangerZone();
+  if(pendingPostSeeker){
+    pendingPostSeeker=false;
+    $("need_seeker_banner").classList.remove("show");
+    setTimeout(()=>go("seeker"),700);
+  }
 }
 
 /* ---------- my posts ---------- */
@@ -507,23 +498,27 @@ async function renderMyPosts(){
   const isSeeker=!isEmployer;
   let html="";
   if(isSeeker){
-    const {data:seeker}=await sb.from("seekers").select("*").eq("user_id",uid).maybeSingle();
+    const {data:ads}=await sb.from("seeker_ads").select("*").eq("user_id",uid).order("created_at",{ascending:false});
     html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>
       <button class="btn-sm add" data-add-listing>${esc(T[lang].add_listing)}</button></div>`;
-    if(seeker){
-      const sal=seeker.expected_salary?`<span class="tag sal">$${esc(seeker.expected_salary)} ${esc(T[lang].mo)}</span>`:"";
-      html+=`<div class="rc mp-card">
-        <div class="t">${esc(seeker.name)}</div>
-        <div class="m">${esc(seeker.phone||"")} · ${esc(seeker.email||"")}${seeker.telegram_phone?` · Telegram: ${esc(seeker.telegram_phone)}`:""}</div>
-        <span class="tag">${esc(labelOf(CAT,seeker.category))}</span>
-        <span class="tag">${esc(labelOf(PROV,seeker.province))}</span>
-        <span class="tag">${esc(labelOf(EXP,seeker.experience_level))}</span>${sal}
-        <div class="d">${esc(seeker.bio||"")}</div>
-        <div class="mp-actions">
-          <button class="btn-sm" data-edit-seeker="${esc(seeker.id)}">${esc(T[lang].btn_edit)}</button>
-          <button class="btn-sm danger" data-del-seeker="${esc(seeker.id)}">${esc(T[lang].btn_delete)}</button>
-        </div>
-      </div>`;
+    if(ads&&ads.length){
+      html+=`<div class="cards">`;
+      ads.forEach(ad=>{
+        const sal=ad.expected_salary?`<span class="tag sal">$${esc(ad.expected_salary)} ${esc(T[lang].mo)}</span>`:"";
+        const age=ad.created_at?`<div class="age">${esc(timeAgo(ad.created_at))}</div>`:"";
+        html+=`<div class="rc mp-card">
+          <div class="t">${esc(ad.title||labelOf(CAT,ad.category))}</div>
+          <span class="tag">${esc(labelOf(CAT,ad.category))}</span>
+          <span class="tag">${esc(labelOf(PROV,ad.province))}</span>
+          <span class="tag">${esc(labelOf(EXP,ad.experience_level))}</span>${sal}
+          <div class="d">${esc(ad.description||"")}</div>${age}
+          <div class="mp-actions">
+            <button class="btn-sm" data-edit-seeker="${esc(ad.id)}">${esc(T[lang].btn_edit)}</button>
+            <button class="btn-sm danger" data-del-seeker="${esc(ad.id)}">${esc(T[lang].btn_delete)}</button>
+          </div>
+        </div>`;
+      });
+      html+=`</div>`;
     }else{
       html+=`<div class="empty">${esc(T[lang].myposts_empty)}</div>`;
     }
@@ -565,13 +560,13 @@ async function renderMyPosts(){
 }
 
 async function editSeeker(id){
-  const {data,error}=await sb.from("seekers").select("*").eq("id",id).single();
+  const {data,error}=await sb.from("seeker_ads").select("*").eq("id",id).single();
   if(error){console.error(error);return;}
-  editMode={kind:"seeker",id};
-  $("s_name").value=data.name||"";$("s_phone").value=data.phone||"";$("s_email").value=data.email||"";
-  $("s_telegram").value=data.telegram_phone||"";
-  $("s_prov").value=data.province||"";$("s_cat").value=data.category||"";$("s_exp").value=data.experience_level||"";
-  $("s_sal").value=data.expected_salary||"";$("s_bio").value=data.bio||"";
+  editMode={kind:"seeker-ad",id};
+  $("s_title").value=data.title||"";
+  $("s_cat").value=data.category||"";$("s_prov").value=data.province||"";
+  $("s_exp").value=data.experience_level||"";
+  $("s_sal").value=data.expected_salary||"";$("s_bio").value=data.description||"";
   showPage("seeker");
   $("s_edit_banner").classList.add("show");
   $("e_edit_banner").classList.remove("show");
@@ -591,7 +586,7 @@ async function editJob(id){
 }
 async function delSeeker(id){
   if(!(await showModal(T[lang].confirm_del)))return;
-  const {error}=await sb.from("seekers").delete().eq("id",id);
+  const {error}=await sb.from("seeker_ads").delete().eq("id",id);
   if(error){console.error(error);return;}
   await renderWorkers();
   renderMyPosts();
@@ -665,7 +660,7 @@ async function deleteMyProfile(){
     const {error}=await sb.from(table).delete().eq("user_id",session.user.id);
     if(error){console.error("delete profile:",error);return;}
     if(kind==="employer"){
-      ["ap_co","ap_contact","ap_phone","ap_email","ap_industry","ap_location","ap_website"].forEach(id=>$(id).value="");
+      ["ap_co","ap_contact","ap_phone","ap_email","ap_telegram","ap_industry","ap_location","ap_website"].forEach(id=>$(id).value="");
       $("ap_hint").style.display="";
       await renderJobs();
     }else{
@@ -726,7 +721,8 @@ async function initAuth(){
       go(t||"home");
     }else if(!s&&wasLoggedIn){
       pendingPostJob=false;
-      ["ap_co","ap_contact","ap_phone","ap_email","ap_industry","ap_location","ap_website"].forEach(id=>$(id).value="");
+      pendingPostSeeker=false;
+      ["ap_co","ap_contact","ap_phone","ap_email","ap_telegram","ap_industry","ap_location","ap_website"].forEach(id=>$(id).value="");
       $("mp_content").innerHTML="";
       go("home");
     }
@@ -855,14 +851,14 @@ async function renderWorkers(){
   const arr=await load("seekers");const box=$("w_results");box.innerHTML="";
   const kw=$("w_kw").value.toLowerCase(),c=$("w_cat").value,p=$("w_prov").value,x=$("w_exp").value;
   const out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
-    (!kw||((s.name+" "+(s.bio||"")).toLowerCase().includes(kw))));
+    (!kw||((s.name+" "+(s.title||"")+" "+(s.bio||"")).toLowerCase().includes(kw))));
   $("w_count").textContent=countLine(out.length,"workers");
   if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(s=>{
     const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
     const age=s.created_at?`<div class="age">${esc(timeAgo(s.created_at))}</div>`:"";
     const div=card(
-      `<div class="t">${esc(s.name)}</div>
+      `<div class="t">${esc(s.title||s.name||labelOf(CAT,s.cat))}</div>
        <span class="tag">${esc(labelOf(CAT,s.cat))}</span><span class="tag">${esc(labelOf(PROV,s.prov))}</span>
        <span class="tag">${esc(labelOf(EXP,s.exp))}</span>${sal}
        <div class="d">${esc(s.bio)}</div>${age}`);
@@ -903,13 +899,15 @@ function goSearch(){
 $("home_search_btn").addEventListener("click",goSearch);
 $("home_kw").addEventListener("keydown",e=>{if(e.key==="Enter")goSearch();});
 
-["j_kw","j_cat","j_prov"].forEach(id=>$(id).addEventListener("input",renderJobs));
-["w_kw","w_cat","w_prov","w_exp"].forEach(id=>$(id).addEventListener("input",renderWorkers));
+const debounce=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);};};
+const debJobs=debounce(renderJobs),debWorkers=debounce(renderWorkers);
+["j_kw","j_cat","j_prov"].forEach(id=>$(id).addEventListener("input",debJobs));
+["w_kw","w_cat","w_prov","w_exp"].forEach(id=>$(id).addEventListener("input",debWorkers));
 
 /* ---------- job detail ---------- */
 async function viewJob(id){
   const {data,error}=await sb.from("jobs")
-    .select("*,employers(company_name,phone,email,contact_name,location,website)")
+    .select("*,employers(company_name,phone,email,contact_name,industry,location,website)")
     .eq("id",id).maybeSingle();
   if(error){console.error("view job:",error);return;}
   if(!data){go("jobs");return;}
@@ -938,6 +936,7 @@ function fillJobDetail(j){
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
   if(emp.contact_name)rows.push(row("f_contact_name",esc(emp.contact_name)));
+  if(emp.industry)rows.push(row("f_industry",esc(emp.industry)));
   if(emp.phone)rows.push(row("f_phone",`<a class="js-tel"></a>`));
   if(emp.email)rows.push(row("f_email",`<a class="js-mail"></a>`));
   if(emp.location)rows.push(row("f_location",esc(emp.location)));
@@ -953,17 +952,16 @@ function fillJobDetail(j){
 }
 
 async function viewSeeker(id){
-  // Contact columns are only readable by authenticated users (RLS column grants).
-  // Request them only when logged in; anon visitors get a "log in to view" prompt.
-  const cols=session
-    ?"id,name,phone,email,province,category,experience_level,expected_salary,bio,created_at"
-    :"id,name,province,category,experience_level,expected_salary,bio,created_at";
-  const {data,error}=await sb.from("seekers").select(cols).eq("id",id).maybeSingle();
+  const seekerCols=session?"name,phone,email,telegram_phone":"name";
+  const {data,error}=await sb.from("seeker_ads")
+    .select(`*,seekers(${seekerCols})`)
+    .eq("id",id).maybeSingle();
   if(error){console.error("view seeker:",error);return;}
   if(!data){go("workers");return;}
-  document.title=`${data.name} — KarKhmer`;
+  const _name=data.seekers?.name||"";
+  document.title=`${data.title||_name} — KarKhmer`;
   const _md=document.querySelector('meta[name="description"]');
-  if(_md)_md.content=`${data.name} — KarKhmer`;
+  if(_md)_md.content=`${data.title||_name} — KarKhmer`;
   document.querySelector('[data-report-seeker]').dataset.reportSeeker=id;
   document.querySelector('[data-report-seeker]').textContent=T[lang].report_btn;
   document.querySelector('[data-report-seeker]').disabled=false;
@@ -972,7 +970,8 @@ async function viewSeeker(id){
 }
 
 function fillSeekerDetail(s){
-  $("sd_title").textContent=s.name||"";
+  const skr=s.seekers||{};
+  $("sd_title").textContent=s.title||skr.name||"";
   const sal=s.expected_salary?`$${s.expected_salary} ${T[lang].mo}`:"";
   $("sd_tags").innerHTML=
     `<span class="tag">${esc(labelOf(CAT,s.category))}</span>`+
@@ -980,7 +979,7 @@ function fillSeekerDetail(s){
     `<span class="tag">${esc(labelOf(EXP,s.experience_level))}</span>`+
     (sal?`<span class="tag sal">${esc(sal)}</span>`:"");
   $("sd_age").textContent=s.created_at?timeAgo(s.created_at):"";
-  $("sd_bio").textContent=s.bio||"";
+  $("sd_bio").textContent=s.description||"";
   if(!session){
     $("sd_contact").innerHTML=
       `<div class="contact-locked"><span>${esc(T[lang].contact_locked)}</span>`+
@@ -989,13 +988,15 @@ function fillSeekerDetail(s){
   }
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
-  if(s.phone)rows.push(row("f_phone",`<a class="js-tel"></a>`));
-  if(s.email)rows.push(row("f_email",`<a class="js-mail"></a>`));
+  if(skr.name)rows.push(row("f_name",esc(skr.name)));
+  if(skr.phone)rows.push(row("f_phone",`<a class="js-tel"></a>`));
+  if(skr.email)rows.push(row("f_email",`<a class="js-mail"></a>`));
+  if(skr.telegram_phone)rows.push(row("f_telegram",esc(skr.telegram_phone)));
   $("sd_contact").innerHTML=rows.join("")||`<div class="empty">—</div>`;
   const _stel=$("sd_contact").querySelector(".js-tel");
-  if(_stel){_stel.textContent=s.phone;_stel.href="tel:"+s.phone;}
+  if(_stel){_stel.textContent=skr.phone;_stel.href="tel:"+skr.phone;}
   const _smail=$("sd_contact").querySelector(".js-mail");
-  if(_smail){_smail.textContent=s.email;_smail.href="mailto:"+s.email;}
+  if(_smail){_smail.textContent=skr.email;_smail.href="mailto:"+skr.email;}
 }
 
 async function reportListing(type,id,btn){

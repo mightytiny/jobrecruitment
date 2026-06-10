@@ -150,6 +150,7 @@
     <p class="sub" data-t="myposts_sub"></p>
 
     <div class="info-banner" id="need_company_banner"><span data-t="need_company"></span></div>
+    <div class="info-banner" id="need_seeker_banner"><span data-t="need_seeker_profile"></span></div>
 
     <div id="account_emp_section" style="display:none">
       <h3 class="section-h" id="account_section_h"></h3>
@@ -164,11 +165,13 @@
           <div><label for="ap_email" data-t="f_email"></label><input id="ap_email" type="email" maxlength="120" required></div>
         </div>
         <div class="grid2">
+          <div><label for="ap_telegram" data-t="f_telegram"></label><input id="ap_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
           <div><label for="ap_industry" data-t="f_industry"></label><input id="ap_industry" type="text" maxlength="80"></div>
-          <div><label for="ap_location" data-t="f_location"></label><input id="ap_location" type="text" maxlength="120"></div>
         </div>
-        <label for="ap_website" data-t="f_website"></label>
-        <input id="ap_website" type="url" maxlength="200" placeholder="https://">
+        <div class="grid2">
+          <div><label for="ap_location" data-t="f_location"></label><input id="ap_location" type="text" maxlength="120"></div>
+          <div><label for="ap_website" data-t="f_website"></label><input id="ap_website" type="url" maxlength="200" placeholder="https://"></div>
+        </div>
         <button class="btn" data-save="account-emp" data-t="btn_save"></button>
         <div class="ok" id="ap_ok" data-t="saved"></div>
         <div class="err" id="ap_err"></div>
@@ -187,15 +190,6 @@
           <div><label for="aps_email" data-t="f_email"></label><input id="aps_email" type="email" maxlength="120" required></div>
           <div><label for="aps_telegram" data-t="f_telegram"></label><input id="aps_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
         </div>
-        <div class="grid2">
-          <div><label for="aps_prov" data-t="f_prov"></label><select id="aps_prov"></select></div>
-          <div><label for="aps_cat" data-t="f_cat"></label><select id="aps_cat"></select></div>
-        </div>
-        <div class="grid2">
-          <div><label for="aps_exp" data-t="f_exp"></label><select id="aps_exp"></select></div>
-          <div><label for="aps_sal" data-t="f_esal"></label><input id="aps_sal" type="number" min="0" max="100000"></div>
-        </div>
-        <label for="aps_bio" data-t="f_skills"></label><textarea id="aps_bio" maxlength="1000"></textarea>
         <button class="btn" data-save="account-seeker" data-t="btn_save"></button>
         <div class="ok" id="aps_ok" data-t="saved"></div>
         <div class="err" id="aps_err"></div>
@@ -222,17 +216,11 @@
     <p class="sub" data-t="seeker_sub"></p>
     <div class="edit-banner" id="s_edit_banner"><span data-t="edit_profile_h"></span><button class="link-btn" data-cancel="seeker" data-t="btn_cancel"></button></div>
     <div class="form">
+      <label for="s_title" data-t="f_seek_title"></label>
+      <input id="s_title" type="text" maxlength="120">
       <div class="grid2">
-        <div><label for="s_name" data-t="f_name"></label><input id="s_name" type="text" maxlength="100" required></div>
-        <div><label for="s_phone" data-t="f_phone"></label><input id="s_phone" type="tel" maxlength="20" required></div>
-      </div>
-      <div class="grid2">
-        <div><label for="s_email" data-t="f_email"></label><input id="s_email" type="email" maxlength="120" required></div>
-        <div><label for="s_telegram" data-t="f_telegram"></label><input id="s_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
-      </div>
-      <div class="grid2">
-        <div><label for="s_prov" data-t="f_prov"></label><select id="s_prov"></select></div>
         <div><label for="s_cat" data-t="f_cat"></label><select id="s_cat"></select></div>
+        <div><label for="s_prov" data-t="f_prov"></label><select id="s_prov"></select></div>
       </div>
       <div class="grid2">
         <div><label for="s_exp" data-t="f_exp"></label><select id="s_exp"></select></div>

@@ -1,0 +1,14 @@
+# OS
+Thumbs.db
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Local business / marketing docs — not part of the app
+*.pdf
+Skærmbillede*.jpg
