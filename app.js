@@ -113,7 +113,7 @@ const T={
   switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time."}
 };
 
-let lang="km";
+let lang=localStorage.getItem('lang')||'km';
 const lab=arr=>arr[lang==="km"?1:2];
 
 /* ---------- helpers ---------- */
@@ -193,6 +193,7 @@ function buildSelects(){
 /* ---------- translation render ---------- */
 function applyLang(){
   document.body.dataset.lang=lang;
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
   document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=T[lang][el.dataset.t]||"";});
   document.querySelectorAll("[data-t-ph]").forEach(el=>{el.placeholder=T[lang][el.dataset.tPh]||"";});
   setAccountSectionH();
@@ -211,7 +212,9 @@ function setAccountSectionH(){
 }
 
 /* ---------- navigation ---------- */
+const RESTORABLE=new Set(['home','jobs','workers','myposts']);
 function showPage(id){
+  if(RESTORABLE.has(id))localStorage.setItem('page',id);
   if(id!=="jobdetail"&&id!=="seekerdetail"){
     document.title="KarKhmer";
     const _md=document.querySelector('meta[name="description"]');
@@ -268,6 +271,7 @@ document.addEventListener("click",e=>{
   const vj=e.target.closest("[data-view-job]");if(vj){viewJob(vj.dataset.viewJob);return;}
   const vs=e.target.closest("[data-view-seeker]");if(vs){viewSeeker(vs.dataset.viewSeeker);return;}
   const lb=e.target.closest(".lang button");if(lb){lang=lb.dataset.lang;
+    localStorage.setItem('lang',lang);
     document.querySelectorAll(".lang button").forEach(x=>x.classList.toggle("active",x===lb));applyLang();return;}
   const c=e.target.closest("[data-cancel]");if(c){cancelEdit(c.dataset.cancel);return;}
 });
@@ -426,27 +430,36 @@ async function prepEmployerForm(){
   setSubmitText();
 }
 
-async function prepAccountForm(){
+async function prepAccountForm(prefill=false){
   $("need_company_banner").classList.toggle("show",!!pendingPostJob);
   if(!session)return;
   const isEmp=userRole()==="employer";
   setAccountSectionH();
-  // Employers edit their company card; everyone else edits their seeker profile card. Only one shows.
   $("account_emp_section").style.display=isEmp?"":"none";
   $("account_seeker_section").style.display=isEmp?"none":"";
   if(isEmp){
-    const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
     const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
       ["ap_email","email"],["ap_industry","telegram"],["ap_location","location"],["ap_website","website"]];
-    if(emp){fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});$("ap_hint").style.display="none";}
-    else{fields.forEach(([el])=>{$(el).value="";});$("ap_hint").style.display="";}
+    if(prefill){
+      const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
+      if(emp){fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});$("ap_hint").style.display="none";}
+      else{fields.forEach(([el])=>{$(el).value="";});$("ap_hint").style.display="";}
+    }else{
+      fields.forEach(([el])=>{$(el).value="";});
+      $("ap_hint").style.display="";
+    }
   }else{
-    const {data:skr}=await sb.from("seekers").select("*").eq("user_id",session.user.id).maybeSingle();
-    if(skr){
-      $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";$("aps_email").value=skr.email||"";
-      $("aps_telegram").value=skr.telegram_phone||"";$("aps_sal").value=skr.expected_salary||"";
-      $("aps_prov").value=skr.province||"";$("aps_cat").value=skr.category||"";$("aps_exp").value=skr.experience_level||"";
-      $("aps_bio").value=skr.bio||"";$("aps_hint").style.display="none";
+    if(prefill){
+      const {data:skr}=await sb.from("seekers").select("*").eq("user_id",session.user.id).maybeSingle();
+      if(skr){
+        $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";$("aps_email").value=skr.email||"";
+        $("aps_telegram").value=skr.telegram_phone||"";$("aps_sal").value=skr.expected_salary||"";
+        $("aps_prov").value=skr.province||"";$("aps_cat").value=skr.category||"";$("aps_exp").value=skr.experience_level||"";
+        $("aps_bio").value=skr.bio||"";$("aps_hint").style.display="none";
+      }else{
+        ["aps_name","aps_phone","aps_email","aps_telegram","aps_sal","aps_bio"].forEach(id=>$(id).value="");
+        $("aps_prov").value="";$("aps_cat").value="";$("aps_exp").value="";$("aps_hint").style.display="";
+      }
     }else{
       ["aps_name","aps_phone","aps_email","aps_telegram","aps_sal","aps_bio"].forEach(id=>$(id).value="");
       $("aps_prov").value="";$("aps_cat").value="";$("aps_exp").value="";$("aps_hint").style.display="";
@@ -607,7 +620,7 @@ async function switchRole(){
     session=data.session;
     updateAuthUI();
     updateSwitchRole();
-    await prepAccountForm();
+    await prepAccountForm(true);
     await renderMyPosts();
     updateDangerZone();
   });
@@ -693,6 +706,10 @@ async function initAuth(){
   const {data}=await sb.auth.getSession();
   session=data.session;
   updateAuthUI();
+  if(!recovering){
+    const _saved=localStorage.getItem('page')||'home';
+    if(_saved!=='myposts'||session)go(_saved);
+  }
   sb.auth.onAuthStateChange((event,s)=>{
     const wasLoggedIn=!!session;
     session=s;
