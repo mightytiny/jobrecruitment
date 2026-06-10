@@ -170,6 +170,34 @@
       </div>
     </div>
 
+    <div id="account_seeker_section">
+      <h3 class="section-h" id="account_seeker_h" data-t="section_account_self"></h3>
+      <div class="form account-form">
+        <p class="form-hint" id="aps_hint" data-t="no_account_seeker"></p>
+        <div class="grid2">
+          <div><label for="aps_name" data-t="f_name"></label><input id="aps_name" type="text" maxlength="100" required></div>
+          <div><label for="aps_phone" data-t="f_phone"></label><input id="aps_phone" type="tel" maxlength="20" required></div>
+        </div>
+        <div class="grid2">
+          <div><label for="aps_email" data-t="f_email"></label><input id="aps_email" type="email" maxlength="120" required></div>
+          <div><label for="aps_sal" data-t="f_esal"></label><input id="aps_sal" type="number" min="0" max="100000"></div>
+        </div>
+        <div class="grid2">
+          <div><label for="aps_telegram" data-t="f_telegram"></label><input id="aps_telegram" type="tel" maxlength="20" placeholder="+855..."></div>
+          <div></div>
+        </div>
+        <div class="grid2">
+          <div><label for="aps_prov" data-t="f_prov"></label><select id="aps_prov"></select></div>
+          <div><label for="aps_cat" data-t="f_cat"></label><select id="aps_cat"></select></div>
+        </div>
+        <label for="aps_exp" data-t="f_exp"></label><select id="aps_exp"></select>
+        <label for="aps_bio" data-t="f_skills"></label><textarea id="aps_bio" maxlength="1000"></textarea>
+        <button class="btn" data-save="account-seeker" data-t="btn_save"></button>
+        <div class="ok" id="aps_ok" data-t="saved"></div>
+        <div class="err" id="aps_err"></div>
+      </div>
+    </div>
+
     <div id="mp_content"></div>
 
     <div class="danger-zone" id="danger_zone" hidden>

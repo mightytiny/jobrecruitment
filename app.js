@@ -172,6 +172,7 @@ function fillSelect(el,arr,withAll){
 }
 function buildSelects(){
   fillSelect(s_prov,PROV);fillSelect(s_cat,CAT);fillSelect(s_exp,EXP);
+  fillSelect(aps_prov,PROV);fillSelect(aps_cat,CAT);fillSelect(aps_exp,EXP);
   fillSelect(e_prov,PROV);fillSelect(e_cat,CAT);fillSelect(e_type,TYPE);
   fillSelect(j_cat,CAT,1);fillSelect(j_prov,PROV,1);
   fillSelect(w_cat,CAT,1);fillSelect(w_prov,PROV,1);fillSelect(w_exp,EXP,1);
@@ -186,13 +187,14 @@ function applyLang(){
   updateAuthUI();
   setSubmitText();
   renderJobs();renderWorkers();
-  if(document.getElementById("myposts").classList.contains("show"))renderMyPosts();
+  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();}
 }
 
-// Top card on the profile page: "My company profile" for employers, "My profile info" for everyone else.
+// Top card on the profile page is the employer-only company form. Seekers never see it;
+// they edit their details through the seeker form and see their info as a card in mp_content.
 function setAccountSectionH(){
-  const el=$("account_section_h");
-  if(el)el.textContent=userRole()==="employer"?T[lang].section_account_emp:T[lang].section_account_self;
+  const h=$("account_section_h");
+  if(h)h.textContent=T[lang].section_account_emp;
 }
 
 /* ---------- navigation ---------- */
@@ -215,9 +217,10 @@ async function go(id){
   }
   // Role gate: silently ignore cross-role nav attempts
   const r=userRole();
-  if(session&&r){
+  if(session){
+    // Employers use the job form; everyone else (seeker, incl. no-role) uses the seeker form.
     if(id==="seeker"&&r==="employer")return;
-    if(id==="employer"&&r==="seeker")return;
+    if(id==="employer"&&r!=="employer")return;
   }
   // Posting a job needs an employer record first — divert to Profile
   if(id==="employer"&&session&&!(editMode&&editMode.kind==="job")){
@@ -254,13 +257,14 @@ async function withBusy(btn,fn){
   finally{btn.disabled=false;btn.textContent=orig;}
 }
 
-const SAVE_ERR_ID={seeker:"s_err",employer:"e_err","account-emp":"ap_err"};
+const SAVE_ERR_ID={seeker:"s_err",employer:"e_err","account-emp":"ap_err","account-seeker":"aps_err"};
 document.querySelectorAll("[data-save]").forEach(btn=>{
   btn.addEventListener("click",()=>withBusy(btn,async()=>{
     const kind=btn.dataset.save;
     if(!session){return showErr($(SAVE_ERR_ID[kind]),T[lang].err_need_login);}
     if(kind==="seeker")await saveSeeker();
     else if(kind==="account-emp")await saveAccountEmployer();
+    else if(kind==="account-seeker")await saveAccountSeeker();
     else await saveEmployer();
   }));
 });
@@ -328,7 +332,7 @@ async function saveAccountEmployer(){
   const payload={
     company_name:co,phone,email,
     contact_name:trim($("ap_contact").value)||null,
-    industry:trim($("ap_industry").value)||null,
+    telegram:trim($("ap_industry").value)||null,
     location:trim($("ap_location").value)||null,
     website:trim($("ap_website").value)||null
   };
@@ -396,21 +400,53 @@ async function prepEmployerForm(){
 async function prepAccountForm(){
   $("need_company_banner").classList.toggle("show",!!pendingPostJob);
   if(!session)return;
-  const r=userRole();
+  const isEmp=userRole()==="employer";
   setAccountSectionH();
-  const isEmp=!r||r==="employer";
+  // Employers edit their company card; everyone else edits their seeker profile card. Only one shows.
   $("account_emp_section").style.display=isEmp?"":"none";
-  if(!isEmp)return;
-  const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
-  const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
-    ["ap_email","email"],["ap_industry","industry"],["ap_location","location"],["ap_website","website"]];
-  if(emp){
-    fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});
-    $("ap_hint").style.display="none";
+  $("account_seeker_section").style.display=isEmp?"none":"";
+  if(isEmp){
+    const {data:emp}=await sb.from("employers").select("*").eq("user_id",session.user.id).maybeSingle();
+    const fields=[["ap_co","company_name"],["ap_contact","contact_name"],["ap_phone","phone"],
+      ["ap_email","email"],["ap_industry","telegram"],["ap_location","location"],["ap_website","website"]];
+    if(emp){fields.forEach(([el,col])=>{$(el).value=emp[col]||"";});$("ap_hint").style.display="none";}
+    else{fields.forEach(([el])=>{$(el).value="";});$("ap_hint").style.display="";}
   }else{
-    fields.forEach(([el])=>{$(el).value="";});
-    $("ap_hint").style.display="";
+    const {data:skr}=await sb.from("seekers").select("*").eq("user_id",session.user.id).maybeSingle();
+    if(skr){
+      $("aps_name").value=skr.name||"";$("aps_phone").value=skr.phone||"";$("aps_email").value=skr.email||"";
+      $("aps_telegram").value=skr.telegram_phone||"";$("aps_sal").value=skr.expected_salary||"";
+      $("aps_prov").value=skr.province||"";$("aps_cat").value=skr.category||"";$("aps_exp").value=skr.experience_level||"";
+      $("aps_bio").value=skr.bio||"";$("aps_hint").style.display="none";
+    }else{
+      ["aps_name","aps_phone","aps_email","aps_telegram","aps_sal","aps_bio"].forEach(id=>$(id).value="");
+      $("aps_prov").value="";$("aps_cat").value="";$("aps_exp").value="";$("aps_hint").style.display="";
+    }
   }
+}
+
+async function saveAccountSeeker(){
+  const errEl=$("aps_err");
+  const name=trim($("aps_name").value),phone=trim($("aps_phone").value),email=trim($("aps_email").value);
+  if(!name||!phone||!email||!$("aps_prov").value||!$("aps_cat").value||!$("aps_exp").value)
+    return showErr(errEl,T[lang].err_required);
+  if(!validEmail(email))return showErr(errEl,T[lang].err_email);
+  if(!validPhone(phone))return showErr(errEl,T[lang].err_phone);
+  const payload={
+    name,phone,email,telegram_phone:trim($("aps_telegram").value)||null,
+    province:$("aps_prov").value,category:$("aps_cat").value,
+    experience_level:$("aps_exp").value,expected_salary:num($("aps_sal").value),
+    bio:trim($("aps_bio").value)
+  };
+  const {data:skr}=await sb.from("seekers").select("id").eq("user_id",session.user.id).maybeSingle();
+  let error;
+  if(skr){({error}=await sb.from("seekers").update(payload).eq("id",skr.id));}
+  else{({error}=await sb.from("seekers").insert({...payload,user_id:session.user.id}));}
+  if(error){console.error("save account-seeker:",error);return showErr(errEl,error.message);}
+  $("aps_ok").classList.add("show");setTimeout(()=>$("aps_ok").classList.remove("show"),2500);
+  $("aps_hint").style.display="none";
+  await renderWorkers();
+  updateDangerZone();
 }
 
 /* ---------- my posts ---------- */
@@ -419,16 +455,11 @@ async function renderMyPosts(){
   if(!session){box.innerHTML="";return;}
   const uid=session.user.id;
   const r=userRole();
-  const isSeeker=!r||r==="seeker";
   const isEmployer=r==="employer";
-  const [seekerRes,jobsRes]=await Promise.all([
-    isSeeker?sb.from("seekers").select("*").eq("user_id",uid).maybeSingle():Promise.resolve({data:null}),
-    isEmployer?sb.from("jobs").select("*,employers(company_name,phone,email)").eq("user_id",uid).order("created_at",{ascending:false}):Promise.resolve({data:[]})
-  ]);
-  const seeker=seekerRes.data;
-  const jobs=jobsRes.data||[];
+  const isSeeker=!isEmployer;
   let html="";
   if(isSeeker){
+    const {data:seeker}=await sb.from("seekers").select("*").eq("user_id",uid).maybeSingle();
     html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_profile)}</h3>
       <button class="btn-sm add" data-add-listing>${esc(T[lang].add_listing)}</button></div>`;
     if(seeker){
@@ -450,9 +481,10 @@ async function renderMyPosts(){
     }
   }
   if(isEmployer){
+    const {data:jobs}=await sb.from("jobs").select("*,employers(company_name,phone,email)").eq("user_id",uid).order("created_at",{ascending:false});
     html+=`<div class="mp-head"><h3 class="mp-h">${esc(T[lang].myposts_jobs)}</h3>
       <button class="btn-sm add" data-add-job>${esc(T[lang].add_job_listing)}</button></div>`;
-    if(jobs.length){
+    if(jobs&&jobs.length){
       html+=`<div class="cards">`;
       jobs.forEach(j=>{
         const sal=(j.salary_min||j.salary_max)?`<span class="tag sal">$${esc(j.salary_min||"?")}–${esc(j.salary_max||"?")} ${esc(T[lang].mo)}</span>`:"";
@@ -529,11 +561,11 @@ async function updateDangerZone(){
   if(!session){zone.hidden=true;return;}
   const r=userRole(),uid=session.user.id;
   let kind=null;
-  if(r==="employer"||!r){
+  if(r==="employer"){
     const {data}=await sb.from("employers").select("id").eq("user_id",uid).maybeSingle();
     if(data)kind="employer";
   }
-  if(!kind&&(r==="seeker"||!r)){
+  if(!kind&&r!=="employer"){
     const {data}=await sb.from("seekers").select("id").eq("user_id",uid).maybeSingle();
     if(data)kind="seeker";
   }
@@ -641,8 +673,8 @@ function updateAuthUI(){
 
 function updateRoleVisibility(){
   const r=userRole();
-  const showSeeker=!session||!r||r==="seeker";
-  const showEmployer=!session||!r||r==="employer";
+  const showSeeker=!session||r!=="employer";
+  const showEmployer=!session||r==="employer";
   const apply=(sel,show)=>document.querySelectorAll(sel).forEach(el=>{el.style.display=show?"":"none";});
   apply('nav [data-go="seeker"]',showSeeker);
   apply('nav [data-go="employer"]',showEmployer);
