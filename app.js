@@ -30,13 +30,13 @@ const T={
   need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",
   no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
   create_seeker_link:"បង្កើតប្រវត្តិរូបការងារ →",create_company_inline:"បំពេញព័ត៌មាននេះដើម្បីចាប់ផ្ដើមប្រកាសការងារ",
-  modal_confirm_h:"បញ្ជាក់ការលុប",modal_yes_del:"លុប",
+  modal_confirm_h:"បញ្ជាក់ការលុប",modal_yes_del:"លុប",modal_confirm_switch_h:"បញ្ជាក់ការប្តូរ",modal_yes_switch:"ប្តូរ",
   role_q:"ខ្ញុំជា...",role_seeker:"អ្នកស្វែងរកការងារ",role_employer:"និយោជក",
   back_to_jobs:"← ត្រឡប់ទៅការងារ",back_to_workers:"← ត្រឡប់ទៅកម្មករ",job_description:"ការពិពណ៌នាការងារ",contact:"ទំនាក់ទំនង",
   contact_locked:"សូមចូលគណនីដើម្បីមើលព័ត៌មានទំនាក់ទំនង",
   delete_profile_btn:"លុបប្រវត្តិរូបរបស់ខ្ញុំ",
-  delete_profile_warn_emp:"សកម្មភាពនេះនឹងលុបព័ត៌មានក្រុមហ៊ុន និងការងារទាំងអស់របស់អ្នកជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
-  delete_profile_warn_seeker:"សកម្មភាពនេះនឹងលុបប្រវត្តិរូបការងាររបស់អ្នកជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
+  delete_profile_warn_emp:"សកម្មភាពនេះនឹងលុបព័ត៌មាន និងការបង្ហោះទាំងអស់របស់អ្នកចេញពីមូលដ្ឋានទិន្នន័យរបស់យើងជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
+  delete_profile_warn_seeker:"សកម្មភាពនេះនឹងលុបព័ត៌មាន និងការបង្ហោះទាំងអស់របស់អ្នកចេញពីមូលដ្ឋានទិន្នន័យរបស់យើងជាអចិន្ត្រៃយ៍។ មិនអាចត្រឡប់វិញបានទេ។",
   f_name:"ឈ្មោះ",f_phone:"លេខទូរស័ព្ទ",f_email:"អ៊ីមែល",f_prov:"ខេត្ត",f_cat:"ប្រភេទការងារ",f_exp:"បទពិសោធន៍",
   f_esal:"ប្រាក់ខែរំពឹងទុក ($)",f_skills:"ជំនាញ / ប្រវត្តិសង្ខេប",f_submit:"ដាក់ស្នើ",saved:"✓ បានរក្សាទុក",
   f_company:"ឈ្មោះក្រុមហ៊ុន",f_title:"ចំណងជើងការងារ",f_type:"ប្រភេទ",f_smin:"ប្រាក់ខែ អប្បបរមា ($)",f_smax:"ប្រាក់ខែ អតិបរមា ($)",
@@ -83,13 +83,13 @@ const T={
   need_company:"Please complete your company info before posting a job",
   no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
   create_seeker_link:"Create job-seeker profile →",create_company_inline:"Fill this in to start posting jobs",
-  modal_confirm_h:"Confirm delete",modal_yes_del:"Delete",
+  modal_confirm_h:"Confirm delete",modal_yes_del:"Delete",modal_confirm_switch_h:"Confirm switch",modal_yes_switch:"Switch",
   role_q:"I am a...",role_seeker:"Job seeker",role_employer:"Employer",
   back_to_jobs:"← Back to jobs",back_to_workers:"← Back to workers",job_description:"Description",contact:"Contact",
   contact_locked:"Log in to view contact details",
   delete_profile_btn:"Delete my profile",
-  delete_profile_warn_emp:"This will permanently remove your company info and all your jobs. This cannot be undone.",
-  delete_profile_warn_seeker:"This will permanently remove your job-seeker profile. This cannot be undone.",
+  delete_profile_warn_emp:"This will permanently remove all your information and postings from our database. This cannot be undone.",
+  delete_profile_warn_seeker:"This will permanently remove all your information and postings from our database. This cannot be undone.",
   f_name:"Name",f_phone:"Phone",f_email:"Email",f_prov:"Province",f_cat:"Category",f_exp:"Experience",
   f_esal:"Expected salary ($)",f_skills:"Skills / short bio",f_submit:"Submit",saved:"✓ Saved",
   f_company:"Company name",f_title:"Job title",f_type:"Type",f_smin:"Salary min ($)",f_smax:"Salary max ($)",
@@ -598,7 +598,7 @@ async function switchRole(){
   const r=userRole();
   const newRole=r==="employer"?"seeker":"employer";
   const warnKey=newRole==="seeker"?"switch_role_warn_to_seeker":"switch_role_warn_to_emp";
-  if(!(await showModal(T[lang][warnKey])))return;
+  if(!(await showModal(T[lang][warnKey],T[lang].modal_confirm_switch_h,T[lang].modal_yes_switch)))return;
   const btn=$("switch_role_btn");
   await withBusy(btn,async()=>{
     const {error}=await sb.auth.updateUser({data:{role:newRole}});
@@ -657,13 +657,13 @@ async function deleteMyProfile(){
 }
 
 /* ---------- modal ---------- */
-function showModal(msg){
+function showModal(msg,title,confirmBtn){
   return new Promise(resolve=>{
     const root=$("modal_root");
-    $("modal_title").textContent=T[lang].modal_confirm_h;
+    $("modal_title").textContent=title||T[lang].modal_confirm_h;
     $("modal_msg").textContent=msg;
     $("modal_cancel").textContent=T[lang].btn_cancel;
-    $("modal_ok").textContent=T[lang].modal_yes_del;
+    $("modal_ok").textContent=confirmBtn||T[lang].modal_yes_del;
     root.hidden=false;
     const close=val=>{
       root.hidden=true;
