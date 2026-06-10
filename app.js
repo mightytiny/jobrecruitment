@@ -57,7 +57,9 @@ const T={
   switch_role_info_emp:"គណនីរបស់អ្នកគឺជានិយោជក។",switch_role_info_seeker:"គណនីរបស់អ្នកគឺជាអ្នករកការងារ។",
   switch_to_seeker:"ប្តូរទៅជាអ្នករកការងារ",switch_to_employer:"ប្តូរទៅជានិយោជក",
   switch_role_warn_to_seeker:"អ្នកនឹងប្តូរទៅជាអ្នករកការងារ។ ព័ត៌មានក្រុមហ៊ុននឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
-  switch_role_warn_to_emp:"អ្នកនឹងប្តូរទៅជានិយោជក។ ប្រវត្តិរូបការងាររបស់អ្នកនឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។"},
+  switch_role_warn_to_emp:"អ្នកនឹងប្តូរទៅជានិយោជក។ ប្រវត្តិរូបការងាររបស់អ្នកនឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
+  report_btn:"រាយការណ៍ប្រកាស",report_confirm:"រាយការណ៍ប្រកាសនេះថាជាក់លែង ឬមិនសមស្រប?",report_confirm_btn:"រាយការណ៍",
+  report_done:"✓ បានរាយការណ៍។ អរគុណ",report_need_login:"សូមចូលគណនីដើម្បីរាយការណ៍"},
  en:{nav_home:"Home",nav_jobs:"Find jobs",nav_workers:"Find workers",
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
@@ -110,7 +112,9 @@ const T={
   switch_role_info_emp:"Your account is registered as an Employer.",switch_role_info_seeker:"Your account is registered as a Job Seeker.",
   switch_to_seeker:"Switch to Job Seeker",switch_to_employer:"Switch to Employer",
   switch_role_warn_to_seeker:"You will be switched to a Job Seeker account. Your company info will be hidden but not deleted — switch back any time.",
-  switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time."}
+  switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time.",
+  report_btn:"Report listing",report_confirm:"Report this listing as fake or inappropriate?",report_confirm_btn:"Report",
+  report_done:"✓ Reported. Thank you.",report_need_login:"Log in to report this listing"}
 };
 
 let lang=localStorage.getItem('lang')||'km';
@@ -270,6 +274,8 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return;}
   const vj=e.target.closest("[data-view-job]");if(vj){viewJob(vj.dataset.viewJob);return;}
   const vs=e.target.closest("[data-view-seeker]");if(vs){viewSeeker(vs.dataset.viewSeeker);return;}
+  const rj=e.target.closest("[data-report-job]");if(rj&&rj.dataset.reportJob){reportListing("job",rj.dataset.reportJob,rj);return;}
+  const rs=e.target.closest("[data-report-seeker]");if(rs&&rs.dataset.reportSeeker){reportListing("seeker",rs.dataset.reportSeeker,rs);return;}
   const lb=e.target.closest(".lang button");if(lb){lang=lb.dataset.lang;
     localStorage.setItem('lang',lang);
     document.querySelectorAll(".lang button").forEach(x=>x.classList.toggle("active",x===lb));applyLang();return;}
@@ -910,6 +916,9 @@ async function viewJob(id){
   document.title=`${data.title} — KarKhmer`;
   const _md=document.querySelector('meta[name="description"]');
   if(_md)_md.content=`${data.title}${data.employers?.company_name?" · "+data.employers.company_name:""} — KarKhmer`;
+  document.querySelector('[data-report-job]').dataset.reportJob=id;
+  document.querySelector('[data-report-job]').textContent=T[lang].report_btn;
+  document.querySelector('[data-report-job]').disabled=false;
   fillJobDetail(data);
   showPage("jobdetail");
 }
@@ -926,23 +935,21 @@ function fillJobDetail(j){
     (sal?`<span class="tag sal">${esc(sal)}</span>`:"");
   $("jd_age").textContent=j.created_at?timeAgo(j.created_at):"";
   $("jd_desc").textContent=j.description||"";
-  if(!session){
-    $("jd_contact").innerHTML=
-      `<div class="contact-locked"><span>${esc(T[lang].contact_locked)}</span>`+
-      `<button class="btn-sm" data-go="login">${esc(T[lang].nav_login)}</button></div>`;
-    return;
-  }
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
   if(emp.contact_name)rows.push(row("f_contact_name",esc(emp.contact_name)));
-  if(emp.phone)rows.push(row("f_phone",`<a href="tel:${esc(emp.phone)}">${esc(emp.phone)}</a>`));
-  if(emp.email)rows.push(row("f_email",`<a href="mailto:${esc(emp.email)}">${esc(emp.email)}</a>`));
+  if(emp.phone)rows.push(row("f_phone",`<a class="js-tel"></a>`));
+  if(emp.email)rows.push(row("f_email",`<a class="js-mail"></a>`));
   if(emp.location)rows.push(row("f_location",esc(emp.location)));
   if(emp.website){
     const url=/^https?:/i.test(emp.website)?emp.website:`https://${emp.website}`;
     rows.push(row("f_website",`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(emp.website)}</a>`));
   }
   $("jd_contact").innerHTML=rows.join("")||`<div class="empty">—</div>`;
+  const _jtel=$("jd_contact").querySelector(".js-tel");
+  if(_jtel){_jtel.textContent=emp.phone;_jtel.href="tel:"+emp.phone;}
+  const _jmail=$("jd_contact").querySelector(".js-mail");
+  if(_jmail){_jmail.textContent=emp.email;_jmail.href="mailto:"+emp.email;}
 }
 
 async function viewSeeker(id){
@@ -957,6 +964,9 @@ async function viewSeeker(id){
   document.title=`${data.name} — KarKhmer`;
   const _md=document.querySelector('meta[name="description"]');
   if(_md)_md.content=`${data.name} — KarKhmer`;
+  document.querySelector('[data-report-seeker]').dataset.reportSeeker=id;
+  document.querySelector('[data-report-seeker]').textContent=T[lang].report_btn;
+  document.querySelector('[data-report-seeker]').disabled=false;
   fillSeekerDetail(data);
   showPage("seekerdetail");
 }
@@ -979,9 +989,26 @@ function fillSeekerDetail(s){
   }
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
-  if(s.phone)rows.push(row("f_phone",`<a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>`));
-  if(s.email)rows.push(row("f_email",`<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>`));
+  if(s.phone)rows.push(row("f_phone",`<a class="js-tel"></a>`));
+  if(s.email)rows.push(row("f_email",`<a class="js-mail"></a>`));
   $("sd_contact").innerHTML=rows.join("")||`<div class="empty">—</div>`;
+  const _stel=$("sd_contact").querySelector(".js-tel");
+  if(_stel){_stel.textContent=s.phone;_stel.href="tel:"+s.phone;}
+  const _smail=$("sd_contact").querySelector(".js-mail");
+  if(_smail){_smail.textContent=s.email;_smail.href="mailto:"+s.email;}
+}
+
+async function reportListing(type,id,btn){
+  if(!session){
+    const go_login=await showModal(T[lang].report_need_login,T[lang].report_btn,T[lang].nav_login);
+    if(go_login)go("login");
+    return;
+  }
+  if(!(await showModal(T[lang].report_confirm,T[lang].report_btn,T[lang].report_confirm_btn)))return;
+  const {error}=await sb.from("reports").insert({listing_type:type,listing_id:id,reporter_id:session.user.id});
+  if(error){console.error("report:",error);return;}
+  btn.textContent=T[lang].report_done;
+  btn.disabled=true;
 }
 
 document.querySelectorAll(".page").forEach(page=>{
