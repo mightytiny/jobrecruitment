@@ -5,12 +5,10 @@ const EXP=[["0","គ្មានបទពិសោធន៍","No experience"],["
 const TYPE=[["ft","ពេញម៉ោង","Full-time"],["pt","ក្រៅម៉ោង","Part-time"]];
 
 const T={
- km:{nav_home:"ទំព័រដើម",nav_seeker:"ស្វែងរកការងារ",nav_employer:"ជ្រើសរើសបុគ្គលិក",nav_jobs:"ស្វែងរកការងារ",nav_workers:"រកកម្មករ",
+ km:{nav_home:"ទំព័រដើម",nav_jobs:"ស្វែងរកការងារ",nav_workers:"រកកម្មករ",
   nav_login:"ចូល",nav_signup:"ចុះឈ្មោះ",nav_logout:"ចេញ",nav_myposts:"ប្រវត្តិរូប",tab_posts:"ប្រកាសរបស់ខ្ញុំ",
   eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
   hero_h:"ភ្ជាប់ទេពកោសល្យកម្ពុជា ជាមួយឱកាសការងារ",hero_p:"វេទិកាដ៏ទុកចិត្តសម្រាប់អ្នកស្វែងរកការងារ និងនិយោជកនៅទូទាំងព្រះរាជាណាចក្រកម្ពុជា។",
-  path_seeker_h:"ខ្ញុំស្វែងរកការងារ",path_seeker_p:"បង្កើតប្រវត្តិរូប និងស្វែងរកឱកាសការងារ",cta_register:"ចុះឈ្មោះ →",
-  path_emp_h:"ខ្ញុំជ្រើសរើសបុគ្គលិក",path_emp_p:"ប្រកាសការងារ និងស្វែងរកបុគ្គលិក",cta_post:"ប្រកាសការងារ →",
   seeker_h:"ចុះឈ្មោះអ្នកស្វែងរកការងារ",seeker_sub:"បំពេញព័ត៌មានរបស់អ្នក",
   emp_h:"ប្រកាសការងារ",emp_sub:"បំពេញព័ត៌មានការងារ",
   jobs_h:"ស្វែងរកការងារ",jobs_sub:"ត្រងតាមប្រភេទ ខេត្ត ឬពាក្យគន្លឹះ",
@@ -51,13 +49,19 @@ const T={
   saving:"កំពុងរក្សាទុក...",err_required:"សូមបំពេញព័ត៌មានដែលត្រូវការ",err_email:"អ៊ីមែលមិនត្រឹមត្រូវ",err_phone:"លេខទូរស័ព្ទមិនត្រឹមត្រូវ",
   err_password:"ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៦ តួ",err_password_match:"ពាក្យសម្ងាត់មិនដូចគ្នា",
   err_login:"អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ",err_signup:"មិនអាចបង្កើតគណនីបាន",err_need_login:"សូមចូលប្រើដើម្បីប្រកាស",
-  ago_today:"ថ្ងៃនេះ",ago_yesterday:"ម្សិលមិញ",ago_days:"ថ្ងៃមុន",ago_months:"ខែមុន",ago_years:"ឆ្នាំមុន"},
- en:{nav_home:"Home",nav_seeker:"Find work",nav_employer:"Hire",nav_jobs:"Find jobs",nav_workers:"Find workers",
+  ago_today:"ថ្ងៃនេះ",ago_yesterday:"ម្សិលមិញ",ago_days:"ថ្ងៃមុន",ago_months:"ខែមុន",ago_years:"ឆ្នាំមុន",
+  nav_post_job:"ប្រកាសការងារ",home_search_btn:"ស្វែងរក",
+  home_seeker_cta:"ស្វែងរកការងារ?",home_seeker_link:"ចុះឈ្មោះឥតគិតថ្លៃ →",
+  home_latest_jobs:"ការងារថ្មីៗ",home_see_all:"មើលការងារទាំងអស់ →",home_no_jobs:"មិនទាន់មានការងារទេ",home_no_jobs_cta:"ប្រកាសការងារ →",
+  postjob_seeker_modal:"គណនីរបស់អ្នកត្រូវបានចុះឈ្មោះជាអ្នករកការងារ។ ដើម្បីប្រកាសការងារ សូមបង្កើតគណនីថ្មីជានិយោជក។",
+  switch_role_info_emp:"គណនីរបស់អ្នកគឺជានិយោជក។",switch_role_info_seeker:"គណនីរបស់អ្នកគឺជាអ្នករកការងារ។",
+  switch_to_seeker:"ប្តូរទៅជាអ្នករកការងារ",switch_to_employer:"ប្តូរទៅជានិយោជក",
+  switch_role_warn_to_seeker:"អ្នកនឹងប្តូរទៅជាអ្នករកការងារ។ ព័ត៌មានក្រុមហ៊ុននឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
+  switch_role_warn_to_emp:"អ្នកនឹងប្តូរទៅជានិយោជក។ ប្រវត្តិរូបការងាររបស់អ្នកនឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។"},
+ en:{nav_home:"Home",nav_jobs:"Find jobs",nav_workers:"Find workers",
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
   hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
-  path_seeker_h:"I'm looking for work",path_seeker_p:"Build a profile and discover opportunities",cta_register:"Register →",
-  path_emp_h:"I'm hiring",path_emp_p:"Post jobs and find qualified candidates",cta_post:"Post a job →",
   seeker_h:"Job seeker sign-up",seeker_sub:"Fill in your details",
   emp_h:"Post a job",emp_sub:"Fill in the job details",
   jobs_h:"Search jobs",jobs_sub:"Filter by category, province or keyword",
@@ -98,15 +102,22 @@ const T={
   saving:"Saving...",err_required:"Please fill in all required fields",err_email:"Please enter a valid email",err_phone:"Please enter a valid phone number",
   err_password:"Password must be at least 6 characters",err_password_match:"Passwords do not match",
   err_login:"Invalid email or password",err_signup:"Could not create account",err_need_login:"Please log in to post",
-  ago_today:"today",ago_yesterday:"yesterday",ago_days:"days ago",ago_months:"months ago",ago_years:"years ago"}
+  ago_today:"today",ago_yesterday:"yesterday",ago_days:"days ago",ago_months:"months ago",ago_years:"years ago",
+  nav_post_job:"Post a Job",home_search_btn:"Search",
+  home_seeker_cta:"Looking for work?",home_seeker_link:"Create a free profile →",
+  home_latest_jobs:"Latest Jobs",home_see_all:"See all jobs →",home_no_jobs:"No jobs posted yet",home_no_jobs_cta:"Post a job →",
+  postjob_seeker_modal:"Your account is registered as a job seeker. To post jobs, please create a separate employer account.",
+  switch_role_info_emp:"Your account is registered as an Employer.",switch_role_info_seeker:"Your account is registered as a Job Seeker.",
+  switch_to_seeker:"Switch to Job Seeker",switch_to_employer:"Switch to Employer",
+  switch_role_warn_to_seeker:"You will be switched to a Job Seeker account. Your company info will be hidden but not deleted — switch back any time.",
+  switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time."}
 };
 
 let lang="km";
 const lab=arr=>arr[lang==="km"?1:2];
 
 /* ---------- helpers ---------- */
-// DEV: set to false before launching publicly. When true, accepts literal "email"/"phone" for fast testing.
-const DEV=true;
+const DEV=false;
 const $=id=>document.getElementById(id);
 const esc=s=>s==null?"":String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -174,6 +185,7 @@ function buildSelects(){
   fillSelect(s_prov,PROV);fillSelect(s_cat,CAT);fillSelect(s_exp,EXP);
   fillSelect(aps_prov,PROV);fillSelect(aps_cat,CAT);fillSelect(aps_exp,EXP);
   fillSelect(e_prov,PROV);fillSelect(e_cat,CAT);fillSelect(e_type,TYPE);
+  fillSelect(home_cat,CAT,1);
   fillSelect(j_cat,CAT,1);fillSelect(j_prov,PROV,1);
   fillSelect(w_cat,CAT,1);fillSelect(w_prov,PROV,1);fillSelect(w_exp,EXP,1);
 }
@@ -182,12 +194,13 @@ function buildSelects(){
 function applyLang(){
   document.body.dataset.lang=lang;
   document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=T[lang][el.dataset.t]||"";});
+  document.querySelectorAll("[data-t-ph]").forEach(el=>{el.placeholder=T[lang][el.dataset.tPh]||"";});
   setAccountSectionH();
   buildSelects();
   updateAuthUI();
   setSubmitText();
-  renderJobs();renderWorkers();
-  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();}
+  renderJobs();renderWorkers();renderHomeJobs();
+  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();updateSwitchRole();}
 }
 
 // Top card on the profile page is the employer-only company form. Seekers never see it;
@@ -199,6 +212,11 @@ function setAccountSectionH(){
 
 /* ---------- navigation ---------- */
 function showPage(id){
+  if(id!=="jobdetail"&&id!=="seekerdetail"){
+    document.title="KarKhmer";
+    const _md=document.querySelector('meta[name="description"]');
+    if(_md)_md.content="Connecting Cambodian talent with opportunity — jobs and workers across Cambodia.";
+  }
   document.querySelectorAll(".page").forEach(p=>p.classList.toggle("show",p.id===id));
   document.querySelectorAll("nav button,[data-go]").forEach(b=>{
     if(b.dataset.go)b.classList.toggle("active",b.dataset.go===id);
@@ -206,6 +224,16 @@ function showPage(id){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 async function go(id){
+  // Post a Job: route based on auth state and role
+  if(id==="postjob"){
+    if(!session){
+      document.querySelector('input[name="su_role"][value="employer"]').checked=true;
+      return go("signup");
+    }
+    if(userRole()==="employer")return go("employer");
+    window.alert(T[lang].postjob_seeker_modal);
+    return;
+  }
   // Gate post forms behind login
   if((id==="seeker"||id==="employer")&&!session){
     pendingNav=id;
@@ -230,9 +258,10 @@ async function go(id){
   showPage(id);
   if(id==="jobs")renderJobs();
   else if(id==="workers")renderWorkers();
-  else if(id==="myposts"){await prepAccountForm();await renderMyPosts();updateDangerZone();}
+  else if(id==="myposts"){await prepAccountForm();await renderMyPosts();updateDangerZone();updateSwitchRole();}
   else if(id==="seeker")await prepSeekerForm();
   else if(id==="employer")await prepEmployerForm();
+  else if(id==="home")renderHomeJobs();
 }
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return;}
@@ -521,6 +550,7 @@ async function editSeeker(id){
   if(error){console.error(error);return;}
   editMode={kind:"seeker",id};
   $("s_name").value=data.name||"";$("s_phone").value=data.phone||"";$("s_email").value=data.email||"";
+  $("s_telegram").value=data.telegram_phone||"";
   $("s_prov").value=data.province||"";$("s_cat").value=data.category||"";$("s_exp").value=data.experience_level||"";
   $("s_sal").value=data.expected_salary||"";$("s_bio").value=data.bio||"";
   showPage("seeker");
@@ -554,6 +584,35 @@ async function delJob(id){
   await renderJobs();
   renderMyPosts();
 }
+
+/* ---------- switch role ---------- */
+function updateSwitchRole(){
+  const zone=$("switch_role_zone");
+  if(!session){zone.hidden=true;return;}
+  zone.hidden=false;
+  const r=userRole();
+  $("switch_role_info").textContent=T[lang][r==="employer"?"switch_role_info_emp":"switch_role_info_seeker"];
+  $("switch_role_btn").textContent=T[lang][r==="employer"?"switch_to_seeker":"switch_to_employer"];
+}
+async function switchRole(){
+  const r=userRole();
+  const newRole=r==="employer"?"seeker":"employer";
+  const warnKey=newRole==="seeker"?"switch_role_warn_to_seeker":"switch_role_warn_to_emp";
+  if(!(await showModal(T[lang][warnKey])))return;
+  const btn=$("switch_role_btn");
+  await withBusy(btn,async()=>{
+    const {error}=await sb.auth.updateUser({data:{role:newRole}});
+    if(error){console.error("switch role:",error);showErr($("switch_role_err"),error.message);return;}
+    const {data}=await sb.auth.getSession();
+    session=data.session;
+    updateAuthUI();
+    updateSwitchRole();
+    await prepAccountForm();
+    await renderMyPosts();
+    updateDangerZone();
+  });
+}
+$("switch_role_btn").addEventListener("click",switchRole);
 
 /* ---------- danger zone (delete profile) ---------- */
 async function updateDangerZone(){
@@ -664,24 +723,10 @@ function updateAuthUI(){
   }else{
     auth.innerHTML=`
       <button data-go="login" class="auth-btn ghost"></button>
-      <button data-go="signup" class="auth-btn amber"></button>`;
+      <button data-go="signup" class="auth-btn amber auth-signup-btn"></button>`;
     auth.querySelector('[data-go="login"]').textContent=T[lang].nav_login;
     auth.querySelector('[data-go="signup"]').textContent=T[lang].nav_signup;
   }
-  updateRoleVisibility();
-}
-
-function updateRoleVisibility(){
-  const r=userRole();
-  const showSeeker=!session||r!=="employer";
-  const showEmployer=!session||r==="employer";
-  const apply=(sel,show)=>document.querySelectorAll(sel).forEach(el=>{el.style.display=show?"":"none";});
-  apply('nav [data-go="seeker"]',showSeeker);
-  apply('nav [data-go="employer"]',showEmployer);
-  apply('.path[data-go="seeker"]',showSeeker);
-  apply('.path[data-go="employer"]',showEmployer);
-  const paths=document.querySelector('.paths');
-  if(paths)paths.classList.toggle('compact',showSeeker!==showEmployer);
 }
 
 document.querySelectorAll("[data-auth]").forEach(btn=>{
@@ -803,6 +848,38 @@ async function renderWorkers(){
     box.appendChild(div);
   });
 }
+async function renderHomeJobs(){
+  const grid=$("home_jobs_grid");
+  if(!grid)return;
+  grid.innerHTML="";
+  const arr=await load("jobs");
+  const recent=arr.slice(0,6);
+  if(!recent.length){
+    grid.innerHTML=`<div class="empty home-empty-cta"><p>${esc(T[lang].home_no_jobs)}</p><button class="btn amber" data-go="postjob">${esc(T[lang].home_no_jobs_cta)}</button></div>`;
+    return;
+  }
+  recent.forEach(j=>{
+    const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
+    const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
+    const div=card(
+      `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
+       <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
+       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
+       <div class="d">${esc(j.desc)}</div>${age}`);
+    div.classList.add("clickable");
+    div.dataset.viewJob=j.id;
+    grid.appendChild(div);
+  });
+}
+
+function goSearch(){
+  $("j_kw").value=$("home_kw").value;
+  $("j_cat").value=$("home_cat").value;
+  go("jobs");
+}
+$("home_search_btn").addEventListener("click",goSearch);
+$("home_kw").addEventListener("keydown",e=>{if(e.key==="Enter")goSearch();});
+
 ["j_kw","j_cat","j_prov"].forEach(id=>$(id).addEventListener("input",renderJobs));
 ["w_kw","w_cat","w_prov","w_exp"].forEach(id=>$(id).addEventListener("input",renderWorkers));
 
@@ -813,6 +890,9 @@ async function viewJob(id){
     .eq("id",id).maybeSingle();
   if(error){console.error("view job:",error);return;}
   if(!data){go("jobs");return;}
+  document.title=`${data.title} — KarKhmer`;
+  const _md=document.querySelector('meta[name="description"]');
+  if(_md)_md.content=`${data.title}${data.employers?.company_name?" · "+data.employers.company_name:""} — KarKhmer`;
   fillJobDetail(data);
   showPage("jobdetail");
 }
@@ -829,6 +909,12 @@ function fillJobDetail(j){
     (sal?`<span class="tag sal">${esc(sal)}</span>`:"");
   $("jd_age").textContent=j.created_at?timeAgo(j.created_at):"";
   $("jd_desc").textContent=j.description||"";
+  if(!session){
+    $("jd_contact").innerHTML=
+      `<div class="contact-locked"><span>${esc(T[lang].contact_locked)}</span>`+
+      `<button class="btn-sm" data-go="login">${esc(T[lang].nav_login)}</button></div>`;
+    return;
+  }
   const rows=[];
   const row=(k,v)=>`<div class="contact-row"><span class="k">${esc(T[lang][k])}</span><span class="v">${v}</span></div>`;
   if(emp.contact_name)rows.push(row("f_contact_name",esc(emp.contact_name)));
@@ -851,6 +937,9 @@ async function viewSeeker(id){
   const {data,error}=await sb.from("seekers").select(cols).eq("id",id).maybeSingle();
   if(error){console.error("view seeker:",error);return;}
   if(!data){go("workers");return;}
+  document.title=`${data.name} — KarKhmer`;
+  const _md=document.querySelector('meta[name="description"]');
+  if(_md)_md.content=`${data.name} — KarKhmer`;
   fillSeekerDetail(data);
   showPage("seekerdetail");
 }

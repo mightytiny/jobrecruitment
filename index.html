@@ -26,6 +26,7 @@
     <button data-go="workers" data-t="nav_workers"></button>
   </nav>
   <div class="rt">
+    <button data-go="postjob" class="auth-btn amber post-job-btn" data-t="nav_post_job"></button>
     <div class="auth" id="auth_area"></div>
     <div class="lang">
       <button data-lang="km" class="active">ខ្មែរ</button>
@@ -43,19 +44,23 @@
         <span class="eyebrow" data-t="eyebrow"></span>
         <h1 data-t="hero_h"></h1>
         <p data-t="hero_p"></p>
-        <div class="paths">
-          <div class="path" data-go="seeker">
-            <h3 data-t="path_seeker_h"></h3>
-            <p data-t="path_seeker_p"></p>
-            <span class="path-cta" data-t="cta_register"></span>
-          </div>
-          <div class="path" data-go="employer">
-            <h3 data-t="path_emp_h"></h3>
-            <p data-t="path_emp_p"></p>
-            <span class="path-cta" data-t="cta_post"></span>
-          </div>
+        <div class="hero-search">
+          <input type="text" id="home_kw" data-t-ph="f_keyword">
+          <select id="home_cat"></select>
+          <button class="btn amber" id="home_search_btn" data-t="home_search_btn"></button>
         </div>
+        <p class="hero-seeker-cta">
+          <span data-t="home_seeker_cta"></span>
+          <button data-go="signup" data-t="home_seeker_link"></button>
+        </p>
       </div>
+    </div>
+    <div class="home-section">
+      <div class="home-section-head">
+        <h2 data-t="home_latest_jobs"></h2>
+        <button class="see-all-btn" data-go="jobs" data-t="home_see_all"></button>
+      </div>
+      <div class="home-jobs-grid" id="home_jobs_grid"></div>
     </div>
   </section>
 
@@ -146,7 +151,7 @@
 
     <div class="info-banner" id="need_company_banner"><span data-t="need_company"></span></div>
 
-    <div id="account_emp_section">
+    <div id="account_emp_section" style="display:none">
       <h3 class="section-h" id="account_section_h"></h3>
       <div class="form account-form">
         <p class="form-hint" id="ap_hint" data-t="create_company_inline"></p>
@@ -170,7 +175,7 @@
       </div>
     </div>
 
-    <div id="account_seeker_section">
+    <div id="account_seeker_section" style="display:none">
       <h3 class="section-h" id="account_seeker_h" data-t="section_account_self"></h3>
       <div class="form account-form">
         <p class="form-hint" id="aps_hint" data-t="no_account_seeker"></p>
@@ -199,6 +204,12 @@
     </div>
 
     <div id="mp_content"></div>
+
+    <div class="switch-role-zone" id="switch_role_zone" hidden>
+      <p class="switch-role-info" id="switch_role_info"></p>
+      <button class="btn-sm" id="switch_role_btn"></button>
+      <div class="err" id="switch_role_err"></div>
+    </div>
 
     <div class="danger-zone" id="danger_zone" hidden>
       <p class="danger-warn" id="danger_warn"></p>
