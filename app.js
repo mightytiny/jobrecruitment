@@ -1063,7 +1063,8 @@ async function reportListing(type,id,btn){
   }
   if(!(await showModal(T[lang].report_confirm,T[lang].report_btn,T[lang].report_confirm_btn)))return;
   const {error}=await sb.from("reports").insert({listing_type:type,listing_id:id,reporter_id:session.user.id});
-  if(error){console.error("report:",error);return;}
+  // 23505 = already reported this listing; same outcome from the user's view.
+  if(error&&error.code!=="23505"){console.error("report:",error);return;}
   btn.textContent=T[lang].report_done;
   btn.disabled=true;
 }
