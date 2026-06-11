@@ -126,8 +126,10 @@ const T={
 };
 
 let lang=localStorage.getItem('lang')||'km';
-let jobsView=localStorage.getItem('jobsView')||'cards';
+let jobsView=localStorage.getItem('jobsView')||'list';
 let jobsSort=localStorage.getItem('jobsSort')||'new';
+let workersView=localStorage.getItem('workersView')||'list';
+let workersSort=localStorage.getItem('workersSort')||'new';
 const lab=arr=>arr[lang==="km"?1:2];
 
 /* ---------- helpers ---------- */
@@ -207,6 +209,12 @@ function buildSelects(){
       ["ind_az",T[lang].sort_ind_az],["ind_za",T[lang].sort_ind_za]]
       .map(([v,t])=>`<option value="${v}">${esc(t)}</option>`).join("");
     sortEl.value=jobsSort;
+  }
+  const wSortEl=$("w_sort");
+  if(wSortEl){
+    wSortEl.innerHTML=[["new",T[lang].sort_new],["old",T[lang].sort_old]]
+      .map(([v,t])=>`<option value="${v}">${esc(t)}</option>`).join("");
+    wSortEl.value=workersSort;
   }
 }
 
@@ -329,6 +337,7 @@ document.querySelectorAll("[data-save]").forEach(btn=>{
   }));
 });
 $("del_profile_btn").addEventListener("click",deleteMyProfile);
+$("profile_logout_btn").addEventListener("click",async()=>{await sb.auth.signOut();});
 
 async function saveSeeker(){
   const errEl=$("s_err");
@@ -802,11 +811,8 @@ function updateAuthUI(){
   if(!auth)return;
   if(session){
     auth.innerHTML=`
-      <button data-go="myposts" class="auth-btn"></button>
-      <button id="btn_logout" class="auth-btn ghost"></button>`;
+      <button data-go="myposts" class="auth-btn"></button>`;
     auth.querySelector('[data-go="myposts"]').textContent=T[lang].nav_myposts;
-    $("btn_logout").textContent=T[lang].nav_logout;
-    $("btn_logout").onclick=async()=>{await sb.auth.signOut();};
   }else{
     auth.innerHTML=`
       <button data-go="login" class="auth-btn ghost"></button>
@@ -922,11 +928,12 @@ async function renderJobs(){
       box.appendChild(div);
     }else{
       const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
+      const ind=j.industry?`<span class="tag ind">${esc(j.industry)}</span>`:"";
       const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
       const div=card(
         `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
          <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
-         <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
+         <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${ind}${sal}
          <div class="d">${esc(j.desc)}</div>${age}`);
       div.classList.add("clickable");
       div.dataset.viewJob=j.id;
@@ -937,21 +944,37 @@ async function renderJobs(){
 async function renderWorkers(){
   const arr=await load("seekers");const box=$("w_results");box.innerHTML="";
   const kw=$("w_kw").value.toLowerCase(),c=$("w_cat").value,p=$("w_prov").value,x=$("w_exp").value;
-  const out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
+  let out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
     (!kw||((s.name+" "+(s.title||"")+" "+(s.bio||"")).toLowerCase().includes(kw))));
+  if(workersSort==="old")out.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
   $("w_count").textContent=countLine(out.length,"workers");
+  $("w_view_cards").classList.toggle("active",workersView==="cards");
+  $("w_view_list").classList.toggle("active",workersView==="list");
+  box.classList.toggle("list-view",workersView==="list");
   if(!out.length){box.innerHTML=`<div class="empty">${esc(T[lang].empty)}</div>`;return;}
   out.forEach(s=>{
-    const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
-    const age=s.created_at?`<div class="age">${esc(timeAgo(s.created_at))}</div>`:"";
-    const div=card(
-      `<div class="t">${esc(s.title||s.name||labelOf(CAT,s.cat))}</div>
-       <span class="tag">${esc(labelOf(CAT,s.cat))}</span><span class="tag">${esc(labelOf(PROV,s.prov))}</span>
-       <span class="tag">${esc(labelOf(EXP,s.exp))}</span>${sal}
-       <div class="d">${esc(s.bio)}</div>${age}`);
-    div.classList.add("clickable");
-    div.dataset.viewSeeker=s.id;
-    box.appendChild(div);
+    if(workersView==="list"){
+      const sal=s.sal?`<span class="sal-tag">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
+      const div=card(
+        `<div class="list-r1"><div class="t">${esc(s.title||s.name||labelOf(CAT,s.cat))}</div>${sal}</div>`+
+        `<div class="list-r2"><span>${esc(labelOf(CAT,s.cat))}</span><span class="ls">·</span>`+
+        `<span>${esc(labelOf(PROV,s.prov))}</span><span class="ls">·</span><span>${esc(labelOf(EXP,s.exp))}</span>`+
+        `<span class="ls">·</span><span class="list-age">${esc(timeAgo(s.created_at))}</span></div>`);
+      div.classList.add("clickable","list-item");
+      div.dataset.viewSeeker=s.id;
+      box.appendChild(div);
+    }else{
+      const sal=s.sal?`<span class="tag sal">$${esc(s.sal)} ${esc(T[lang].mo)}</span>`:"";
+      const age=s.created_at?`<div class="age">${esc(timeAgo(s.created_at))}</div>`:"";
+      const div=card(
+        `<div class="t">${esc(s.title||s.name||labelOf(CAT,s.cat))}</div>
+         <span class="tag">${esc(labelOf(CAT,s.cat))}</span><span class="tag">${esc(labelOf(PROV,s.prov))}</span>
+         <span class="tag">${esc(labelOf(EXP,s.exp))}</span>${sal}
+         <div class="d">${esc(s.bio)}</div>${age}`);
+      div.classList.add("clickable");
+      div.dataset.viewSeeker=s.id;
+      box.appendChild(div);
+    }
   });
 }
 async function renderHomeJobs(){
@@ -966,11 +989,12 @@ async function renderHomeJobs(){
   }
   recent.forEach(j=>{
     const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
+    const ind=j.industry?`<span class="tag ind">${esc(j.industry)}</span>`:"";
     const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
     const div=card(
       `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
        <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
-       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
+       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${ind}${sal}
        <div class="d">${esc(j.desc)}</div>${age}`);
     div.classList.add("clickable");
     div.dataset.viewJob=j.id;
@@ -993,6 +1017,9 @@ const debJobs=debounce(renderJobs),debWorkers=debounce(renderWorkers);
 $("j_view_cards").addEventListener("click",()=>{jobsView="cards";localStorage.setItem('jobsView','cards');renderJobs();});
 $("j_view_list").addEventListener("click",()=>{jobsView="list";localStorage.setItem('jobsView','list');renderJobs();});
 $("j_sort").addEventListener("change",()=>{jobsSort=$("j_sort").value;localStorage.setItem('jobsSort',jobsSort);renderJobs();});
+$("w_view_cards").addEventListener("click",()=>{workersView="cards";localStorage.setItem('workersView','cards');renderWorkers();});
+$("w_view_list").addEventListener("click",()=>{workersView="list";localStorage.setItem('workersView','list');renderWorkers();});
+$("w_sort").addEventListener("change",()=>{workersSort=$("w_sort").value;localStorage.setItem('workersSort',workersSort);renderWorkers();});
 
 /* ---------- job detail ---------- */
 async function viewJob(id){

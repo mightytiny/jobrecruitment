@@ -27,12 +27,16 @@ nav button,.lang button{
 }
 nav button:hover{background:#ece4d4}
 nav button.active{background:var(--teal);color:#fff}
+nav .nav-post{background:var(--amber);color:var(--teal2);font-weight:600;white-space:nowrap}
+nav .nav-post:hover{background:var(--amber2)}
 .lang{display:flex;justify-self:end;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--card)}
 @media(max-width:780px){
-  .bar{grid-template-columns:auto 1fr;height:auto;padding:12px 22px;gap:10px 12px}
-  .logo{grid-row:1;grid-column:1}
-  .rt{grid-row:1;grid-column:2;min-width:0}
-  nav{grid-row:2;grid-column:1 / -1;justify-content:flex-start}
+  /* Row 1: logo (left) + account/lang (right). Row 2: nav + Post a job. */
+  .bar{grid-template-columns:auto 1fr;height:auto;padding:10px 18px;gap:8px 12px}
+  .logo{grid-row:1;grid-column:1;justify-self:start}
+  .rt{grid-row:1;grid-column:2;justify-self:end;min-width:0;flex-wrap:nowrap}
+  nav{grid-row:2;grid-column:1 / -1;justify-content:flex-start;gap:5px}
+  nav button{font-size:13px;padding:7px 11px}
 }
 .lang button{border-radius:0;padding:5px 11px;font-size:13px}
 .lang button.active{background:var(--amber);color:var(--teal2);font-weight:600}
@@ -214,6 +218,7 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 .rc .m{font-size:13px;color:var(--muted);margin:3px 0 10px}
 .tag{display:inline-block;background:#eef3f1;color:var(--teal2);font-size:12px;padding:3px 10px;border-radius:20px;margin:0 6px 6px 0}
 .tag.sal{background:#fbf0db;color:var(--amber2)}
+.tag.ind{background:transparent;color:var(--muted);border:1px solid var(--line)}
 .rc .d{font-size:14px;margin-top:8px;color:#33433f}
 #j_results .rc .d,#w_results .rc .d{
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
@@ -238,10 +243,10 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 }
 
 /* ---------- list view ---------- */
-#j_results.list-view{grid-template-columns:1fr}
+#j_results.list-view,#w_results.list-view{grid-template-columns:1fr}
 .list-item{padding:13px 18px}
 .list-r1{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:5px}
-.list-r1 .t{font-size:16px}
+.list-r1 .t{font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sal-tag{
   flex-shrink:0;background:#fbf0db;color:var(--amber2);
   font-size:12px;padding:2px 9px;border-radius:20px;font-weight:500
@@ -250,7 +255,6 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 .list-r2 .m{color:var(--teal2);font-weight:500}
 .ls{color:var(--line);font-size:11px;line-height:1}
 .list-age{font-style:italic}
-@media(max-width:480px){.list-r1{flex-direction:column;gap:4px}}
 
 /* ---------- job detail ---------- */
 .back-btn{
@@ -352,7 +356,6 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 #home_jobs_grid .empty .btn{display:inline-block}
 
 /* ---------- post-job header button ---------- */
-.post-job-btn{white-space:nowrap}
 @media(max-width:500px){.auth-signup-btn{display:none}}
 
 footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13px;text-align:center}
@@ -372,7 +375,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 .auth-btn.amber:hover{background:var(--amber2);border-color:var(--amber2)}
 .auth-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 @media(max-width:780px){
-  .rt{flex-wrap:nowrap;gap:8px;justify-content:flex-end}
+  .rt{flex-wrap:nowrap;gap:8px;justify-content:flex-end;min-width:0}
   .auth{width:auto;gap:6px;justify-content:flex-end}
   .auth .who{max-width:110px}
   .auth-btn{padding:5px 8px;font-size:13px;white-space:nowrap}
@@ -480,6 +483,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 }
 .danger-zone[hidden]{display:none}
 .danger-warn{font-size:13.5px;color:var(--muted);margin:0 0 12px;line-height:1.55;max-width:520px}
+.logout-zone{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);max-width:640px}
 
 /* ---------- change account email ---------- */
 .account-email-zone{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);max-width:640px}

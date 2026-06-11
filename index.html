@@ -24,9 +24,9 @@
     <button data-go="home" class="active" data-t="nav_home"></button>
     <button data-go="jobs" data-t="nav_jobs"></button>
     <button data-go="workers" data-t="nav_workers"></button>
+    <button data-go="postjob" class="nav-post" data-t="nav_post_job"></button>
   </nav>
   <div class="rt">
-    <button data-go="postjob" class="auth-btn amber post-job-btn" data-t="nav_post_job"></button>
     <div class="auth" id="auth_area"></div>
     <div class="lang">
       <button data-lang="km" class="active">ខ្មែរ</button>
@@ -219,6 +219,10 @@
       <div class="err" id="switch_role_err"></div>
     </div>
 
+    <div class="logout-zone">
+      <button class="btn-sm" id="profile_logout_btn" data-t="nav_logout"></button>
+    </div>
+
     <div class="danger-zone" id="danger_zone" hidden>
       <p class="danger-warn" id="danger_warn"></p>
       <button class="btn-sm danger solid" id="del_profile_btn"></button>
@@ -339,6 +343,17 @@
       <div><div class="label" data-t="f_cat"></div><select id="w_cat"></select></div>
       <div><div class="label" data-t="f_prov"></div><select id="w_prov"></select></div>
       <div><div class="label" data-t="f_exp"></div><select id="w_exp"></select></div>
+    </div>
+    <div class="view-controls">
+      <div class="view-toggle-btns">
+        <button id="w_view_cards" class="view-toggle-btn active">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </button>
+        <button id="w_view_list" class="view-toggle-btn">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="2" width="14" height="2.5" rx="1"/><rect x="1" y="6.75" width="14" height="2.5" rx="1"/><rect x="1" y="11.5" width="14" height="2.5" rx="1"/></svg>
+        </button>
+      </div>
+      <select id="w_sort"></select>
     </div>
     <div class="result-count" id="w_count" aria-live="polite"></div>
     <div class="cards" id="w_results"></div>
