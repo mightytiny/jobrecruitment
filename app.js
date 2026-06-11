@@ -319,8 +319,7 @@ async function go(id){
   // Post a Job: route based on auth state and role
   if(id==="postjob"){
     if(!session){
-      document.querySelector('input[name="su_role"][value="employer"]').checked=true;
-      return go("signup");
+      return go("login");
     }
     if(userRole()==="employer")return go("employer");
     window.alert(T[lang].postjob_seeker_modal);
@@ -907,6 +906,12 @@ document.querySelectorAll("[data-auth]").forEach(btn=>{
   }));
 });
 
+document.querySelectorAll('input[name="su_role"]').forEach(r=>{
+  r.addEventListener("change",()=>{
+    $("su_co_wrap").style.display=r.value==="employer"&&r.checked?"":"none";
+  });
+});
+
 async function doLogin(){
   const errEl=$("li_err");
   const email=trim($("li_email").value),pw=$("li_pw").value;
@@ -925,16 +930,21 @@ async function doSignup(){
   if(pw.length<8)return showErr(errEl,T[lang].err_password);
   if(pw!==pw2)return showErr(errEl,T[lang].err_password_match);
   const role=(document.querySelector('input[name="su_role"]:checked')||{}).value||"seeker";
+  const co=role==="employer"?trim($("su_co").value):"";
+  if(role==="employer"&&!co)return showErr(errEl,T[lang].err_required);
+  const meta={role};
+  if(co)meta.company_name=co;
   const {error}=await sb.auth.signUp({
     email,password:pw,
     options:{
       emailRedirectTo:window.location.origin+window.location.pathname,
-      data:{role}
+      data:meta
     }
   });
   if(error){console.error("signup:",error);return showErr(errEl,T[lang].err_signup);}
   $("verify_msg").textContent=`${T[lang].verify_msg} ${email}`;
-  ["su_email","su_pw","su_pw2"].forEach(id=>$(id).value="");
+  ["su_email","su_pw","su_pw2","su_co"].forEach(id=>$(id).value="");
+  $("su_co_wrap").style.display="none";
   go("verify");
 }
 async function doForgot(){
