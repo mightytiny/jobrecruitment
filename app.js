@@ -1,3 +1,9 @@
+/* ---------- one-time cleanup: remove any previously-installed service worker ---------- */
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()));
+}
+if(window.caches)caches.keys().then(ks=>ks.forEach(k=>caches.delete(k)));
+
 /* ---------- data dictionaries ---------- */
 const PROV=[["pp","ភ្នំពេញ","Phnom Penh"],["bmc","បន្ទាយមានជ័យ","Banteay Meanchey"],["btb","បាត់ដំបង","Battambang"],["kpc","កំពង់ចាម","Kampong Cham"],["kpch","កំពង់ឆ្នាំង","Kampong Chhnang"],["kps","កំពង់ស្ពឺ","Kampong Speu"],["kpt","កំពង់ធំ","Kampong Thom"],["kam","កំពត","Kampot"],["kdl","កណ្ដាល","Kandal"],["kep","កែប","Kep"],["kkg","កោះកុង","Koh Kong"],["krt","ក្រចេះ","Kratie"],["mdk","មណ្ឌលគិរី","Mondulkiri"],["odm","ឧត្តរមានជ័យ","Oddar Meanchey"],["pln","ប៉ៃលិន","Pailin"],["psh","ព្រះសីហនុ","Preah Sihanouk"],["pvh","ព្រះវិហារ","Preah Vihear"],["pvg","ព្រៃវែង","Prey Veng"],["pst","ពោធិ៍សាត់","Pursat"],["rtk","រតនគិរី","Ratanakiri"],["sr","សៀមរាប","Siem Reap"],["stg","ស្ទឹងត្រែង","Stung Treng"],["svr","ស្វាយរៀង","Svay Rieng"],["tko","តាកែវ","Takeo"],["tkm","ត្បូងឃ្មុំ","Tboung Khmum"]];
 const CAT=[["con","សំណង់","Construction"],["hos","បដិសណ្ឋារកិច្ច","Hospitality"],["ret","លក់រាយ","Retail"],["gar","កាត់ដេរ","Garment"],["drv","បើកបរ","Driving"],["dom","ការងារផ្ទះ","Domestic"],["it","ព័ត៌មានវិទ្យា","IT"],["adm","រដ្ឋបាល","Admin"],["agr","កសិកម្ម","Agriculture"]];
@@ -46,9 +52,11 @@ const T={
   btn_edit:"កែ",btn_delete:"លុប",btn_save:"រក្សាការផ្លាស់ប្ដូរ",btn_cancel:"បោះបង់",
   edit_profile_h:"កែប្រវត្តិរូបរបស់អ្នក",edit_job_h:"កែការងាររបស់អ្នក",
   confirm_del:"តើអ្នកប្រាកដជាចង់លុបប្រកាសនេះមែនទេ?",
-  f_keyword:"ពាក្យគន្លឹះ",all:"ទាំងអស់",empty:"រកមិនឃើញលទ្ធផល",mo:"/ខែ",footer:"KarKhmer — គំរូបង្ហាញ",
+  f_keyword:"ពាក្យគន្លឹះ",all:"ទាំងអស់",empty:"រកមិនឃើញលទ្ធផល",mo:"/ខែ",footer:"© ២០២៦ KarKhmer",
+  loading:"កំពុងផ្ទុក...",load_failed:"មិនអាចផ្ទុកទិន្នន័យបានទេ។ សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិត។",retry:"ព្យាយាមម្តងទៀត",
+  err_generic:"មានបញ្ហាបច្ចេកទេស។ សូមព្យាយាមម្តងទៀត។",
   saving:"កំពុងរក្សាទុក...",err_required:"សូមបំពេញព័ត៌មានដែលត្រូវការ",err_email:"អ៊ីមែលមិនត្រឹមត្រូវ",err_phone:"លេខទូរស័ព្ទមិនត្រឹមត្រូវ",
-  err_password:"ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៦ តួ",err_password_match:"ពាក្យសម្ងាត់មិនដូចគ្នា",
+  err_password:"ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៨ តួ",err_password_match:"ពាក្យសម្ងាត់មិនដូចគ្នា",
   err_login:"អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ",err_signup:"មិនអាចបង្កើតគណនីបាន",err_need_login:"សូមចូលប្រើដើម្បីប្រកាស",
   ago_today:"ថ្ងៃនេះ",ago_yesterday:"ម្សិលមិញ",ago_days:"ថ្ងៃមុន",ago_months:"ខែមុន",ago_years:"ឆ្នាំមុន",
   nav_post_job:"ប្រកាសការងារ",home_search_btn:"ស្វែងរក",
@@ -105,9 +113,11 @@ const T={
   btn_edit:"Edit",btn_delete:"Delete",btn_save:"Save changes",btn_cancel:"Cancel",
   edit_profile_h:"Editing your profile",edit_job_h:"Editing your job",
   confirm_del:"Delete this post?",
-  f_keyword:"Keyword",all:"All",empty:"No results found",mo:"/mo",footer:"KarKhmer — demo prototype",
+  f_keyword:"Keyword",all:"All",empty:"No results found",mo:"/mo",footer:"© 2026 KarKhmer",
+  loading:"Loading...",load_failed:"Couldn't load data. Please check your connection.",retry:"Try again",
+  err_generic:"Something went wrong. Please try again.",
   saving:"Saving...",err_required:"Please fill in all required fields",err_email:"Please enter a valid email",err_phone:"Please enter a valid phone number",
-  err_password:"Password must be at least 6 characters",err_password_match:"Passwords do not match",
+  err_password:"Password must be at least 8 characters",err_password_match:"Passwords do not match",
   err_login:"Invalid email or password",err_signup:"Could not create account",err_need_login:"Please log in to post",
   ago_today:"today",ago_yesterday:"yesterday",ago_days:"days ago",ago_months:"months ago",ago_years:"years ago",
   nav_post_job:"Post a Job",home_search_btn:"Search",
@@ -133,22 +143,24 @@ let workersSort=localStorage.getItem('workersSort')||'new';
 const lab=arr=>arr[lang==="km"?1:2];
 
 /* ---------- helpers ---------- */
-const DEV=false;
 const $=id=>document.getElementById(id);
 const esc=s=>s==null?"":String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE=/^[\d\s+\-()]{6,20}$/;
-const validEmail=v=>(DEV&&v==="email")||EMAIL_RE.test(v);
-const validPhone=v=>(DEV&&v==="phone")||PHONE_RE.test(v);
+const validEmail=v=>EMAIL_RE.test(v);
+const validPhone=v=>PHONE_RE.test(v);
+const KHMER_DIGITS="០១២៣៤៥៦៧៨៩";
+const toKhmerNum=n=>String(n).replace(/\d/g,d=>KHMER_DIGITS[+d]);
+const fmtNum=n=>lang==="km"?toKhmerNum(n):String(n);
 function timeAgo(iso){
   if(!iso)return"";
   const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);
   if(d<1)return T[lang].ago_today;
   if(d===1)return T[lang].ago_yesterday;
-  if(d<30)return d+" "+T[lang].ago_days;
+  if(d<30)return fmtNum(d)+" "+T[lang].ago_days;
   const mo=Math.floor(d/30);
-  if(mo<12)return mo+" "+T[lang].ago_months;
-  return Math.floor(mo/12)+" "+T[lang].ago_years;
+  if(mo<12)return fmtNum(mo)+" "+T[lang].ago_months;
+  return fmtNum(Math.floor(mo/12))+" "+T[lang].ago_years;
 }
 
 /* ---------- supabase client ---------- */
@@ -164,31 +176,45 @@ let pendingPostJob=false; // set when user tried Hire without an employer record
 let pendingPostSeeker=false; // set when seeker tried to post without a profile
 const userRole=()=>(session&&session.user&&session.user.user_metadata&&session.user.user_metadata.role)||null;
 
-async function load(key){
+// Lists are cached in memory so typing in the search box filters locally;
+// page entry refetches (fresh=true). Returns null on fetch failure so the
+// renderers can show a retry UI instead of a misleading "no results".
+const cache={jobs:null,seekers:null};
+const JOB_COLS="id,title,category,province,employment_type,salary_min,salary_max,description,created_at";
+const AD_COLS="id,title,category,province,experience_level,expected_salary,description,created_at";
+const mapJob=j=>({
+  id:j.id,co:j.employers?.company_name,
+  title:j.title,cat:j.category,prov:j.province,type:j.employment_type,
+  smin:j.salary_min,smax:j.salary_max,desc:j.description,created_at:j.created_at
+});
+async function load(key,fresh=false){
+  if(!fresh&&cache[key])return cache[key];
   if(key==="seekers"){
     const {data,error}=await sb.from("seeker_ads")
-      .select("id,title,category,province,experience_level,expected_salary,description,created_at,seekers(name)")
+      .select(AD_COLS+",seekers(name)")
       .order("created_at",{ascending:false});
-    if(error){console.error("load seekers:",error);return [];}
-    return (data||[]).map(s=>({
+    if(error){console.error("load seekers:",error);return null;}
+    cache.seekers=(data||[]).map(s=>({
       id:s.id,name:s.seekers?.name,title:s.title,
       cat:s.category,prov:s.province,exp:s.experience_level,
       sal:s.expected_salary,bio:s.description,created_at:s.created_at
     }));
+    return cache.seekers;
   }
   if(key==="jobs"){
+    // List views only need the company name; contact fields stay in the detail query.
     const {data,error}=await sb.from("jobs")
-      .select("*,employers(company_name,phone,email)")
+      .select(JOB_COLS+",employers(company_name)")
       .order("created_at",{ascending:false});
-    if(error){console.error("load jobs:",error);return [];}
-    return (data||[]).map(j=>({
-      id:j.id,co:j.employers?.company_name,phone:j.employers?.phone,email:j.employers?.email,
-      title:j.title,cat:j.category,prov:j.province,type:j.employment_type,
-      smin:j.salary_min,smax:j.salary_max,desc:j.description,created_at:j.created_at
-    }));
+    if(error){console.error("load jobs:",error);return null;}
+    cache.jobs=(data||[]).map(mapJob);
+    return cache.jobs;
   }
   return [];
 }
+const loadingHtml=()=>`<div class="empty loading">${esc(T[lang].loading)}</div>`;
+const failHtml=key=>`<div class="empty load-fail"><p>${esc(T[lang].load_failed)}</p>`+
+  `<button class="btn-sm" data-retry="${key}">${esc(T[lang].retry)}</button></div>`;
 
 /* ---------- build selects ---------- */
 function fillSelect(el,arr,withAll){
@@ -218,6 +244,7 @@ function buildSelects(){
 
 /* ---------- translation render ---------- */
 function applyLang(){
+  document.documentElement.lang=lang;
   document.body.dataset.lang=lang;
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
   document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=T[lang][el.dataset.t]||"";});
@@ -226,8 +253,12 @@ function applyLang(){
   buildSelects();
   updateAuthUI();
   setSubmitText();
-  renderJobs();renderWorkers();renderHomeJobs();
-  if(document.getElementById("myposts").classList.contains("show")){renderMyPosts();updateDangerZone();updateSwitchRole();updateAccountEmail();}
+  // Only re-render what's on screen — the others rebuild on page entry anyway.
+  const showing=id=>$(id).classList.contains("show");
+  if(showing("jobs"))renderJobs();
+  if(showing("workers"))renderWorkers();
+  if(showing("home"))renderHomeJobs();
+  if(showing("myposts")){renderMyPosts();updateDangerZone();updateSwitchRole();updateAccountEmail();}
 }
 
 // Top card on the profile page is the employer-only company form. Seekers never see it;
@@ -237,10 +268,40 @@ function setAccountSectionH(){
   if(h)h.textContent=T[lang].section_account_emp;
 }
 
+/* ---------- routing ---------- */
+// Shareable URLs: #/jobs, #/job/<id>, #/worker/<id>, etc. Supabase auth links
+// also use the hash (#access_token=...) — anything not starting with "#/" is
+// ignored here and left to the auth flow.
+const ROUTE_PAGES=new Set(['home','jobs','workers','myposts','login','signup','seeker','employer','forgot']);
+let suppressHash=false;
+function setHash(h){
+  if(location.hash===h)return;
+  suppressHash=true;
+  location.hash=h;
+}
+function parseRoute(h){
+  let m=h.match(/^#\/(job|worker)\/([0-9a-fA-F-]{36})$/);
+  if(m)return {kind:m[1],id:m[2]};
+  m=h.match(/^#\/([a-z]+)$/);
+  if(m&&ROUTE_PAGES.has(m[1]))return {page:m[1]};
+  return null;
+}
+function applyRoute(r){
+  if(r.kind==="job")viewJob(r.id);
+  else if(r.kind==="worker")viewSeeker(r.id);
+  else go(r.page);
+}
+window.addEventListener("hashchange",()=>{
+  if(suppressHash){suppressHash=false;return;}
+  const r=parseRoute(location.hash);
+  if(r)applyRoute(r);
+});
+
 /* ---------- navigation ---------- */
 const RESTORABLE=new Set(['home','jobs','workers','myposts']);
 function showPage(id){
   if(RESTORABLE.has(id))localStorage.setItem('page',id);
+  if(id!=="jobdetail"&&id!=="seekerdetail")setHash("#/"+id);
   if(id!=="jobdetail"&&id!=="seekerdetail"){
     document.title="KarKhmer";
     const _md=document.querySelector('meta[name="description"]');
@@ -290,8 +351,8 @@ async function go(id){
     if(!skr){pendingPostSeeker=true;return go("myposts");}
   }
   showPage(id);
-  if(id==="jobs")renderJobs();
-  else if(id==="workers")renderWorkers();
+  if(id==="jobs")renderJobs(true);
+  else if(id==="workers")renderWorkers(true);
   else if(id==="myposts"){await prepAccountForm(true);await renderMyPosts();updateDangerZone();updateSwitchRole();updateAccountEmail();}
   else if(id==="seeker")await prepSeekerForm();
   else if(id==="employer")await prepEmployerForm();
@@ -301,6 +362,10 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return;}
   const vj=e.target.closest("[data-view-job]");if(vj){viewJob(vj.dataset.viewJob);return;}
   const vs=e.target.closest("[data-view-seeker]");if(vs){viewSeeker(vs.dataset.viewSeeker);return;}
+  const rt=e.target.closest("[data-retry]");if(rt){
+    const k=rt.dataset.retry;
+    if(k==="jobs")renderJobs(true);else if(k==="seekers")renderWorkers(true);else renderHomeJobs();
+    return;}
   const rj=e.target.closest("[data-report-job]");if(rj&&rj.dataset.reportJob){reportListing("job",rj.dataset.reportJob,rj);return;}
   const rs=e.target.closest("[data-report-seeker]");if(rs&&rs.dataset.reportSeeker){reportListing("seeker",rs.dataset.reportSeeker,rs);return;}
   const lb=e.target.closest(".lang button");if(lb){lang=lb.dataset.lang;
@@ -354,11 +419,11 @@ async function saveSeeker(){
   }else{
     ({error}=await sb.from("seeker_ads").insert({...payload,user_id:session.user.id,seeker_id:skr.id}));
   }
-  if(error){console.error("save seeker-ad:",error);return showErr(errEl,error.message);}
-  $("s_ok").classList.add("show");setTimeout(()=>$("s_ok").classList.remove("show"),2500);
-  clearEditState();
-  await renderWorkers();
-  go("myposts");
+  if(error){console.error("save seeker-ad:",error);return showErr(errEl,T[lang].err_generic);}
+  cache.seekers=null;
+  $("s_ok").classList.add("show");
+  // Let the user actually see the confirmation before leaving the form.
+  setTimeout(()=>{$("s_ok").classList.remove("show");clearEditState();go("myposts");},900);
 }
 
 async function saveEmployer(){
@@ -380,11 +445,10 @@ async function saveEmployer(){
   }else{
     ({error}=await sb.from("jobs").insert({...jobPayload,user_id:session.user.id,employer_id:emp.id}));
   }
-  if(error){console.error("save job:",error);return showErr(errEl,error.message);}
-  $("e_ok").classList.add("show");setTimeout(()=>$("e_ok").classList.remove("show"),2500);
-  clearEditState();
-  await renderJobs();
-  go("myposts");
+  if(error){console.error("save job:",error);return showErr(errEl,T[lang].err_generic);}
+  cache.jobs=null;
+  $("e_ok").classList.add("show");
+  setTimeout(()=>{$("e_ok").classList.remove("show");clearEditState();go("myposts");},900);
 }
 
 async function saveAccountEmployer(){
@@ -409,10 +473,10 @@ async function saveAccountEmployer(){
   }else{
     ({error}=await sb.from("employers").insert({...payload,user_id:session.user.id}));
   }
-  if(error){console.error("save account-emp:",error);return showErr(errEl,error.message);}
+  if(error){console.error("save account-emp:",error);return showErr(errEl,T[lang].err_generic);}
   $("ap_ok").classList.add("show");setTimeout(()=>$("ap_ok").classList.remove("show"),2500);
   $("ap_hint").style.display="none";
-  await renderJobs(); // company name shown in public listings
+  cache.jobs=null; // company name shown in public listings
   updateDangerZone();
   if(pendingPostJob){
     pendingPostJob=false;
@@ -506,7 +570,7 @@ async function saveAccountSeeker(){
   let error;
   if(skr){({error}=await sb.from("seekers").update(payload).eq("id",skr.id));}
   else{({error}=await sb.from("seekers").insert({...payload,user_id:session.user.id}));}
-  if(error){console.error("save account-seeker:",error);return showErr(errEl,error.message);}
+  if(error){console.error("save account-seeker:",error);return showErr(errEl,T[lang].err_generic);}
   $("aps_ok").classList.add("show");setTimeout(()=>$("aps_ok").classList.remove("show"),2500);
   $("aps_hint").style.display="none";
   updateDangerZone();
@@ -617,14 +681,14 @@ async function delSeeker(id){
   if(!(await showModal(T[lang].confirm_del)))return;
   const {error}=await sb.from("seeker_ads").delete().eq("id",id);
   if(error){console.error(error);return;}
-  await renderWorkers();
+  cache.seekers=null;
   renderMyPosts();
 }
 async function delJob(id){
   if(!(await showModal(T[lang].confirm_del)))return;
   const {error}=await sb.from("jobs").delete().eq("id",id);
   if(error){console.error(error);return;}
-  await renderJobs();
+  cache.jobs=null;
   renderMyPosts();
 }
 
@@ -645,7 +709,7 @@ async function switchRole(){
   const btn=$("switch_role_btn");
   await withBusy(btn,async()=>{
     const {error}=await sb.auth.updateUser({data:{role:newRole}});
-    if(error){console.error("switch role:",error);showErr($("switch_role_err"),error.message);return;}
+    if(error){console.error("switch role:",error);showErr($("switch_role_err"),T[lang].err_generic);return;}
     const {data}=await sb.auth.getSession();
     session=data.session;
     updateAuthUI();
@@ -678,7 +742,7 @@ async function doChangeEmail(){
   // Supabase emails a confirmation link; the change only takes effect once the
   // user clicks it, so the old address stays valid until then.
   const {error}=await sb.auth.updateUser({email},{emailRedirectTo:window.location.origin+window.location.pathname});
-  if(error){console.error("change email:",error);return showErr(errEl,error.message);}
+  if(error){console.error("change email:",error);return showErr(errEl,T[lang].err_generic);}
   $("ce_email").value="";
   $("ce_ok").classList.add("show");
 }
@@ -724,9 +788,9 @@ async function deleteMyProfile(){
     if(kind==="employer"){
       ["ap_co","ap_contact","ap_phone","ap_email","ap_telegram","ap_industry","ap_location","ap_website"].forEach(id=>$(id).value="");
       $("ap_hint").style.display="";
-      await renderJobs();
+      cache.jobs=null;
     }else{
-      await renderWorkers();
+      cache.seekers=null;
     }
     go("home");
   });
@@ -749,15 +813,20 @@ function showModal(msg,title,confirmBtn){
       document.removeEventListener("keydown",keyHandler);
       resolve(val);
     };
+    // No global Enter-to-confirm: Enter activates whichever button has focus
+    // (native behavior), so tabbing to Cancel and pressing Enter cancels.
     const keyHandler=e=>{
       if(e.key==="Escape")close(false);
-      else if(e.key==="Enter")close(true);
+      else if(e.key==="Tab"){ // trap focus inside the two modal buttons
+        e.preventDefault();
+        (document.activeElement===$("modal_ok")?$("modal_cancel"):$("modal_ok")).focus();
+      }
     };
     $("modal_cancel").onclick=()=>close(false);
     $("modal_ok").onclick=()=>close(true);
     root.onclick=e=>{if(e.target===root)close(false);};
     document.addEventListener("keydown",keyHandler);
-    $("modal_ok").focus();
+    $("modal_cancel").focus(); // safe default for a destructive dialog
   });
 }
 
@@ -772,8 +841,13 @@ async function initAuth(){
   session=data.session;
   updateAuthUI();
   if(!recovering){
-    const _saved=localStorage.getItem('page')||'home';
-    if(_saved!=='myposts'||session)go(_saved);
+    // A shared link (#/job/...) takes precedence over the locally saved page.
+    const r=parseRoute(location.hash);
+    if(r){applyRoute(r);}
+    else{
+      const _saved=localStorage.getItem('page')||'home';
+      if(_saved!=='myposts'||session)go(_saved);
+    }
   }
   sb.auth.onAuthStateChange(async (event,s)=>{
     const wasLoggedIn=!!session;
@@ -786,7 +860,7 @@ async function initAuth(){
       // trigger, so just refresh what the user sees.
       if(s&&s.user&&s.user.email!==prevEmail){
         if($("myposts").classList.contains("show")){await prepAccountForm(true);updateAccountEmail();}
-        renderJobs();
+        cache.jobs=null; // public contact email may have changed
       }
       return;
     }
@@ -845,7 +919,7 @@ async function doSignup(){
   const email=trim($("su_email").value),pw=$("su_pw").value,pw2=$("su_pw2").value;
   if(!email||!pw||!pw2)return showErr(errEl,T[lang].err_required);
   if(!validEmail(email))return showErr(errEl,T[lang].err_email);
-  if(pw.length<6)return showErr(errEl,T[lang].err_password);
+  if(pw.length<8)return showErr(errEl,T[lang].err_password);
   if(pw!==pw2)return showErr(errEl,T[lang].err_password_match);
   const role=(document.querySelector('input[name="su_role"]:checked')||{}).value||"seeker";
   const {error}=await sb.auth.signUp({
@@ -855,7 +929,7 @@ async function doSignup(){
       data:{role}
     }
   });
-  if(error){console.error("signup:",error);return showErr(errEl,error.message||T[lang].err_signup);}
+  if(error){console.error("signup:",error);return showErr(errEl,T[lang].err_signup);}
   $("verify_msg").textContent=`${T[lang].verify_msg} ${email}`;
   ["su_email","su_pw","su_pw2"].forEach(id=>$(id).value="");
   go("verify");
@@ -870,7 +944,7 @@ async function doForgot(){
   });
   // A non-existent email returns no error (Supabase avoids account enumeration);
   // only real failures (e.g. rate limit) surface here.
-  if(error){console.error("forgot:",error);return showErr(errEl,error.message);}
+  if(error){console.error("forgot:",error);return showErr(errEl,T[lang].err_generic);}
   $("fp_email").value="";
   $("fp_ok").classList.add("show");
 }
@@ -878,11 +952,11 @@ async function doReset(){
   const errEl=$("rp_err");
   const pw=$("rp_pw").value,pw2=$("rp_pw2").value;
   if(!pw||!pw2)return showErr(errEl,T[lang].err_required);
-  if(pw.length<6)return showErr(errEl,T[lang].err_password);
+  if(pw.length<8)return showErr(errEl,T[lang].err_password);
   if(pw!==pw2)return showErr(errEl,T[lang].err_password_match);
   // The recovery link established a session; updateUser sets the new password on it.
   const {error}=await sb.auth.updateUser({password:pw});
-  if(error){console.error("reset:",error);return showErr(errEl,error.message);}
+  if(error){console.error("reset:",error);return showErr(errEl,T[lang].err_generic);}
   ["rp_pw","rp_pw2"].forEach(id=>$(id).value="");
   $("rp_ok").classList.add("show");
   setTimeout(()=>{$("rp_ok").classList.remove("show");go("home");},1500);
@@ -891,16 +965,18 @@ async function doReset(){
 /* ---------- search renderers ---------- */
 const labelOf=(arr,id)=>{const f=arr.find(a=>a[0]===id);return f?lab(f):"";};
 function card(html){const d=document.createElement("div");d.className="rc";d.innerHTML=html;return d;}
-const KHMER_DIGITS="០១២៣៤៥៦៧៨៩";
-const toKhmerNum=n=>String(n).replace(/\d/g,d=>KHMER_DIGITS[+d]);
 function countLine(n,kind){
   if(lang==="km") return "មាន "+toKhmerNum(n)+" "+(kind==="jobs"?"ការងារ":"កម្មករ");
   const noun=kind==="jobs"?(n===1?"job":"jobs"):(n===1?"worker":"workers");
   return n+" "+noun+" found";
 }
 
-async function renderJobs(){
-  const arr=await load("jobs");const box=$("j_results");box.innerHTML="";
+async function renderJobs(fresh=false){
+  const box=$("j_results");
+  if(fresh||!cache.jobs){box.innerHTML=loadingHtml();$("j_count").textContent="";}
+  const arr=await load("jobs",fresh);
+  if(!arr){box.innerHTML=failHtml("jobs");return;}
+  box.innerHTML="";
   const kw=$("j_kw").value.toLowerCase(),c=$("j_cat").value,p=$("j_prov").value;
   let out=arr.filter(j=>(!c||j.cat===c)&&(!p||j.prov===p)&&
     (!kw||((j.title+" "+(j.desc||"")+" "+(j.co||"")).toLowerCase().includes(kw))));
@@ -935,8 +1011,12 @@ async function renderJobs(){
     }
   });
 }
-async function renderWorkers(){
-  const arr=await load("seekers");const box=$("w_results");box.innerHTML="";
+async function renderWorkers(fresh=false){
+  const box=$("w_results");
+  if(fresh||!cache.seekers){box.innerHTML=loadingHtml();$("w_count").textContent="";}
+  const arr=await load("seekers",fresh);
+  if(!arr){box.innerHTML=failHtml("seekers");return;}
+  box.innerHTML="";
   const kw=$("w_kw").value.toLowerCase(),c=$("w_cat").value,p=$("w_prov").value,x=$("w_exp").value;
   let out=arr.filter(s=>(!c||s.cat===c)&&(!p||s.prov===p)&&(!x||s.exp===x)&&
     (!kw||((s.name+" "+(s.title||"")+" "+(s.bio||"")).toLowerCase().includes(kw))));
@@ -974,9 +1054,18 @@ async function renderWorkers(){
 async function renderHomeJobs(){
   const grid=$("home_jobs_grid");
   if(!grid)return;
+  // Use the cached list when we have one; otherwise fetch just the 6 newest.
+  let recent;
+  if(cache.jobs){recent=cache.jobs.slice(0,6);}
+  else{
+    grid.innerHTML=loadingHtml();
+    const {data,error}=await sb.from("jobs")
+      .select(JOB_COLS+",employers(company_name)")
+      .order("created_at",{ascending:false}).limit(6);
+    if(error){console.error("load home jobs:",error);grid.innerHTML=failHtml("home");return;}
+    recent=(data||[]).map(mapJob);
+  }
   grid.innerHTML="";
-  const arr=await load("jobs");
-  const recent=arr.slice(0,6);
   if(!recent.length){
     grid.innerHTML=`<div class="empty home-empty-cta"><p>${esc(T[lang].home_no_jobs)}</p><button class="btn amber" data-go="postjob">${esc(T[lang].home_no_jobs_cta)}</button></div>`;
     return;
@@ -1017,10 +1106,11 @@ $("w_sort").addEventListener("change",()=>{workersSort=$("w_sort").value;localSt
 /* ---------- job detail ---------- */
 async function viewJob(id){
   const {data,error}=await sb.from("jobs")
-    .select("*,employers(company_name,phone,email,contact_name,industry,location,website)")
+    .select(JOB_COLS+",employers(company_name,phone,email,contact_name,industry,location,website)")
     .eq("id",id).maybeSingle();
   if(error){console.error("view job:",error);return;}
   if(!data){go("jobs");return;}
+  setHash("#/job/"+id);
   document.title=`${data.title} — KarKhmer`;
   const _md=document.querySelector('meta[name="description"]');
   if(_md)_md.content=`${data.title}${data.employers?.company_name?" · "+data.employers.company_name:""} — KarKhmer`;
@@ -1064,10 +1154,11 @@ function fillJobDetail(j){
 async function viewSeeker(id){
   const seekerCols=session?"name,phone,email,telegram_phone":"name";
   const {data,error}=await sb.from("seeker_ads")
-    .select(`*,seekers(${seekerCols})`)
+    .select(`${AD_COLS},seekers(${seekerCols})`)
     .eq("id",id).maybeSingle();
   if(error){console.error("view seeker:",error);return;}
   if(!data){go("workers");return;}
+  setHash("#/worker/"+id);
   const _name=data.seekers?.name||"";
   document.title=`${data.title||_name} — KarKhmer`;
   const _md=document.querySelector('meta[name="description"]');
