@@ -292,7 +292,16 @@
       <div class="detail-desc" id="jd_desc"></div>
       <h3 class="detail-section-h" data-t="contact"></h3>
       <div class="detail-contact" id="jd_contact"></div>
-      <div class="report-wrap"><button class="report-btn" data-report-job="" data-t="report_btn"></button></div>
+      <div class="detail-foot">
+        <button class="share-btn" data-share="job">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+          <span data-t="share_btn"></span>
+        </button>
+        <div class="detail-foot-nav">
+          <button class="back-link" data-go="jobs" data-t="back_to_jobs"></button>
+          <button class="report-btn" data-report-job="" data-t="report_btn"></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -331,7 +340,12 @@
       <div class="detail-desc" id="sd_bio"></div>
       <h3 class="detail-section-h" data-t="contact"></h3>
       <div class="detail-contact" id="sd_contact"></div>
-      <div class="report-wrap"><button class="report-btn" data-report-seeker="" data-t="report_btn"></button></div>
+      <div class="detail-foot">
+        <div class="detail-foot-nav">
+          <button class="back-link" data-go="workers" data-t="back_to_workers"></button>
+          <button class="report-btn" data-report-seeker="" data-t="report_btn"></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -370,6 +384,20 @@
     <div class="modal-actions">
       <button class="btn-sm" id="modal_cancel"></button>
       <button class="btn-sm danger solid" id="modal_ok"></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="share_root" hidden>
+  <div class="modal share-sheet" role="dialog" aria-modal="true" aria-labelledby="share_title">
+    <h3 id="share_title" class="modal-h" data-t="share_sheet_h"></h3>
+    <div class="share-grid" id="share_grid"></div>
+    <div class="share-copy-row">
+      <input id="share_url" type="text" readonly aria-label="Link">
+      <button class="btn-sm" id="share_copy" data-t="share_copy"></button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm" id="share_close" data-t="btn_cancel"></button>
     </div>
   </div>
 </div>

@@ -69,6 +69,7 @@ const T={
   switch_role_warn_to_emp:"អ្នកនឹងប្តូរទៅជានិយោជក។ ប្រវត្តិរូបការងាររបស់អ្នកនឹងមិនត្រូវបានបង្ហាញ ប៉ុន្តែមិនត្រូវបានលុបចោលទេ។",
   report_btn:"រាយការណ៍ប្រកាស",report_confirm:"រាយការណ៍ប្រកាសនេះថាជាក់លែង ឬមិនសមស្រប?",report_confirm_btn:"រាយការណ៍",
   report_done:"✓ បានរាយការណ៍។ អរគុណ",report_need_login:"សូមចូលគណនីដើម្បីរាយការណ៍",
+  share_btn:"ចែករំលែក",share_sheet_h:"ចែករំលែកប្រកាសនេះ",share_copy:"ចម្លងតំណ",share_copied:"✓ បានចម្លងតំណ",
   change_email_info:"អ៊ីមែលចូល និងទំនាក់ទំនង៖",change_email_btn:"ប្តូរអ៊ីមែល",change_email_label:"អ៊ីមែលថ្មី",change_email_send:"ផ្ញើតំណបញ្ជាក់",
   change_email_sent:"✓ យើងបានផ្ញើតំណបញ្ជាក់ទៅអ៊ីមែលថ្មីរបស់អ្នក។ ចុចតំណនោះដើម្បីបញ្ចប់ការប្តូរ។ អ៊ីមែលចាស់នៅដំណើរការរហូតដល់ពេលនោះ។",
   sort_new:"ថ្មីជាងគេ",sort_old:"ចាស់ជាងគេ"},
@@ -130,6 +131,7 @@ const T={
   switch_role_warn_to_emp:"You will be switched to an Employer account. Your job seeker profile will be hidden but not deleted — switch back any time.",
   report_btn:"Report listing",report_confirm:"Report this listing as fake or inappropriate?",report_confirm_btn:"Report",
   report_done:"✓ Reported. Thank you.",report_need_login:"Log in to report this listing",
+  share_btn:"Share",share_sheet_h:"Share this listing",share_copy:"Copy link",share_copied:"✓ Link copied",
   change_email_info:"Login & contact email:",change_email_btn:"Change email",change_email_label:"New email",change_email_send:"Send confirmation link",
   change_email_sent:"✓ We've sent a confirmation link to your new email. Click it to finish the change. Your old email stays active until then.",
   sort_new:"Newest first",sort_old:"Oldest first"}
@@ -368,6 +370,7 @@ document.addEventListener("click",e=>{
     return;}
   const rj=e.target.closest("[data-report-job]");if(rj&&rj.dataset.reportJob){reportListing("job",rj.dataset.reportJob,rj);return;}
   const rs=e.target.closest("[data-report-seeker]");if(rs&&rs.dataset.reportSeeker){reportListing("seeker",rs.dataset.reportSeeker,rs);return;}
+  const sh=e.target.closest("[data-share]");if(sh&&sh.dataset.id){shareListing(sh.dataset.id,sh.dataset.title);return;}
   const lb=e.target.closest(".lang button");if(lb){lang=lb.dataset.lang;
     localStorage.setItem('lang',lang);
     document.querySelectorAll(".lang button").forEach(x=>x.classList.toggle("active",x===lb));applyLang();return;}
@@ -1117,6 +1120,8 @@ async function viewJob(id){
   document.querySelector('[data-report-job]').dataset.reportJob=id;
   document.querySelector('[data-report-job]').textContent=T[lang].report_btn;
   document.querySelector('[data-report-job]').disabled=false;
+  const _sj=document.querySelector('[data-share="job"]');
+  _sj.dataset.id=id;_sj.dataset.title=data.title||"";
   fillJobDetail(data);
   showPage("jobdetail");
 }
@@ -1212,6 +1217,51 @@ async function reportListing(type,id,btn){
   if(error&&error.code!=="23505"){console.error("report:",error);return;}
   btn.textContent=T[lang].report_done;
   btn.disabled=true;
+}
+
+/* ---------- share ---------- */
+function shareListing(id,title){
+  const url=location.origin+location.pathname+"#/job/"+id;
+  const shareTitle=`${title||"KarKhmer"} — KarKhmer`;
+  // Native share sheet reaches every installed app (Telegram, Facebook,
+  // Messenger, SMS…) in one tap — the widest reach, so prefer it.
+  if(navigator.share){
+    navigator.share({title:shareTitle,text:shareTitle,url}).catch(()=>{});
+    return;
+  }
+  openShareMenu(shareTitle,url); // desktop browsers without the Web Share API
+}
+
+function openShareMenu(title,url){
+  const root=$("share_root");
+  const e=encodeURIComponent,u=e(url),t=e(title);
+  const links=[
+    ["Facebook",`https://www.facebook.com/sharer/sharer.php?u=${u}`],
+    ["Telegram",`https://t.me/share/url?url=${u}&text=${t}`],
+    ["WhatsApp",`https://wa.me/?text=${e(title+" "+url)}`],
+    ["X",`https://twitter.com/intent/tweet?url=${u}&text=${t}`],
+    ["LINE",`https://social-plugins.line.me/lineit/share?url=${u}`],
+    ["Email",`mailto:?subject=${t}&body=${e(title+"\n"+url)}`]
+  ];
+  $("share_grid").innerHTML=links.map(([n,h])=>
+    `<a class="share-opt" href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join("");
+  $("share_url").value=url;
+  const copyBtn=$("share_copy"),closeBtn=$("share_close");
+  copyBtn.textContent=T[lang].share_copy;
+  const key=ev=>{if(ev.key==="Escape")close();};
+  const close=()=>{
+    root.hidden=true;root.onclick=null;copyBtn.onclick=null;closeBtn.onclick=null;
+    document.removeEventListener("keydown",key);
+  };
+  copyBtn.onclick=async()=>{
+    try{await navigator.clipboard.writeText(url);}
+    catch{$("share_url").select();try{document.execCommand("copy");}catch{}}
+    copyBtn.textContent=T[lang].share_copied;
+  };
+  closeBtn.onclick=close;
+  root.onclick=ev=>{if(ev.target===root)close();};
+  document.addEventListener("keydown",key);
+  root.hidden=false;
 }
 
 document.querySelectorAll(".page").forEach(page=>{

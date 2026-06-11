@@ -297,7 +297,23 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
   padding:14px 16px;background:#fbf0db;border:1px solid #f1d9a9;
   border-radius:10px;color:var(--amber2);font-size:14px;font-weight:500
 }
-.report-wrap{margin-top:28px;text-align:right}
+.detail-foot{margin-top:30px;text-align:center}
+.share-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  background:var(--teal);color:#fff;border:0;border-radius:10px;padding:11px 22px
+}
+.share-btn:hover{background:var(--teal2)}
+.share-btn svg{width:17px;height:17px}
+.detail-foot-nav{
+  margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;gap:12px
+}
+.back-link{
+  font:inherit;font-size:14px;font-weight:500;background:none;border:0;
+  color:var(--teal);cursor:pointer;padding:2px 0
+}
+.back-link:hover{color:var(--amber2)}
 .report-btn{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
 .report-btn:hover:not(:disabled){color:#b33}
 .report-btn:disabled{cursor:default;text-decoration:none}
@@ -524,3 +540,18 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 .modal-body{font-size:14.5px;color:var(--muted);margin:0 0 22px;line-height:1.55}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end}
 .modal-actions .btn-sm{padding:9px 18px;font-size:14px}
+
+/* ---------- share sheet (desktop fallback) ---------- */
+.share-sheet{max-width:360px}
+.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 16px}
+.share-opt{
+  display:block;text-align:center;padding:11px;border:1px solid var(--line);
+  border-radius:10px;font-size:14px;font-weight:500;color:var(--ink);
+  text-decoration:none;background:var(--cream)
+}
+.share-opt:hover{border-color:var(--teal);color:var(--teal)}
+.share-copy-row{display:flex;gap:8px;margin-bottom:18px}
+.share-copy-row input{
+  flex:1;min-width:0;font:inherit;font-size:13px;padding:9px 11px;
+  border:1px solid var(--line);border-radius:8px;background:var(--cream);color:var(--muted)
+}
