@@ -63,7 +63,7 @@ const T={
   report_done:"✓ បានរាយការណ៍។ អរគុណ",report_need_login:"សូមចូលគណនីដើម្បីរាយការណ៍",
   change_email_info:"អ៊ីមែលចូល និងទំនាក់ទំនង៖",change_email_btn:"ប្តូរអ៊ីមែល",change_email_label:"អ៊ីមែលថ្មី",change_email_send:"ផ្ញើតំណបញ្ជាក់",
   change_email_sent:"✓ យើងបានផ្ញើតំណបញ្ជាក់ទៅអ៊ីមែលថ្មីរបស់អ្នក។ ចុចតំណនោះដើម្បីបញ្ចប់ការប្តូរ។ អ៊ីមែលចាស់នៅដំណើរការរហូតដល់ពេលនោះ។",
-  sort_new:"ថ្មីជាងគេ",sort_old:"ចាស់ជាងគេ",sort_ind_az:"ឧស្សាហកម្ម ក→អ",sort_ind_za:"ឧស្សាហកម្ម អ→ក"},
+  sort_new:"ថ្មីជាងគេ",sort_old:"ចាស់ជាងគេ"},
  en:{nav_home:"Home",nav_jobs:"Find jobs",nav_workers:"Find workers",
   nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
   eyebrow:"Professional Recruitment Platform",
@@ -122,12 +122,12 @@ const T={
   report_done:"✓ Reported. Thank you.",report_need_login:"Log in to report this listing",
   change_email_info:"Login & contact email:",change_email_btn:"Change email",change_email_label:"New email",change_email_send:"Send confirmation link",
   change_email_sent:"✓ We've sent a confirmation link to your new email. Click it to finish the change. Your old email stays active until then.",
-  sort_new:"Newest first",sort_old:"Oldest first",sort_ind_az:"Industry A→Z",sort_ind_za:"Industry Z→A"}
+  sort_new:"Newest first",sort_old:"Oldest first"}
 };
 
 let lang=localStorage.getItem('lang')||'km';
 let jobsView=localStorage.getItem('jobsView')||'list';
-let jobsSort=localStorage.getItem('jobsSort')||'new';
+let jobsSort=localStorage.getItem('jobsSort')==='old'?'old':'new';
 let workersView=localStorage.getItem('workersView')||'list';
 let workersSort=localStorage.getItem('workersSort')||'new';
 const lab=arr=>arr[lang==="km"?1:2];
@@ -178,12 +178,11 @@ async function load(key){
   }
   if(key==="jobs"){
     const {data,error}=await sb.from("jobs")
-      .select("*,employers(company_name,phone,email,industry)")
+      .select("*,employers(company_name,phone,email)")
       .order("created_at",{ascending:false});
     if(error){console.error("load jobs:",error);return [];}
     return (data||[]).map(j=>({
       id:j.id,co:j.employers?.company_name,phone:j.employers?.phone,email:j.employers?.email,
-      industry:j.employers?.industry,
       title:j.title,cat:j.category,prov:j.province,type:j.employment_type,
       smin:j.salary_min,smax:j.salary_max,desc:j.description,created_at:j.created_at
     }));
@@ -205,8 +204,7 @@ function buildSelects(){
   fillSelect(w_cat,CAT,1);fillSelect(w_prov,PROV,1);fillSelect(w_exp,EXP,1);
   const sortEl=$("j_sort");
   if(sortEl){
-    sortEl.innerHTML=[["new",T[lang].sort_new],["old",T[lang].sort_old],
-      ["ind_az",T[lang].sort_ind_az],["ind_za",T[lang].sort_ind_za]]
+    sortEl.innerHTML=[["new",T[lang].sort_new],["old",T[lang].sort_old]]
       .map(([v,t])=>`<option value="${v}">${esc(t)}</option>`).join("");
     sortEl.value=jobsSort;
   }
@@ -907,8 +905,6 @@ async function renderJobs(){
   let out=arr.filter(j=>(!c||j.cat===c)&&(!p||j.prov===p)&&
     (!kw||((j.title+" "+(j.desc||"")+" "+(j.co||"")).toLowerCase().includes(kw))));
   if(jobsSort==="old")out.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-  else if(jobsSort==="ind_az")out.sort((a,b)=>{if(!a.industry&&!b.industry)return 0;if(!a.industry)return 1;if(!b.industry)return -1;return a.industry.localeCompare(b.industry);});
-  else if(jobsSort==="ind_za")out.sort((a,b)=>{if(!a.industry&&!b.industry)return 0;if(!a.industry)return 1;if(!b.industry)return -1;return b.industry.localeCompare(a.industry);});
   $("j_count").textContent=countLine(out.length,"jobs");
   $("j_view_cards").classList.toggle("active",jobsView==="cards");
   $("j_view_list").classList.toggle("active",jobsView==="list");
@@ -917,23 +913,21 @@ async function renderJobs(){
   out.forEach(j=>{
     if(jobsView==="list"){
       const sal=(j.smin||j.smax)?`<span class="sal-tag">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
-      const ind=j.industry?`<span class="ls">·</span><span>${esc(j.industry)}</span>`:"";
       const div=card(
         `<div class="list-r1"><div class="t">${esc(j.title)}</div>${sal}</div>`+
         `<div class="list-r2"><span class="m">${esc(j.co)}</span><span class="ls">·</span>`+
         `<span>${esc(labelOf(CAT,j.cat))}</span><span class="ls">·</span><span>${esc(labelOf(PROV,j.prov))}</span>`+
-        `${ind}<span class="ls">·</span><span class="list-age">${esc(timeAgo(j.created_at))}</span></div>`);
+        `<span class="ls">·</span><span class="list-age">${esc(timeAgo(j.created_at))}</span></div>`);
       div.classList.add("clickable","list-item");
       div.dataset.viewJob=j.id;
       box.appendChild(div);
     }else{
       const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
-      const ind=j.industry?`<span class="tag ind">${esc(j.industry)}</span>`:"";
       const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
       const div=card(
         `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
          <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
-         <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${ind}${sal}
+         <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
          <div class="d">${esc(j.desc)}</div>${age}`);
       div.classList.add("clickable");
       div.dataset.viewJob=j.id;
@@ -989,12 +983,11 @@ async function renderHomeJobs(){
   }
   recent.forEach(j=>{
     const sal=(j.smin||j.smax)?`<span class="tag sal">$${esc(j.smin||"?")}–${esc(j.smax||"?")} ${esc(T[lang].mo)}</span>`:"";
-    const ind=j.industry?`<span class="tag ind">${esc(j.industry)}</span>`:"";
     const age=j.created_at?`<div class="age">${esc(timeAgo(j.created_at))}</div>`:"";
     const div=card(
       `<div class="t">${esc(j.title)}</div><div class="m">${esc(j.co)}</div>
        <span class="tag">${esc(labelOf(CAT,j.cat))}</span><span class="tag">${esc(labelOf(PROV,j.prov))}</span>
-       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${ind}${sal}
+       <span class="tag">${esc(labelOf(TYPE,j.type))}</span>${sal}
        <div class="d">${esc(j.desc)}</div>${age}`);
     div.classList.add("clickable");
     div.dataset.viewJob=j.id;

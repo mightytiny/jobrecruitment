@@ -218,7 +218,6 @@ input[readonly]:focus{box-shadow:none;border-color:var(--line)}
 .rc .m{font-size:13px;color:var(--muted);margin:3px 0 10px}
 .tag{display:inline-block;background:#eef3f1;color:var(--teal2);font-size:12px;padding:3px 10px;border-radius:20px;margin:0 6px 6px 0}
 .tag.sal{background:#fbf0db;color:var(--amber2)}
-.tag.ind{background:transparent;color:var(--muted);border:1px solid var(--line)}
 .rc .d{font-size:14px;margin-top:8px;color:#33433f}
 #j_results .rc .d,#w_results .rc .d{
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
