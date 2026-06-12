@@ -1,8 +1,7 @@
-/* ---------- one-time cleanup: remove any previously-installed service worker ---------- */
+/* ---------- PWA: register the service worker (installable + offline shell) ---------- */
 if("serviceWorker" in navigator){
-  navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 }
-if(window.caches)caches.keys().then(ks=>ks.forEach(k=>caches.delete(k)));
 
 /* ---------- data dictionaries ---------- */
 const PROV=[["pp","ភ្នំពេញ","Phnom Penh"],["bmc","បន្ទាយមានជ័យ","Banteay Meanchey"],["btb","បាត់ដំបង","Battambang"],["kpc","កំពង់ចាម","Kampong Cham"],["kpch","កំពង់ឆ្នាំង","Kampong Chhnang"],["kps","កំពង់ស្ពឺ","Kampong Speu"],["kpt","កំពង់ធំ","Kampong Thom"],["kam","កំពត","Kampot"],["kdl","កណ្ដាល","Kandal"],["kep","កែប","Kep"],["kkg","កោះកុង","Koh Kong"],["krt","ក្រចេះ","Kratie"],["mdk","មណ្ឌលគិរី","Mondulkiri"],["odm","ឧត្តរមានជ័យ","Oddar Meanchey"],["pln","ប៉ៃលិន","Pailin"],["psh","ព្រះសីហនុ","Preah Sihanouk"],["pvh","ព្រះវិហារ","Preah Vihear"],["pvg","ព្រៃវែង","Prey Veng"],["pst","ពោធិ៍សាត់","Pursat"],["rtk","រតនគិរី","Ratanakiri"],["sr","សៀមរាប","Siem Reap"],["stg","ស្ទឹងត្រែង","Stung Treng"],["svr","ស្វាយរៀង","Svay Rieng"],["tko","តាកែវ","Takeo"],["tkm","ត្បូងឃ្មុំ","Tboung Khmum"]];
