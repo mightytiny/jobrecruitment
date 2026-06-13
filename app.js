@@ -1232,17 +1232,25 @@ async function reportListing(type,id,btn){
 function shareListing(id,title){
   const url=location.origin+location.pathname+"#/job/"+id;
   const shareTitle=`${title||"KarKhmer"} — KarKhmer`;
-  openShareMenu(shareTitle,url);
+  // Native share sheet reaches every installed app (Telegram, Facebook,
+  // Messenger, SMS…) in one tap — the widest reach, so prefer it.
+  if(navigator.share){
+    navigator.share({title:shareTitle,text:shareTitle,url}).catch(()=>{});
+    return;
+  }
+  openShareMenu(shareTitle,url); // desktop browsers without the Web Share API
 }
 
 function openShareMenu(title,url){
   const root=$("share_root");
   const e=encodeURIComponent,u=e(url),t=e(title);
   const links=[
-    ["WhatsApp",`https://wa.me/?text=${e(title+" "+url)}`],
     ["Facebook",`https://www.facebook.com/sharer/sharer.php?u=${u}`],
-    ["LinkedIn",`https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
-    ["Telegram",`https://t.me/share/url?url=${u}&text=${t}`]
+    ["Telegram",`https://t.me/share/url?url=${u}&text=${t}`],
+    ["WhatsApp",`https://wa.me/?text=${e(title+" "+url)}`],
+    ["X",`https://twitter.com/intent/tweet?url=${u}&text=${t}`],
+    ["LINE",`https://social-plugins.line.me/lineit/share?url=${u}`],
+    ["Email",`mailto:?subject=${t}&body=${e(title+"\n"+url)}`]
   ];
   $("share_grid").innerHTML=links.map(([n,h])=>
     `<a class="share-opt" href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join("");
