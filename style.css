@@ -88,8 +88,6 @@ body[data-lang="km"] .hero h1{line-height:1.3;font-size:clamp(26px,3.8vw,42px);f
   margin:22px 0 0;font-size:17px;line-height:1.6;font-weight:300;
   color:rgba(255,255,255,0.78);max-width:480px;
 }
-.paths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:40px 0 0;max-width:520px}
-.paths.compact{grid-template-columns:1fr;max-width:320px}
 @media(max-width:980px){
   .hero{min-height:380px;
     background-image:
@@ -101,23 +99,6 @@ body[data-lang="km"] .hero h1{line-height:1.3;font-size:clamp(26px,3.8vw,42px);f
   .hero-content{padding:44px 28px}
 }
 @media(max-width:480px){.hero-content{padding:36px 22px}}
-.path{
-  background:rgba(255,253,248,0.97);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:12px;padding:22px 22px 20px;cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
-  backdrop-filter:blur(6px);
-  box-shadow:0 8px 24px -10px rgba(0,0,0,0.35);
-}
-@media(hover:hover){
-  .path:hover{transform:translateY(-2px);background:#fff;box-shadow:0 14px 32px -12px rgba(0,0,0,0.45)}
-}
-.path h3{font-family:"Fraunces",serif;font-weight:600;font-size:18px;margin:0 0 6px;color:var(--ink);letter-spacing:-0.2px}
-.path p{font-size:13.5px;color:var(--muted);margin:0 0 14px;line-height:1.5}
-.path-cta{font-size:12.5px;font-weight:600;color:var(--amber2);letter-spacing:0.3px}
-body[data-lang="km"] .path h3{font-size:17px}
-body[data-lang="km"] .path-cta{font-size:13.5px}
-
 .page{display:none;padding:46px 0 90px}
 .page-band{
   position:relative;
@@ -386,7 +367,6 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 /* ---------- auth header area ---------- */
 .rt{display:flex;align-items:center;gap:12px;justify-self:end}
 .auth{display:flex;align-items:center;gap:8px}
-.auth .who{font-size:13px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .auth-btn{
   font:inherit;font-size:13px;font-weight:500;border:1px solid var(--line);
   background:var(--card);color:var(--ink);padding:5px 12px;border-radius:9px;cursor:pointer;transition:.15s
@@ -400,7 +380,6 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 @media(max-width:780px){
   .rt{flex-wrap:nowrap;gap:8px;justify-content:flex-end;min-width:0}
   .auth{width:auto;gap:6px;justify-content:flex-end}
-  .auth .who{max-width:110px}
   .auth-btn{padding:5px 8px;font-size:13px;white-space:nowrap}
   .lang button{padding:5px 7px;font-size:13px;white-space:nowrap}
 }
@@ -422,6 +401,9 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
   border-color:var(--teal);background:rgba(13,79,74,0.06);color:var(--teal2);
   box-shadow:0 0 0 3px rgba(13,79,74,0.08)
 }
+/* Company field follows the radio's live state, so it survives a page refresh. */
+#su_co_wrap{display:none}
+.auth-form:has(input[name="su_role"][value="employer"]:checked) #su_co_wrap{display:block}
 .alt-link{
   display:inline-block;margin-top:14px;background:none;border:0;padding:0;font:inherit;font-size:13.5px;
   color:var(--teal);cursor:pointer;text-decoration:underline;text-underline-offset:3px

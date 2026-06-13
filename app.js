@@ -11,8 +11,7 @@ const TYPE=[["ft","ពេញម៉ោង","Full-time"],["pt","ក្រៅម៉
 
 const T={
  km:{nav_home:"ទំព័រដើម",nav_jobs:"ស្វែងរកការងារ",nav_workers:"រកកម្មករ",
-  nav_login:"ចូល",nav_signup:"ចុះឈ្មោះ",nav_logout:"ចេញ",nav_myposts:"ប្រវត្តិរូប",tab_posts:"ប្រកាសរបស់ខ្ញុំ",
-  eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
+  nav_login:"ចូល",nav_signup:"ចុះឈ្មោះ",nav_logout:"ចេញ",nav_myposts:"ប្រវត្តិរូប",  eyebrow:"វេទិកាជ្រើសរើសបុគ្គលិកអាជីព",
   hero_h:"ភ្ជាប់ទេពកោសល្យកម្ពុជា ជាមួយឱកាសការងារ",hero_p:"វេទិកាដ៏ទុកចិត្តសម្រាប់អ្នកស្វែងរកការងារ និងនិយោជកនៅទូទាំងព្រះរាជាណាចក្រកម្ពុជា។",
   seeker_h:"ប្រកាសការស្វែងរកការងារ",seeker_sub:"ពិពណ៌នាការងារដែលអ្នកស្វែងរក",
   emp_h:"ប្រកាសការងារ",emp_sub:"បំពេញព័ត៌មានការងារ",
@@ -30,12 +29,12 @@ const T={
   myposts_profile:"ប្រកាសរបស់ខ្ញុំ",myposts_jobs:"ប្រកាសការងាររបស់ខ្ញុំ",myposts_empty:"អ្នកមិនទាន់មានព័ត៌មានឬប្រកាសទេ។",
   section_account_emp:"ប្រវត្តិរូបក្រុមហ៊ុនរបស់ខ្ញុំ",section_account_self:"ព័ត៌មានប្រវត្តិរូបរបស់ខ្ញុំ",section_posts:"ការងាររបស់ខ្ញុំ",
   add_listing:"+ បន្ថែមប្រកាស",add_job_listing:"+ បន្ថែមប្រកាសការងារ",
-  f_full_name:"ឈ្មោះ",f_family_name:"នាមត្រកូល",f_telegram:"លេខ Telegram",
+  f_telegram:"លេខ Telegram",
   f_contact_name:"ឈ្មោះអ្នកទំនាក់ទំនង",f_industry:"ឧស្សាហកម្ម",f_location:"ទីតាំង",f_website:"គេហទំព័រ",
   need_company:"សូមបំពេញព័ត៌មានក្រុមហ៊ុនមុនពេលប្រកាសការងារ",need_seeker_profile:"សូមបំពេញប្រវត្តិរូបរបស់អ្នកមុនពេលប្រកាស",
   f_seek_title:"ចំណងជើងប្រកាស (ជាជម្រើស)",
-  no_account_emp:"អ្នកមិនទាន់មានព័ត៌មានក្រុមហ៊ុនទេ",no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
-  create_seeker_link:"បង្កើតប្រវត្តិរូបការងារ →",create_company_inline:"បំពេញព័ត៌មាននេះដើម្បីចាប់ផ្ដើមប្រកាសការងារ",
+  no_account_seeker:"អ្នកមិនទាន់មានប្រវត្តិរូបការងារទេ",
+  create_company_inline:"បំពេញព័ត៌មាននេះដើម្បីចាប់ផ្ដើមប្រកាសការងារ",
   modal_confirm_h:"បញ្ជាក់ការលុប",modal_yes_del:"លុប",modal_confirm_switch_h:"បញ្ជាក់ការប្តូរ",modal_yes_switch:"ប្តូរ",
   role_q:"ខ្ញុំជា...",role_seeker:"អ្នកស្វែងរកការងារ",role_employer:"និយោជក",
   back_to_jobs:"← ត្រឡប់ទៅការងារ",back_to_workers:"← ត្រឡប់ទៅកម្មករ",job_description:"ការពិពណ៌នាការងារ",contact:"ទំនាក់ទំនង",
@@ -73,8 +72,7 @@ const T={
   change_email_sent:"✓ យើងបានផ្ញើតំណបញ្ជាក់ទៅអ៊ីមែលថ្មីរបស់អ្នក។ ចុចតំណនោះដើម្បីបញ្ចប់ការប្តូរ។ អ៊ីមែលចាស់នៅដំណើរការរហូតដល់ពេលនោះ។",
   sort_new:"ថ្មីជាងគេ",sort_old:"ចាស់ជាងគេ"},
  en:{nav_home:"Home",nav_jobs:"Find jobs",nav_workers:"Find workers",
-  nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",tab_posts:"My posts",
-  eyebrow:"Professional Recruitment Platform",
+  nav_login:"Log in",nav_signup:"Sign up",nav_logout:"Log out",nav_myposts:"Profile",  eyebrow:"Professional Recruitment Platform",
   hero_h:"Connecting Cambodian talent with opportunity",hero_p:"The trusted platform for job seekers and employers across the Kingdom of Cambodia.",
   seeker_h:"Post a listing",seeker_sub:"Describe the work you're looking for",
   emp_h:"Post a job",emp_sub:"Fill in the job details",
@@ -92,12 +90,12 @@ const T={
   myposts_profile:"My listings",myposts_jobs:"My job listings",myposts_empty:"Nothing here yet.",
   section_account_emp:"My company profile",section_account_self:"My profile info",section_posts:"My jobs",
   add_listing:"+ Add listing",add_job_listing:"+ Add job listing",
-  f_full_name:"Name",f_family_name:"Family name",f_telegram:"Telegram number",
+  f_telegram:"Telegram number",
   f_contact_name:"Contact name",f_industry:"Industry",f_location:"Location",f_website:"Website",
   need_company:"Please complete your company info before posting a job",need_seeker_profile:"Please complete your profile before posting a listing",
   f_seek_title:"Listing title (optional)",
-  no_account_emp:"You don't have company info yet",no_account_seeker:"You don't have a job-seeker profile yet",
-  create_seeker_link:"Create job-seeker profile →",create_company_inline:"Fill this in to start posting jobs",
+  no_account_seeker:"You don't have a job-seeker profile yet",
+  create_company_inline:"Fill this in to start posting jobs",
   modal_confirm_h:"Confirm delete",modal_yes_del:"Delete",modal_confirm_switch_h:"Confirm switch",modal_yes_switch:"Switch",
   role_q:"I am a...",role_seeker:"Job seeker",role_employer:"Employer",
   back_to_jobs:"← Back to jobs",back_to_workers:"← Back to workers",job_description:"Description",contact:"Contact",
@@ -318,10 +316,12 @@ async function go(id){
   // Post a Job: route based on auth state and role
   if(id==="postjob"){
     if(!session){
+      pendingNav="postjob"; // resume the post-job flow after login
       return go("login");
     }
     if(userRole()==="employer")return go("employer");
-    window.alert(T[lang].postjob_seeker_modal);
+    // Seeker logged in: can't post jobs — offer to create a separate employer account.
+    if(await showModal(T[lang].postjob_seeker_modal,T[lang].nav_post_job,T[lang].nav_signup))go("signup");
     return;
   }
   // Gate post forms behind login
@@ -357,6 +357,7 @@ async function go(id){
   else if(id==="seeker")await prepSeekerForm();
   else if(id==="employer")await prepEmployerForm();
   else if(id==="home")renderHomeJobs();
+  else if(id==="signup"){const emp=document.querySelector('input[name="su_role"][value="employer"]');if(emp)emp.checked=true;}
 }
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return;}
@@ -905,11 +906,6 @@ document.querySelectorAll("[data-auth]").forEach(btn=>{
   }));
 });
 
-document.querySelectorAll('input[name="su_role"]').forEach(r=>{
-  r.addEventListener("change",()=>{
-    $("su_co_wrap").style.display=r.value==="employer"&&r.checked?"":"none";
-  });
-});
 
 async function doLogin(){
   const errEl=$("li_err");
@@ -943,7 +939,6 @@ async function doSignup(){
   if(error){console.error("signup:",error);return showErr(errEl,T[lang].err_signup);}
   $("verify_msg").textContent=`${T[lang].verify_msg} ${email}`;
   ["su_email","su_pw","su_pw2","su_co"].forEach(id=>$(id).value="");
-  $("su_co_wrap").style.display="none";
   go("verify");
 }
 async function doForgot(){
